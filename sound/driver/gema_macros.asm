@@ -137,6 +137,7 @@ gInsPsgN macro pitch,alv,atk,slv,dky,rrt,vib,mode
 ;
 ; pitch | Pitch/Octave
 ; fmins | 24-bit pointer to FM patch data
+;         68k's ROM area only.
 ; ----------------------------------------------------
 
 gInsFm macro pitch,fmins
@@ -149,6 +150,7 @@ gInsFm macro pitch,fmins
 ;
 ; pitch | UNUSED, set to 0
 ; fmins | 24-bit pointer to FM patch data
+;         68k's ROM area only.
 ; ----------------------------------------------------
 
 gInsFm3	macro pitch,fmins
@@ -160,7 +162,7 @@ gInsFm3	macro pitch,fmins
 ; gInsDac - DAC instrument
 ;
 ; pitch | Pitch/Octave
-; start | 24-bit pointer to DAC sample
+; start | 24-bit pointer, 68k's ROM area only.
 ; flags | Flags: %0000000l
 ;         l - Use loop enable: No(0) or Yes(1)
 ; ----------------------------------------------------
@@ -174,7 +176,8 @@ gInsDac	macro pitch,start,flags
 ; gInsPcm - Sega CD PCM Sample
 ;
 ; pitch | Pitch/Octave
-; start | 24-bit pointer to DAC sample
+; start | 24-bit pointer
+;         Sub-CPU area only.
 ; flags | Flags: %0000000l
 ;         l - Use loop enable: No(0) or Yes(1)
 ; ----------------------------------------------------
@@ -193,7 +196,9 @@ gInsPcm	macro pitch,start,flags
 ; gInsPwm - Sega 32X PWM Sample
 ;
 ; pitch | Pitch/Octave
-; start | 24-bit pointer to DAC sample
+; start | 32-bit pointer
+;         SH2's map view: CS1(ROM) or CS3(SDRAM)
+;
 ; flags | Flags: %000000sl
 ;         l - Use loop enable: No(0) or Yes(1)
 ;         s - Sample data is in Stereo

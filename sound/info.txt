@@ -1,22 +1,9 @@
-Soundtrack data can be stored on ROM, RAM* and Word-RAM**
-
- * Requires calling Sound_Update manually to send the data
-   as a workaround for the Z80 bankswitch limitation.
-** Make sure the Word-RAM permission is set to MAIN-CPU.
-
-This tracklist is stored on:
-ROM      on Genesis/32X($880000)
-WORD-RAM on SegaCD/CD32X
-
-This data will be unavilable if using SegaCD's stamps, relocate
-the entire data manually.
-
 ------------------------------------------------------------
 
 	gemaTrk option,ticks,location
 
 option: 0 - Don't use global subbeats
-        1 - Use global subbeats (SET externally)
+        1 - Use global subbeats (externally set)
 ticks:  Ticks number on a fixed tempo:
         150 on NTSC or 125 on PAL
         To change the tempo set "option" to 1,
@@ -61,7 +48,7 @@ Keep panning bits 0 and set the panning manually in your track.
 $22 - LFO: %0000evvv
 e | Enable
 v | Value
-This is a global setting, this will affect ALL sound.
+This is a global setting, this will affect ALL the sound.
 
 $28 - KEYS: %oooo0000
 o | Operators 4-1

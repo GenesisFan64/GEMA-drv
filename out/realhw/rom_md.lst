@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 1 - 10/11/2024 07:15:31 PM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 1 - 10/11/2024 10:48:36 PM
 
 
        1/       0 :                     ; ===========================================================================
@@ -1255,78 +1255,83 @@
 (1)  137/     29E :                     ;
 (1)  138/     29E :                     ; pitch | Pitch/Octave
 (1)  139/     29E :                     ; fmins | 24-bit pointer to FM patch data
-(1)  140/     29E :                     ; ----------------------------------------------------
-(1)  141/     29E :                     
-(1)  142/     29E :                     gInsFm macro pitch,fmins
-(1)  143/     29E :                     	dc.b $A0,pitch,((fmins>>16)&$FF),((fmins>>8)&$FF)
-(1)  144/     29E :                     	dc.b fmins&$FF,$00,$00,$00
-(1)  145/     29E :                     	endm
-(1)  146/     29E :                     
-(1)  147/     29E :                     ; ----------------------------------------------------
-(1)  148/     29E :                     ; gInsFm - FM3 Special instrument/patch
-(1)  149/     29E :                     ;
-(1)  150/     29E :                     ; pitch | UNUSED, set to 0
-(1)  151/     29E :                     ; fmins | 24-bit pointer to FM patch data
-(1)  152/     29E :                     ; ----------------------------------------------------
-(1)  153/     29E :                     
-(1)  154/     29E :                     gInsFm3	macro pitch,fmins
-(1)  155/     29E :                     	dc.b $B0,pitch,((fmins>>16)&$FF),((fmins>>8)&$FF)
-(1)  156/     29E :                     	dc.b fmins&$FF,$00,$00,$00
-(1)  157/     29E :                     	endm
-(1)  158/     29E :                     
-(1)  159/     29E :                     ; ----------------------------------------------------
-(1)  160/     29E :                     ; gInsDac - DAC instrument
-(1)  161/     29E :                     ;
-(1)  162/     29E :                     ; pitch | Pitch/Octave
-(1)  163/     29E :                     ; start | 24-bit pointer to DAC sample
-(1)  164/     29E :                     ; flags | Flags: %0000000l
-(1)  165/     29E :                     ;         l - Use loop enable: No(0) or Yes(1)
-(1)  166/     29E :                     ; ----------------------------------------------------
-(1)  167/     29E :                     
-(1)  168/     29E :                     gInsDac	macro pitch,start,flags
-(1)  169/     29E :                     	dc.b $C0|flags,pitch,((start>>16)&$FF),((start>>8)&$FF)
-(1)  170/     29E :                     	dc.b start&$FF,0,0,0
-(1)  171/     29E :                     	endm
-(1)  172/     29E :                     
-(1)  173/     29E :                     ; ----------------------------------------------------
-(1)  174/     29E :                     ; gInsPcm - Sega CD PCM Sample
-(1)  175/     29E :                     ;
-(1)  176/     29E :                     ; pitch | Pitch/Octave
-(1)  177/     29E :                     ; start | 24-bit pointer to DAC sample
-(1)  178/     29E :                     ; flags | Flags: %0000000l
-(1)  179/     29E :                     ;         l - Use loop enable: No(0) or Yes(1)
-(1)  180/     29E :                     ; ----------------------------------------------------
-(1)  181/     29E :                     
-(1)  182/     29E :                     gInsPcm	macro pitch,start,flags
-(1)  183/     29E :                      if MCD|MARSCD
-(1)  184/     29E :                     	dc.b $D0|flags,pitch,((start>>16)&$FF),((start>>8)&$FF)
-(1)  185/     29E :                     	dc.b start&$FF,0,0,0
-(1)  186/     29E :                      else
-(1)  187/     29E :                     	dc.b $00,$00,$00,$00
-(1)  188/     29E :                     	dc.b $00,$00,$00,$00
-(1)  189/     29E :                      endif
-(1)  190/     29E :                     	endm
-(1)  191/     29E :                     
-(1)  192/     29E :                     ; ----------------------------------------------------
-(1)  193/     29E :                     ; gInsPwm - Sega 32X PWM Sample
-(1)  194/     29E :                     ;
-(1)  195/     29E :                     ; pitch | Pitch/Octave
-(1)  196/     29E :                     ; start | 24-bit pointer to DAC sample
-(1)  197/     29E :                     ; flags | Flags: %000000sl
-(1)  198/     29E :                     ;         l - Use loop enable: No(0) or Yes(1)
-(1)  199/     29E :                     ;         s - Sample data is in Stereo
-(1)  200/     29E :                     ; ----------------------------------------------------
-(1)  201/     29E :                     
-(1)  202/     29E :                     gInsPwm	macro pitch,start,flags
-(1)  203/     29E :                      if MARS|MARSCD
-(1)  204/     29E :                     	dc.b $E0|flags,pitch,((start>>24)&$FF),((start>>16)&$FF)
-(1)  205/     29E :                     	dc.b ((start>>8)&$FF),start&$FF,0,0
-(1)  206/     29E :                      else
-(1)  207/     29E :                     	dc.b $00,$00,$00,$00
-(1)  208/     29E :                     	dc.b $00,$00,$00,$00
-(1)  209/     29E :                      endif
-(1)  210/     29E :                     	endm
-(1)  211/     29E :                     
+(1)  140/     29E :                     ;         68k's ROM area only.
+(1)  141/     29E :                     ; ----------------------------------------------------
+(1)  142/     29E :                     
+(1)  143/     29E :                     gInsFm macro pitch,fmins
+(1)  144/     29E :                     	dc.b $A0,pitch,((fmins>>16)&$FF),((fmins>>8)&$FF)
+(1)  145/     29E :                     	dc.b fmins&$FF,$00,$00,$00
+(1)  146/     29E :                     	endm
+(1)  147/     29E :                     
+(1)  148/     29E :                     ; ----------------------------------------------------
+(1)  149/     29E :                     ; gInsFm - FM3 Special instrument/patch
+(1)  150/     29E :                     ;
+(1)  151/     29E :                     ; pitch | UNUSED, set to 0
+(1)  152/     29E :                     ; fmins | 24-bit pointer to FM patch data
+(1)  153/     29E :                     ;         68k's ROM area only.
+(1)  154/     29E :                     ; ----------------------------------------------------
+(1)  155/     29E :                     
+(1)  156/     29E :                     gInsFm3	macro pitch,fmins
+(1)  157/     29E :                     	dc.b $B0,pitch,((fmins>>16)&$FF),((fmins>>8)&$FF)
+(1)  158/     29E :                     	dc.b fmins&$FF,$00,$00,$00
+(1)  159/     29E :                     	endm
+(1)  160/     29E :                     
+(1)  161/     29E :                     ; ----------------------------------------------------
+(1)  162/     29E :                     ; gInsDac - DAC instrument
+(1)  163/     29E :                     ;
+(1)  164/     29E :                     ; pitch | Pitch/Octave
+(1)  165/     29E :                     ; start | 24-bit pointer, 68k's ROM area only.
+(1)  166/     29E :                     ; flags | Flags: %0000000l
+(1)  167/     29E :                     ;         l - Use loop enable: No(0) or Yes(1)
+(1)  168/     29E :                     ; ----------------------------------------------------
+(1)  169/     29E :                     
+(1)  170/     29E :                     gInsDac	macro pitch,start,flags
+(1)  171/     29E :                     	dc.b $C0|flags,pitch,((start>>16)&$FF),((start>>8)&$FF)
+(1)  172/     29E :                     	dc.b start&$FF,0,0,0
+(1)  173/     29E :                     	endm
+(1)  174/     29E :                     
+(1)  175/     29E :                     ; ----------------------------------------------------
+(1)  176/     29E :                     ; gInsPcm - Sega CD PCM Sample
+(1)  177/     29E :                     ;
+(1)  178/     29E :                     ; pitch | Pitch/Octave
+(1)  179/     29E :                     ; start | 24-bit pointer
+(1)  180/     29E :                     ;         Sub-CPU area only.
+(1)  181/     29E :                     ; flags | Flags: %0000000l
+(1)  182/     29E :                     ;         l - Use loop enable: No(0) or Yes(1)
+(1)  183/     29E :                     ; ----------------------------------------------------
+(1)  184/     29E :                     
+(1)  185/     29E :                     gInsPcm	macro pitch,start,flags
+(1)  186/     29E :                      if MCD|MARSCD
+(1)  187/     29E :                     	dc.b $D0|flags,pitch,((start>>16)&$FF),((start>>8)&$FF)
+(1)  188/     29E :                     	dc.b start&$FF,0,0,0
+(1)  189/     29E :                      else
+(1)  190/     29E :                     	dc.b $00,$00,$00,$00
+(1)  191/     29E :                     	dc.b $00,$00,$00,$00
+(1)  192/     29E :                      endif
+(1)  193/     29E :                     	endm
+(1)  194/     29E :                     
+(1)  195/     29E :                     ; ----------------------------------------------------
+(1)  196/     29E :                     ; gInsPwm - Sega 32X PWM Sample
+(1)  197/     29E :                     ;
+(1)  198/     29E :                     ; pitch | Pitch/Octave
+(1)  199/     29E :                     ; start | 32-bit pointer
+(1)  200/     29E :                     ;         SH2's map view: CS1(ROM) or CS3(SDRAM)
+(1)  201/     29E :                     ;
+(1)  202/     29E :                     ; flags | Flags: %000000sl
+(1)  203/     29E :                     ;         l - Use loop enable: No(0) or Yes(1)
+(1)  204/     29E :                     ;         s - Sample data is in Stereo
+(1)  205/     29E :                     ; ----------------------------------------------------
+(1)  206/     29E :                     
+(1)  207/     29E :                     gInsPwm	macro pitch,start,flags
+(1)  208/     29E :                      if MARS|MARSCD
+(1)  209/     29E :                     	dc.b $E0|flags,pitch,((start>>24)&$FF),((start>>16)&$FF)
+(1)  210/     29E :                     	dc.b ((start>>8)&$FF),start&$FF,0,0
+(1)  211/     29E :                      else
+(1)  212/     29E :                     	dc.b $00,$00,$00,$00
+(1)  213/     29E :                     	dc.b $00,$00,$00,$00
+(1)  214/     29E :                      endif
+(1)  215/     29E :                     	endm
+(1)  216/     29E :                     
      192/     29E :                     		include	"sound/driver/gema.asm"
 (1)    1/     29E :                     ; ===========================================================================
 (1)    2/     29E :                     ; -------------------------------------------------------------------
@@ -12018,7 +12023,7 @@
      425/   10DC8 : 00                  		dc.b 0
      426/   10DC9 :                     		align $8000
      427/   18000 :                     
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 2 - 10/11/2024 07:15:31 PM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 2 - 10/11/2024 10:48:36 PM
 
 
   Symbol Table (* = unused):
@@ -12496,7 +12501,7 @@
  TBLPWM :                      1C58 C |  TBLZ_CLEAR :                   EEC C |
  TH :                      20000000 - |  TICKCNT :                     1CFA C |
  TICKFLAG :                    1CF9 C |  TICKSPSET :                   1CF8 C |
-*TIME :               "07:15:31 PM" - | *TIMERCTL :                      30 - |
+*TIME :               "10:48:36 PM" - | *TIMERCTL :                      30 - |
  TRACK_OUT :                    5D1 C |  TRACK_OUT.INDX_DEL :           5DF C |
  TRACK_OUT.NOTHIN :             60D C |  TRKBLKS_0 :                   16AB C |
  TRKBLKS_1 :                   16B3 C |  TRKBLKS_2 :                   16BB C |
@@ -12684,7 +12689,7 @@
    1279 symbols
     407 unused symbols
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 3 - 10/11/2024 07:15:31 PM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 3 - 10/11/2024 10:48:36 PM
 
 
   Defined Macros:
@@ -12707,7 +12712,7 @@ SCREEN_CODE                           | VDP_SHOWME
 
      28 macros
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 4 - 10/11/2024 07:15:31 PM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 4 - 10/11/2024 10:48:36 PM
 
 
   Defined Structures/Unions:
@@ -12758,7 +12763,7 @@ PALFD
   5      (I8) TIMER
   6      (I16) NUM
 3 structures
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 5 - 10/11/2024 07:15:31 PM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 5 - 10/11/2024 10:48:36 PM
 
 
   Defined Functions:
@@ -12768,7 +12773,7 @@ FULL_LOC                              | PSTR_MEM
 COLOR_INDX                            | CELL_VRAM                            
 SPLITW                                |
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 6 - 10/11/2024 07:15:31 PM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 6 - 10/11/2024 10:48:36 PM
 
 
   Code Pages:
@@ -12780,8 +12785,8 @@ STANDARD (0 changed characters)
 
 0.15 seconds assembly time
 
-  14159 lines source file
-  14604 lines incl. macro expansions
+  14164 lines source file
+  14609 lines incl. macro expansions
       5 passes
       0 errors
       0 warnings
