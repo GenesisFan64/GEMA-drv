@@ -43,9 +43,7 @@ A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 #### Making a test track
 
-All the sound data is stored in /sound<br>
-
-Making a test track: You can use the test.it located at /sound/tracks/trkr/<br>
+You can use the file test.it located at /sound/tracks/trkr/<br>
 Open it with OpenMPT or any other tracker that supports ImpulseTracker files, after saving the file you need to go back one folder and run the Python3 script itextrct.py and load the file with this command:<br>
 
 python itextrct.py test<br>
