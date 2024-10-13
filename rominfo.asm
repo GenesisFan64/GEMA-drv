@@ -39,7 +39,7 @@ HTAG_CDVER	equ $0100|$02		; $0100|Version: $00-$FF
 ; "(C)name year.month"
 ; --------------------------------------------------------
 
-HTAG_DATEINFO	equ "(C)???? 2024.???"
+HTAG_DATEINFO	equ "(C)GF64 2024.???"
 
 ; --------------------------------------------------------
 ; "Domestic" Name, Your game's name in your language
@@ -77,7 +77,7 @@ HTAG_NOV_PICO	equ "GEMA Sound Driver PICO                          "
 ; Version number: 00 to 99
 ; --------------------------------------------------------
 
-HTAG_SERIAL	equ "GM HOMEBREW-02"
+HTAG_SERIAL	equ "GM HOMEBREW-00"
 
 ; --------------------------------------------------------
 ; Regions supported

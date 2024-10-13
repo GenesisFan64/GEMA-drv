@@ -1,19 +1,15 @@
 ; ------------------------------------------------------------
-; MACROS
+; GEMA MACROS
 ; ------------------------------------------------------------
 
 ; ----------------------------------------------------
-; gSmplData - Include .WAV sample data, applies to
-;             DAC, PCM* and PWM
+; gSmplData - Special include for .wav files,
+;             works for all chips.
 ;
-;             * No need to convert data, Sub-CPU
-;             converts the data manually.
-;
-; labl | 24-bit Pointer, depending of the
-;        current CPU
-; file | File path for the WAV sample file
-; loop | Loop start point if sample loop is enabled
-;        Set to 0 if not using loop.
+; labl | 24-bit pointer depending of the current CPU
+; file | WAV file location
+; loop | Loop start point, only used if looping is
+;        enabled
 ; ----------------------------------------------------
 
 gSmplData macro labl,file,loop
@@ -32,30 +28,21 @@ labl_e:
 	endm
 
 ; ----------------------------------------------------
-; gemaList - Make a tracklist label
-; ----------------------------------------------------
-
-; gemaList macro thislbl
-; 	align 2
-; thislbl	label *
-; GLBL_GEMABASE := *
-; 	endm
-
-; ----------------------------------------------------
-; gemaTrk - Sequence entry on Gema_MasterList
+; gemaTrk - Sequence entry in the current master
+;           list
 ;
 ; enblt | Disable/Enable global beats on this Sequence
 ;         0 - Don't Use beats, 1 - Use beats
 ; ticks | Ticks (Default tempo: 150-NTSC 120-PAL)
-;   loc | Direct location of the sequence data
+;   loc | Direct 24-bit location of the sequence data
 ; ----------------------------------------------------
 
-gemaTrk macro enbltp,ticks,loc
-	dc.l ((enbltp&$01)<<31)|((ticks&$7F)<<24)|(loc&$FFFFFF)
+gemaTrk macro enblt,ticks,loc
+	dc.l ((enblt&$01)<<31)|((ticks&$7F)<<24)|(loc&$FFFFFF)
 	endm
 
 ; ----------------------------------------------------
-; gemaHead - Track pointers to their respective data
+; gemaHead - Sequence data header
 ;
 ; blk_data  | Block data pointer
 ; patt_data | Pattern data pointer
@@ -82,6 +69,8 @@ gemaHead macro blk,pat,ins,num
 
 ; ----------------------------------------------------
 ; gInsNull - Null instrument
+;
+; You MUST use this on unused instruments.
 ; ----------------------------------------------------
 
 gInsNull macro
@@ -98,7 +87,7 @@ gInsNull macro
 ; slv   | Sustain
 ; dky   | Decay rate (up)
 ; rrt   | Release rate (down)
-; vib   | Set to 0, planned vibrato for later.
+; vib   | Set to 0, reserved for vibrato
 ; ----------------------------------------------------
 
 gInsPsg	macro pitch,alv,atk,slv,dky,rrt,vib
@@ -110,21 +99,18 @@ gInsPsg	macro pitch,alv,atk,slv,dky,rrt,vib
 ; gInsPsg - PSG noise
 ;
 ; pitch | Pitch/Octave
-;         If using Tone3: set to 47 for a full noise
 ; alv   | Attack level
 ; atk   | Attack rate
 ; slv   | Sustain
 ; dky   | Decay rate (up)
 ; rrt   | Release rate (down)
-; vib   | Set to 0, planned vibrato for later.
+; vib   | Set to 0, reserved for vibrato
 ; mode  | Noise mode: %tmm
-;        t - Bass(0)|Noise(1)
-;        m - Clock(0)|Clock/2(1)|Clock/4(2)|Tone3(3)
-;        Using Tone3 will disable PSG Channel 3.
+;         | t - Bass(0)|Noise(1)
+;         | m - Clock(0)|Clock/2(1)|Clock/4(2)|Tone3(3)
 ;
 ; Note:
-; Tone3 WILL silence PSG3 as it steals the
-; frequency from it, chip limitation.
+; Enabling tone3 will turn OFF PSG channel 3.
 ; ----------------------------------------------------
 
 gInsPsgN macro pitch,alv,atk,slv,dky,rrt,vib,mode
@@ -133,11 +119,10 @@ gInsPsgN macro pitch,alv,atk,slv,dky,rrt,vib,mode
 	endm
 
 ; ----------------------------------------------------
-; gInsFm - FM Normal instrument/patch
+; gInsFm - YM2612 FM normal instrument/patch
 ;
 ; pitch | Pitch/Octave
 ; fmins | 24-bit pointer to FM patch data
-;         68k's ROM area only.
 ; ----------------------------------------------------
 
 gInsFm macro pitch,fmins
@@ -146,11 +131,10 @@ gInsFm macro pitch,fmins
 	endm
 
 ; ----------------------------------------------------
-; gInsFm - FM3 Special instrument/patch
+; gInsFm - YM2612 FM special instrument/patch
 ;
 ; pitch | UNUSED, set to 0
 ; fmins | 24-bit pointer to FM patch data
-;         68k's ROM area only.
 ; ----------------------------------------------------
 
 gInsFm3	macro pitch,fmins
@@ -162,9 +146,9 @@ gInsFm3	macro pitch,fmins
 ; gInsDac - DAC instrument
 ;
 ; pitch | Pitch/Octave
-; start | 24-bit pointer, 68k's ROM area only.
+; start | 24-bit pointer
 ; flags | Flags: %0000000l
-;         l - Use loop enable: No(0) or Yes(1)
+;         | l - Enable loop: No(0)/Yes(1)
 ; ----------------------------------------------------
 
 gInsDac	macro pitch,start,flags
@@ -173,13 +157,13 @@ gInsDac	macro pitch,start,flags
 	endm
 
 ; ----------------------------------------------------
-; gInsPcm - Sega CD PCM Sample
+; gInsPcm - RF5C164 PCM Sample (SEGA CD)
 ;
 ; pitch | Pitch/Octave
-; start | 24-bit pointer
-;         Sub-CPU area only.
+; start | 24-bit direct pointer
+;         *Sub-CPU's memory area only*
 ; flags | Flags: %0000000l
-;         l - Use loop enable: No(0) or Yes(1)
+;         | l - Enable loop: No(0)/Yes(1)
 ; ----------------------------------------------------
 
 gInsPcm	macro pitch,start,flags
@@ -193,15 +177,14 @@ gInsPcm	macro pitch,start,flags
 	endm
 
 ; ----------------------------------------------------
-; gInsPwm - Sega 32X PWM Sample
+; gInsPwm - PWM Sample (SEGA 32X)
 ;
 ; pitch | Pitch/Octave
-; start | 32-bit pointer
+; start | 32-bit pointer from
 ;         SH2's map view: CS1(ROM) or CS3(SDRAM)
-;
 ; flags | Flags: %000000sl
-;         l - Use loop enable: No(0) or Yes(1)
-;         s - Sample data is in Stereo
+;         | l - Enable loop: No(0)/Yes(1)
+;         | s - Sample data is in Stereo: No(0)/Yes(1)
 ; ----------------------------------------------------
 
 gInsPwm	macro pitch,start,flags

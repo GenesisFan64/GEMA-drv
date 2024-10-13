@@ -199,14 +199,16 @@ dac_fill:	push	af		; Save af <-- Changes between PUSH AF(play) and RET(stop)
 
 ; --------------------------------------------------------
 ; 02Eh - User read/write values
-commZWrite	db 0			; 2Eh: cmd fifo wptr (from 68k)
-commZRomBlk	db 0			; 2Fh: 68k ROM block flag
-cdRamLen	db 0			; 30h: Size + status flag
-cdRamDst	db 0,0			; 31h: ** Z80 destination
-cdRamSrc	db 0,0			; 33h: ** 68k 24-bit source
-cdRamSrcB	db 0			; 35h: **
+
 mcdBlock	db 0			; 36h: Flag to BLOCK PCM transfers.
 marsBlock	db 0			; 37h: Flag to BLOCK PWM transfers.
+palMode		db 0			; 3Eh: PAL mode flag
+
+commZRead	db 0			; cmd fifo READ pointer (here)
+psgHatMode	db 0			; Current PSGN mode
+fmSpecial	db 0			; copy of FM3 enable bit
+sbeatAcc	dw 0			; Accumulates on each tick to trigger the sub beats
+sbeatPtck	dw 214			; Default global subbeats (this-32 for PAL) 214=125
 
 ; --------------------------------------------------------
 ; Z80 Interrupt at 0038h
@@ -219,15 +221,7 @@ marsBlock	db 0			; 37h: Flag to BLOCK PWM transfers.
 
 ; --------------------------------------------------------
 ; 03Eh - More user settings
-palMode		db 0				; 3Eh: PAL mode flag
-commZRead	db 0				; cmd fifo READ pointer (here)
 
-; --------------------------------------------------------
-; 68K Read/Write area at 40h
-; --------------------------------------------------------
-
-; 		org 40h
-commZfifo	ds MAX_ZCMND			; Buffer for commands from 68k side
 
 ; --------------------------------------------------------
 ; Initialize
@@ -2122,6 +2116,8 @@ dtbl_singl:
 		ld	(hl),0
 		inc	hl
 		ld	(hl),0
+		inc	hl
+		ld	(hl),0
 		call	.fm_keyoff
 		call	.fm_tloff
 		jp	.chnl_ulnkcut
@@ -3228,11 +3224,11 @@ zmars_send:
 	; ----------------------------------------
 	; Send PCM table
 	if MCD|MARSCD
-		rst	8
 		ld	a,(mcdBlock)	; Enable MARS requests?
 		or	a
 		jp	nz,.mcdt_blocked
 		ld	iy,8000h|200Eh	; iy - command ports
+		rst	8
 		ld	a,(mcdUpd)	; NEW transfer?
 		or	a
 		jp	z,.mcdt_blocked
@@ -3293,30 +3289,32 @@ zmars_send:
 		dec	c
 		jr	nz,.mcd_nextp
 		ld	(iy),0		; "MAIN" unlock
-		rst	8
 .mcdt_blocked:
 		ld	hl,pcmcom
 		xor	a
 		ld	b,8		; MAX PCM channels
+		rst	8
 .clr_pcm:
 		ld	(hl),a
 		inc	hl
 		djnz	.clr_pcm
 .mcdt_noupd:
-		rst	8
-		ld	b,2		; ** wave sync for MCD only
+		ld	b,3
 		djnz	$
+		nop
+		nop
 		rst	8
-		ld	b,1
-		djnz	$
+		nop
+		nop
+		nop
 	endif
 	; ----------------------------------------
 	; Send PWM table
 	if MARS|MARSCD
-		rst	8
 		ld	a,(marsBlock)	; Enable MARS requests?
 		or	a
 		jp	nz,.blocked_m
+		rst	8
 		ld	a,(marsUpd)	; NEW transfer?
 		or	a
 		jr	z,.blocked_m
@@ -3372,7 +3370,6 @@ zmars_send:
 		jr	nz,.w_pass2
 		dec	c
 		jr	nz,.next_packet
-		rst	8
 		res	7,(iy+comm14)	; Break transfer loop
 		res	6,(iy+comm14)	; Clear PASS
 ; Reset comm ports
@@ -3380,19 +3377,26 @@ zmars_send:
 		xor	a
 		ld	hl,pwmcom
 		ld	b,8
+		rst	8
 .clr_pwm:
 		ld	(hl),a		; Reset our COM bytes
 		inc	hl
 		djnz	.clr_pwm
 .pwm_exit:
+		nop
+		nop
 		rst	8
-		ld	b,1		; ** wave sync for MCD only
-		djnz	$
-		rst	8
+		nop
+		nop
+		nop
 	if MARSCD
-		ld	b,1
+		ld	b,3
 		djnz	$
+		nop
+		nop
+		nop
 	endif
+
 	endif
 		ret
 
@@ -4277,6 +4281,15 @@ mcdUpd		db 0			; Flag to request a PCM transfer
 		dw fmcach_4		; Followup
 		dw fmcach_5
 		dw fmcach_6
+x68ksrclsb	db 0		; readRom temporal LSB
+x68ksrcmid	db 0		; readRom temporal MID
+dDacFifoMid	db 0		; WAVE play halfway refill flag (00h/80h)
+dDacPntr	db 0,0,0	; WAVE play current ROM position
+dDacCntr	db 0,0,0	; WAVE play length counter
+headerOut	ds 00Eh		; Temporal storage for 68k pointers
+headerOut_e	ds 2		; <-- reverse readpoint
+sampleHead	ds 006h
+instListOut	ds 8
 
 ; ====================================================================
 ; --------------------------------------------------------
@@ -4374,10 +4387,7 @@ tblPWM:		db 00h,00h,00h,00h,00h,00h,00h,00h,00h,00h	; Channel 1
 		db 00h,00h,00h,07h,00h,00h,00h,00h,00h,00h	; Channel 8
 		db 00h,00h,00h,00h,00h,00h,00h,00h
 		dw -1	; end-of-list
-
 ; ----------------------------------------------------------------
-; Variables inside 1B00h-1CFFh
-
 wave_Start	dw 0		; START: 68k 24-bit pointer
 		db 0
 wave_Len	dw 0		; LENGTH 24-bit
@@ -4386,14 +4396,11 @@ wave_Loop	dw 0		; LOOP POINT 24-bit
 		db 0
 wave_Pitch	dw 0100h	; 01.00h
 wave_Flags	db 0		; WAVE playback flags (%10x: 1 loop / 0 no loop)
-psgHatMode	db 0		; Current PSGN mode
-fmSpecial	db 0		; copy of FM3 enable bit
+
 tickSpSet	db 0		; **
 tickFlag	db 0		; Tick flag from VBlank
 tickCnt		db 0		; ** Tick counter (PUT THIS AFTER tickFlag)
 currTickBits	db 0		; Current Tick/Subbeat flags (000000BTb B-beat, T-tick)
-sbeatAcc	dw 0		; Accumulates on each tick to trigger the sub beats
-sbeatPtck	dw 214		; Default global subbeats (this-32 for PAL) 214=125
 
 ; ====================================================================
 ; ----------------------------------------------------------------
@@ -4403,22 +4410,26 @@ sbeatPtck	dw 214		; Default global subbeats (this-32 for PAL) 214=125
 ; ----------------------------------------------------------------
 
 		org 1D00h
-dWaveBuff	ds 100h		; WAVE data buffer: 100h bytes
+dWaveBuff	ds 100h				; WAVE data buffer: 100h bytes
 trkChnls	ds 8*MAX_TRKCHN
 trkCach_0	ds MAX_RCACH
 trkCach_1	ds MAX_RCACH
 trkCach_2	ds MAX_RCACH
-; trkCach_3	ds MAX_RCACH
-; --------------------------------------------------------
-x68ksrclsb	db 0		; readRom temporal LSB
-x68ksrcmid	db 0		; readRom temporal MID
-dDacFifoMid	db 0		; WAVE play halfway refill flag (00h/80h)
-dDacPntr	db 0,0,0	; WAVE play current ROM position
-dDacCntr	db 0,0,0	; WAVE play length counter
-headerOut	ds 00Eh		; Temporal storage for 68k pointers
-headerOut_e	ds 2		; <-- reverse readpoint
-sampleHead	ds 006h
-instListOut	ds 8
+
+; ====================================================================
+; ----------------------------------------------------------------
+; Control area
+; ----------------------------------------------------------------
+
+		org 1F60h
+commZfifo	ds MAX_ZCMND			; Buffer for commands from 68k side
+commZWrite	db 0				; cmd fifo wptr (from 68k)
+commZRomBlk	db 0				; 68k ROM block flag
+cdRamLen	db 0				; Size + status flag
+cdRamDst	db 0,0				; ** Z80 destination
+cdRamSrc	db 0,0				; ** 68k 24-bit source
+cdRamSrcB	db 0				; **
+
 ; --------------------------------------------------------
 		dephase
 		cpu 68000		; [AS] Return to 68k
