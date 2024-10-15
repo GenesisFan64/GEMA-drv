@@ -1,1 +1,0 @@
-The file spritesheet.scm is a modified version of a script found on a GIMP forum, modified a little to add another type of export.

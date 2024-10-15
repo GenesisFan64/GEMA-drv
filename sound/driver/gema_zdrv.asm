@@ -3338,7 +3338,6 @@ zmars_send:
 		jr	nz,.wait_enter	; If not, retry
 		set	7,(iy+comm14)	; LOCK bit
 		set	1,(iy+standby)	; Request Slave CMD
-		rst	8
 ; .wait_cmd:
 ; 		bit	1,(iy+standby)	; <-- unstable on HW
 ; 		jr	nz,.wait_cmd
@@ -3350,7 +3349,6 @@ zmars_send:
 		ld	de,comm8	; hl - comm8
 		add	hl,de
 		ld	b,2
-		rst	8
 .next_comm:
 		ld	d,(ix)
 		ld	e,(ix+1)

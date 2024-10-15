@@ -1,0 +1,14 @@
+MAKING A TEST TRACK
+
+You can use the file test.it located at /sound/tracks/trkr/
+Open it with OpenMPT or any other tracker that supports ImpulseTracker files, after saving the file you need to go back one folder and run the Python3 script itextrct.py and load the file with this command:
+
+python itextrct.py test
+
+It will output the files test_blk.bin and test_patt.bin:
+_blk contains the pattern order and _patt contains the music data and it's pointers
+
+To change the instrumentation:
+Open the file tracks.asm locate .ins after gtrk_Test0 you'll see the macros gIns(chip), check driver/gema_macros.asm for more info on each chip.
+
+Now run build.bat or build.sh to see the result.

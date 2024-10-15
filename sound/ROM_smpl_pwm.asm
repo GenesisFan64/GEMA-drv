@@ -4,7 +4,7 @@
 ;
 ; - Samples located here CANNOT be used on CD32X
 ; - If the Genesis does DMA that requires the RV bit this
-;   section will get protected ASAP before the DMA starts
+;   section will get protected before the DMA starts
 ;
 ; MACRO:
 ; gSmplData Label,"file_path",loop_start

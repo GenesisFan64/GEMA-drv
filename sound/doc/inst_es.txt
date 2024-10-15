@@ -1,0 +1,170 @@
+/===========================================================================
+| GEMA Instrument format
+\===========================================================================
+
+Todos los intrumentos van organizados en el mismo orden que el module original.
+
+.inst:
+	gInsNull
+	gInsPsg  0,$00,$00,$00,$00,$01,$00
+	gInsPsgN 0,$00,$00,$00,$00,$01,$00,%011
+	gInsFm   0,FmIns_Trumpet_1,0
+	gInsFm3  0,FmIns_Sp_OpenHat,0
+	gInsDac  0,DacIns_TEST,0
+	gInsPcm  0,PcmIns_TEST,0
+	gInsPwm  0,PwmIns_TEST,%10
+
+/=========================================\
+ Null instrument
+\=========================================/
+
+Este es un instrumento nulo para instrumentos que no utilices en la sequencia, no usa parametros.
+
+.inst:
+	gInsNull
+
+/=========================================\
+ PSG  - PSG Tone
+ PSGN - PSG Noise and Bass
+\=========================================/
+
+3 tonos square-wave y un tono noise, los parametros van dentro del instrumento:
+
+.instr:
+	gInsPsg PITCH,ALV,ART,SLV,DKY,RRT,VIB
+	gInsPsgN PITCH,ALV,ART,SLV,DKY,RRT,VIB,MODE
+
+=========================================
+Parametros:
+
+pitch | Pitch/Octave up or down
+alv   | Attack level *1
+art   | Attack rate *1
+slv   | Sustain *1
+dky   | Decay rate (up) *1
+rrt   | Release rate (down) *1
+vib   | Set to 0, reservado para vibrato (si es que se puede...)
+mode  | Noise mode: %tmm
+      | t - Bass(0)|Noise(1)
+      | m - CLOCK(0)|CLOCK/2(1)|CLOCK/4(2)|Tone3(3)
+
+-------------------------------------
+
+*1
+En formato 4-bit float: %0000.0000, $0x es ALTO y $Fx es BAJO (silencio)
+
+El canal NOISE solo puede reproducir sonido a base de CLOCK del CPU, para poder controlar las frequencias/nota utiliza el modo "Tone3"
+Al usar este modo el canal se "roba" la frequencia del canal 3, si activas este modo durante la sequencia el canal 3 se apagará automaticamente hasta que otro instrumento de gInsPsgN use CLOCK
+Si en ese mismo momento el canal 3 ya se estaba usando se apagara automaticamente, pero dentro del driver se sigue utilizando.
+
+/=========================================\
+ FM synthesizer
+
+ FM  - YM2612 normal
+ FM3 - YM2612 special
+\=========================================/
+
+6 canales FM, pero 2 tienen proposito especial:
+
+- Canal FM3 es FM Special para instrumentos más complicados, si un canal normal estaba activo en este canal se sobreescribira con este.
+- Canal FM6 es audio sample (ver gInsDac para más detalles), también se sobreescribe.
+
+.instr:
+	gInsFm  PITCH,LOCATION
+	gInsFm3 PITCH,LOCATION
+
+=========================================
+Parametros:
+
+pitch    | Pitch/Octave up or down
+location | Puntero a ROM or RAM* a los datos de registros YM
+
+* Para usar datos del RAM, se tiene que llamar gemaReadRam manualmente todo el tiempo, por ejemplo dentro del loop de espera de VBlank *
+
+-------------------------------------
+FORMATO de gInsFm y gInsFm3
+
+FmIns_DATA:
+	;    OP1,OP2,OP3,OP4
+	dc.b $30,$34,$38,$3C	; Los registros en este orden (checar el documento YM2612
+	dc.b $40,$44,$48,$4C	; para ver detalles de cada uno)
+	dc.b $50,$54,$58,$5C	; **
+	dc.b $60,$64,$68,$6C	; **
+	dc.b $70,$74,$78,$7C	; **
+	dc.b $80,$84,$88,$8C	; **
+	dc.b $90,$94,$98,$9C	; **
+	dc.b $B0,$B4,$22,$28	; **
+	dc.w FQ1,FQ2,FQ3,FQ4	; gInsFm3 only: frequencias manuales para estos Operadores
+
+Notas:
+SSG-EG no funcionan en consolas piratas, si no los necesitas puedes escribir 0 a todos.
+
+$B4 AMS/PMS: %00aa0ppp
+a | AMS
+p | PMS
+Keep panning bits 0 and set the panning manually in your sequence with effect X
+
+$22 LFO: %0000evvv
+e | Enable
+v | Value
+This is a global setting, this affects ALL FM sound
+
+$28 KEYS: %oooo0000
+o | Operators 4-1
+
+/=========================================\
+ Sample data (WAVE)
+
+ DAC - YM2612 sample
+ PCM - Sega CD PCM
+ PWM - Sega 32X PWM
+\=========================================/
+
+1 canal para Genesis (YM2612)
+8 canales PCM (con Sega CD)
+8 canales PWM (con Sega 32X)
+
+	gInsDac PITCH,LOCATION,FLAGS
+	gInsPcm PITCH,LOCATION,FLAGS
+	gInsPwm PITCH,LOCATION,FLAGS
+
+=========================================
+Parametros:
+
+pitch    | Pitch/Octave up or down
+location | Puntero hacia los datos de sonido
+
+** LIMITACIONES **
+
+gInsDac
+Los samples solo pueden estar dentro del area de Genesis ROM (0-400000, con 32X: 880000, 900000) y RAM (FF0000)
+En RAM es posible usando gemaReadRam pero no es recomandable porque los samples pesan demasiado.
+
+gInsPcm
+Los samples solo pueden estar dentro de la memoria de Sub-CPU, hay que cargar los samples desde el disco primero.
+los punteros apuntan a la memoria de Sub-CPU
+
+gInsPwm
+Se puede usar entre ROM y SDRAM:
+- SDRAM es el lugar más seguro y compatible con CD32X pero el espacio es limitado.
+- En ROM hay mucho más espacio pero solo se puede utilizar en cartucho, NO SE PUEDEN USAR EN CD32X. unica limitación es con el bit RV en donde si el Genesis hace DMA desde ROM, El SH2 pierde acceso hasta que el bit vuelva en 0, ya se ha implementado un backup rapido pero está en WIP
+
+-------------------------------------
+FORMATO:
+
+Los samples deben estar en formato 8-bit unsigned a 16000hz MONORUAL, para los PWM's se puede usar STEREO
+
+NOTA: Si utilizas un programa moderno de edición asegurate que no tenga datos extras al final del archivo, ya que causa CLICKs molestos.
+
+En Sega CD el formato es automaticamente convertido al formado usado en su chip PCM durante el playback.
+
+Sample_DATA:
+	dc.b ((labl_e-labl_s)&$FF),(((labl_e-labl_s)>>8)&$FF),(((labl_e-labl_s)>>16)&$FF) ; Sample size
+	dc.b ((st_loop)&$FF),(((st_loop)>>8)&$FF),(((st_loop)>>16)&$FF)	; Starting loop point
+labl_s:
+	binclude "file.wav",$2C	; Skip $2C bytes from WAV
+labl_e:
+
+Para más facildad utiliza este macro, solo para archivos wav:
+
+	gSmplData label,"filename.wav",loop_start

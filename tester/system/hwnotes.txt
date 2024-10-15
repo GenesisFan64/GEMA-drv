@@ -1,0 +1,52 @@
+LIST OF UNEMULATED SEGA 32X HARDWARE FEATURES/BUGS/ERRORS, the ones marked with (?) are probably wrong and need more testing.
+
+-- General --
+- POPULAR Emulators doesn't trigger the SH2's Error handlers (Address Error, Zero Divide, etc.) this includes the DMA Interrupt needed for DREQ... only the Watchdog interrupt works only because Star Wars 32X requires it to work.
+- MOST Emulators doesn't SOFT reset like in hardware: 68k resets like usual BUT the SH2 side doesn't fully restart, it triggers the VRES interrupt and keep going on return... commonly the code used in this interrupt is just a jump to the "HotStart" code. (ALL values will remain UNMODIFIED including comm's... unless 68k clears them first.)
+- The actual purpose of CACHE isn't emulated at all, If cache (4k or 2k) gets full: Freeze
+- The 4-byte LONG alignment limitation is ignored: If you forget to align your code or any array it will trigger an Address Error on real hardware.
+- Fusion 3.64: The mid-frame SuperVDP changes doesn't work.
+- Fusion 3.64: VDPFILL might randomly get stuck waiting for the framebuffer-busy bit. (?)
+- Fusion 3.64: If the bitmap mode is 0 the VBlank and Framebuffer-lock bits doesn't work, This is a Genesis VDP limitation, not SuperVDP's.
+- Fusion 3.64: SVDP's HBlank flag doesn't work on CD32X
+- ares-emu: the shift register is wrong, it moves the current line to the right, it should be to the LEFT.
+
+-- 68000 --
+- RV bit: This bit sets the ROM map temporally to it's original location on the Genesis side as a workaround for the DMA's ROM-to-VDP transfers and other features (from $88xxxx/$9xxxxx to $0xxxxx), if you do any Genesis DMA-transfer without setting this bit it will read trash data. (Except RAM, like the common Palette/Scroll/Sprite transfers.) Your Genesis DMA-to-VDP transfer routines MUST be located on RAM (recommended method) OR IF you still use the ROM area $880000: put the RV writes (ON and OFF) AND the last VDP write on the RAM area, DISABLE INTERRUPTS DURING THIS PART.
+- Pressing RESET the Stack Point (SP) resets to 0
+
+-- Z80 --
+- If the Z80 tries to read from the 68000s ROM areas $880000 and $900000 while RV bit is set, freeze.
+- Writing to the PSG when the current ROM BANK is set to the $000000, $880000 or $900000 messes with the VDP internals (Tech Bulletin #22) but I haven't seen any effect on hardware (?)
+
+-- SH2---
+- The SDRAM, Framebuffer, ROM area and Cache run at different speeds for reading/writing and depending where the Program Counter (PC) is currently located. CACHE being the fastest BUT with the lowest space to store code or data.
+- Slave CPU runs slower than Master if Slave's code is running from SDRAM
+- If any of the SH2 CPUs READ/WRITE the same location at the same time without cache-thru the CPU with the wrong permission, freeze.
+- When writing $A5xx to $FFFFFE80 to control the WATCHDOG Interrupt: If you don't include the required %00011000($18) bits the current CPU crashes.
+- When exiting the Watchdog interrupt a TIMER is REQUIRED before leaving or else it will get stuck entering and exiting itself non-stop.
+- When DMA is active: If the DESTINATION gets read or rewritten the transfer it will end early or get cancelled.
+- 16-byte DMA transfers doesn't work properly if SOURCE(?) and DESTINATION aren't aligned by 0x10(16)'s.
+- If DREQLEN gets modified during the DREQ transfer it will corrupt the output and probably freeze the entire 32X (?)
+- If you use the DMA interrupt for transfering DREQ data: Fake-Read your current DMA's channel (_DMACHANNEL0/_DMACHANNEL1) then set the TE bit manually to 0 to properly finish the transfer.
+- Also for DMA interrupt: The FIFO writes are a little slower, on the 68K area you must check if FIFO gets full if you write to all 4 FIFO ports or it will miss data.
+- If the 68S is set 0 during the DREQ FIFO any new read will return 0, either the last word recieved or trash data.
+- If RV is set: Any read from the SH2's ROM (CS1) area will return trash data.
+- Writing to the interrupt mask bits as BYTE doesn't seem to work, freeze. (?)
+- _DIV register: Dividing by 0 will return a random output, ares-emu does emulate this behaivor.
+
+-- SuperVDP --
+- The framebuffer has a FIFO, emulation ignores it.
+- Writing pixels in to the framebuffer in BYTEs is SLOW, kinda processing 6 NOPs on every pixel write.
+- If any entry of the linetable ends with $xxFF and the XShift video register is set to 1, that line will NOT get shifted.
+- If the framebuffer is swapped during an active SVDP-FILL, freeze.
+
+-- PWM --
+- Writing a full $0000 wave value produces a loud BUZZ, ares-emu ignores this.
+- It's 3-word FIFO isn't emulated properly: on emulators it behaves like a normal write-register. (I imagine...)
+- The output limit for both LEFT and RIGHT channels is 4095 ($0FFF) but depending of the speed of the PWM interrupt the maximum value decreases.
+
+--- Both ---
+- FM bit: This bit tells which system side (Genesis or 32X) can read/write to the SuperVDP (The Framebuffer and 256-color palette, EXCEPT the registers), If a CPU with NO permission touches the SuperVDP it will freeze the entire system.
+
+For more info check the official hardware manual: "32X Hardware Manual.pdf"

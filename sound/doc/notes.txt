@@ -1,0 +1,66 @@
+------------------------------------------------------------
+
+	gemaTrk option,ticks,location
+
+option: 0 - Don't use global subbeats
+        1 - Use global subbeats (externally set)
+ticks:  Ticks number on a fixed tempo:
+        150 on NTSC or 125 on PAL
+        To change the tempo set "option" to 1,
+        and set your sub-beats externally.
+
+To change your "master list" use:
+	move.l	#Gema_DefaultList,d0
+	bsr	gemaSetMasterList
+This will be needed if using the SegaCD's Stamps.
+
+To use sub-beats:
+	move.w	#beats_num,d0
+	bsr	gemaSetBeats
+	move.w  #slot_id,d0
+	move.w	#sequence_id,d1
+	move.w  #start_block,d2
+	bsr	gemaPlayTrack
+* This change will affect ALL tracks with the same
+  sub-beats flag enabled *
+
+------------------------------------------------------------
+
+INTRUMENT/PATCH FORMAT:
+dc.b $30,$34,$38,$3C	; Your FM data following this register order
+dc.b $40,$44,$48,$4C	; **
+dc.b $50,$54,$58,$5C	; **
+dc.b $60,$64,$68,$6C	; **
+dc.b $70,$74,$78,$7C	; **
+dc.b $80,$84,$88,$8C	; **
+dc.b $90,$94,$98,$9C	; **
+dc.b $B0,$B4,$22,$28	; **
+dc.w OP1,OP2,OP3,OP4	; OPTIONAL: Manual FM3 frequencies
+
+Notes:
+SSG-EG CAN be used, but can get problematic on non-genuine systems.
+
+$B4 - AMS/PMS: %00aa0ppp
+a | AMS
+p | PMS
+Keep panning bits 0 and set the panning manually in your track.
+
+$22 - LFO: %0000evvv
+e | Enable
+v | Value
+This is a global setting, this will affect ALL the sound.
+
+$28 - KEYS: %oooo0000
+o | Operators 4-1
+
+For making your own FM patches:
+Run FM_EDITOR.bin on an emulator and
+save your patch as a savestate, include your
+instrument like this:
+binclude "sound/instr/fm/organ2.gsx",$2478,SIZE
+
+SIZE:
+Normal FM ins:  $20
+Special FM ins: $28
+
+-------------------------------------------------------------------

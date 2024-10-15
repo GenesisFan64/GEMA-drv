@@ -1,20 +1,22 @@
 ; ===========================================================================
 ; -------------------------------------------------------------------
-; Main sound data
+; Default sound data
 ; -------------------------------------------------------------------
 
 MainGemaSeqList:
 	gemaTrk 0,16,gtrk_Test0
-	gemaTrk 1,6,gtrk_Test1
+	gemaTrk 1,3,gtrk_BGM0
+	gemaTrk 0,3,gtrk_BGM1
+	gemaTrk 1,6,gtrk_sauron
 
 ; ----------------------------------------------------
 gtrk_Test0:
-	gemaHead .blk,.pat,.ins,4
+	gemaHead .blk,.pat,.ins,4	; Pointers to blocks, patterns, instruments and number of channels in the track
 .blk:	binclude "sound/tracks/test_blk.bin"
 .pat:	binclude "sound/tracks/test_patt.bin"
 .ins:
 	gInsPsg    0,$00,$00,$00,$00,$01,$00
-	gInsPsgN +12,$00,$00,$00,$00,$01,$00,%011		; Tone3
+	gInsPsgN +12,$00,$00,$00,$00,$01,$00,%011	; Tone3
 	gInsFm   -12,FmIns_Trumpet_bus,0
 	gInsFm3    0,FmIns_Sp_OpenHat,0
 	gInsDac    0,DacIns_TEST,0
@@ -22,7 +24,55 @@ gtrk_Test0:
 	gInsPwm    0,PwmIns_TEST,%10
 
 ; ----------------------------------------------------
-gtrk_Test1:
+gtrk_BGM0:
+	gemaHead .blk,.pat,.ins,12
+.blk:	binclude "sound/tracks/bgm0_blk.bin"
+.pat:	binclude "sound/tracks/bgm0_patt.bin"
+.ins:
+	gInsFm -24,FmIns_Trumpet_bus
+	gInsFm -12,FmIns_Organ_86;FmIns_Piano_Aqua
+	gInsFm -12,FmIns_Bass_Groove_1
+	gInsPsg 0,$40,$30,$30,$02,$01,$00
+	gInsPsg -12,$00,$00,$00,$00,$01,$00
+	gInsFm -12,FmIns_Organ_121;FmIns_Vibraphone_1
+	gInsFm -12,FmIns_Brass_eur
+; ----------------------------------------------------
+gtrk_BGM1:
+	gemaHead .blk,.pat,.ins,12
+.blk:	binclude "sound/tracks/bgm1_blk.bin"
+.pat:	binclude "sound/tracks/bgm1_patt.bin"
+.ins:
+	gInsFm -12,FmIns_Trumpet_1
+	gInsPsg 0,$30,$10,$10,$03,$05,$00
+	gInsFm 0,FmIns_Bass_club
+	gInsFm -12,FmIns_Vibraphone_2
+	gInsDac +24,DacIns_Kick,0
+	gInsNull
+	gInsFm3 0,FmIns_Sp_ClosedHat
+	gInsDac +24,DacIns_Snare,0
+	gInsFm3 0,FmIns_Sp_OpenHat
+	gInsFm -24,FmIns_Vibraphone_1
+	gInsFm -12,FmIns_Trumpet_bus
+	gInsFm 0,FmIns_Xylophone
+	gInsNull
+	gInsNull
+	gInsNull
+	gInsNull
+	gInsNull
+	gInsNull
+	gInsNull
+	gInsNull
+
+; 	gInsFm -24,FmIns_Trumpet_bus
+; 	gInsFm -12,FmIns_Piano_Aqua
+; 	gInsFm -12,FmIns_Bass_Groove_1
+; 	gInsPsg 0,$50,$30,$30,$04,$03,$00
+; 	gInsPsg -12,$00,$00,$00,$00,$01,$00
+; 	gInsFm -12,FmIns_Vibraphone_1
+; 	gInsFm -12,FmIns_Brass_eur
+
+; ----------------------------------------------------
+gtrk_sauron:
 	gemaHead .blk,.pat,.ins,4
 .blk:	binclude "sound/tracks/sauron_blk.bin"
 .pat:	binclude "sound/tracks/sauron_patt.bin"
@@ -110,8 +160,15 @@ FmIns_bass_synth_73:
 		binclude "sound/instr/fm/bin/bass_synth_73.bin"
 FmIns_bass_vlow_74:
 		binclude "sound/instr/fm/bin/bass_vlow_74.bin"
-FmIns_Organ_drawbar:
-		binclude "sound/instr/fm/bin/organ_drawbar.bin"
+FmIns_Organ_70:
+		binclude "sound/instr/fm/bin/organ_70.bin"
+FmIns_Organ_86:
+		binclude "sound/instr/fm/bin/organ_86.bin"
+FmIns_Organ_115:
+		binclude "sound/instr/fm/bin/organ_115.bin"
+FmIns_Organ_121:
+		binclude "sound/instr/fm/bin/organ_121.bin"
+
 FmIns_Flaute_1:
 		binclude "sound/instr/fm/bin/flaute_1.bin"
 FmIns_Flaute_2:
@@ -176,8 +233,8 @@ FmIns_sfx_alien2:
 		binclude "sound/instr/fm/bin/sfx_alien_84.bin"
 
 ; ====================================================================
+; OLD gsx patches:
 
-; FM3 Special
 FmIns_Sp_OpenHat:
 		binclude "sound/instr/fm/gsx/fm3_openhat.gsx",$2478,$28
 FmIns_Sp_ClosedHat:
@@ -206,6 +263,8 @@ FmIns_PSynth_plus:
 		binclude "sound/instr/fm/gsx/psynth_plus.gsx",$2478,$20
 FmIns_Brass_7:
 		binclude "sound/instr/fm/gsx/brass_7.gsx",$2478,$20
+FmIns_Brass_eur:
+		binclude "sound/instr/fm/gsx/brass_eur.gsx",$2478,$20
 
 ; ===========================================================================
 ; -------------------------------------------------------------------
@@ -218,3 +277,5 @@ FmIns_Brass_7:
 		;gSmplData Label,"file_path",loop_start
 ; -----------------------------------------------------------
 		gSmplData DacIns_TEST,"sound/instr/smpl/test.wav",0
+		gSmplData DacIns_Kick,"sound/instr/smpl/kick.wav",0
+		gSmplData DacIns_Snare,"sound/instr/smpl/snare.wav",0

@@ -1,0 +1,8 @@
+=============================================================================
+GEMA Sequence format
+=============================================================================
+
+Los sequence son los datos de musica o sfx, estan basados en los formato ImpulseTracker pero fueron modificados un poco para ahorrar espacio
+
+TODO:
+GF64 medio-se le olvidó como funcionaba el formato por dentro, usen itextrct.py por ahora.

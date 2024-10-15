@@ -9,12 +9,10 @@
 ;   | for larger samples.
 ;
 ; - Support for 32X's PWM:
-;   | 7 pseudo-channels in either MONO
+;   | 8 pseudo-channels in either MONO
 ;   | or STEREO.
 ;
-; - WAVE playback at 16000hz (base) for
-;   | all sample-based channels:
-;   | DAC, PCM and PWM
+; - Sample playback at 16000hz base for all chips
 ;
 ; - DMA ROM protection for DAC
 ;   | This keeps the wave playback in a
@@ -27,7 +25,7 @@
 ; This driver uses the area $FFFF00-$FFFFFF
 ; The Z80 writes a flag directly to RAM for
 ; a workaround to bypass a data-reading
-; hardware limitation. (see Sound_Update)
+; hardware limitation. (see gemaSendRam)
 ;
 ; CURRENTLY THIS CAN ONLY BE USED HERE IN NikonaSDK
 ; BECAUSE OF CROSS-REFERENCING LABELS BETWEEN THE
@@ -115,12 +113,12 @@ gemaReset:
 
 ; ====================================================================
 ; ----------------------------------------------------------------
-; gemaUpdate
+; gemaSendRam
 ;
-; Call this during DISPLAY ONLY and during your VBlank wait
-; (already called by System_Render)
+; If you are reading data from 68000's RAM you MUST call
+; this a lot during display, commonly during the VBlank waiting
+; loop.
 ;
-; RAM-to-Z80 transferRom workaround:
 ; This checks if the Z80 wants to read from RAM (as it can't
 ; see it), The 68k CPU manually writes the RAM bytes from
 ; here to the Z80's RAM
@@ -134,18 +132,9 @@ gemaReset:
 ; - Be careful when loading new data with gemaSetMasterList to
 ;   WORD-RAM, make sure MAIN-CPU has the permission set for
 ;   reading from there
-;
-; Sega Pico:
-; - TODO The entire Sound Driver will be here, translated from
-;   Z80 to 68k.
 ; ----------------------------------------------------------------
 
-gemaUpdate:
-	if PICO
-		rts		; entire Sound driver for Pico goes here
-	else
-	; ------------------------------------------------
-	; If transferRom wants to read from 68k RAM
+gemaSendRam:
 		tst.b	(RAM_ZCdFlag_D).w		; Z80 WROTE the flag?
 		beq.s	.no_task
 		clr.b	(RAM_ZCdFlag_D).w		; Clear here
@@ -171,19 +160,18 @@ gemaUpdate:
 .copy_bytes:
 		move.b	(a4)+,(a5)+
 		dbf	d7,.copy_bytes
-		move.b	#0,(z80_cpu+zDrvRamLen).l	; Clear LEN, breaks Z80 loop
+		move.b	#0,(z80_cpu+zDrvRamLen).l	; Clear LEN, unlocks Z80 loop
 .no_size:
 		bsr	sndUnlockZ80
 		movem.l	(sp)+,a4-a6/d5-d7
 .no_task:
-	endif
 		rts
 
 ; ====================================================================
 ; ------------------------------------------------
 ; sndLockZ80
 ;
-; Locks Z80, unlocks bus.
+; Stop Z80, unlocks bus
 ; ------------------------------------------------
 
 sndLockZ80:
@@ -198,7 +186,7 @@ sndLockZ80:
 ; ------------------------------------------------
 ; sndUnlockZ80
 ;
-; Unlocks Z80, locks bus.
+; Resume Z80, locks bus
 ; ------------------------------------------------
 
 sndUnlockZ80:
@@ -353,7 +341,7 @@ gemaTest:
 ; - ALL TRACKS MUST BE STOPPED, CALL gemaStopAll FIRST
 ;
 ; * RAM data (SCD/CD32X when using Stamps):
-;   Requires calling Sound_Update manually as a
+;   Requires calling gemaSendRam manually as a
 ;   workaround for the Z80's limitation of not being
 ;   able to read from RAM
 ; * Word-RAM (SCD/CD32X):
@@ -465,7 +453,8 @@ gemaStopAll:
 ;
 ; Notes:
 ; - DO NOT MIX THIS WITH gemaSetTrackVol
-; - In v1.0 this only works during new notes on playback.
+; - v1.0: This only works on (re)start
+;   or during new notes on playback.
 ; --------------------------------------------------------
 
 gemaFadeSeq:
@@ -491,7 +480,7 @@ gemaFadeSeq:
 ;
 ; Notes:
 ; - DO NOT MIX THIS WITH gemaFadeSeq
-; - In v1.0 this only works on (re)start
+; - v1.0: This only works on (re)start
 ;   or during new notes on playback.
 ; --------------------------------------------------------
 

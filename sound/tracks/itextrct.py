@@ -104,17 +104,19 @@ while numof_Patt:
 
 	# ****************************************
 	out_patterns.seek(b)
+
 	# ---------------------------
 	# read pattern head
 	# ---------------------------
 	set_End = False
 	timerOut = 0
+
+	# ---------------------------
 	while sizeof_Rows:
 		a = ord(input_file.read(1))
 		
 		# TIMER or END set.
 		if a == 0:
-
 			# Set note data end flag
 			if set_End == True:
 				set_End = False
@@ -140,7 +142,7 @@ while numof_Patt:
 				out_patterns.write(bytes([a&0xFF]))	# save format
 				a = ord(input_file.read(1))
 				buff_Notes[b] = a
-				out_patterns.write(bytes([a&0xFF]))	# store
+				out_patterns.write(bytes([a&0xFF]))	# storage
 			else:
 				# NEW data, reuse format
 				a = 0x80 | b
@@ -166,21 +168,11 @@ while numof_Patt:
 	# Save size
 	pattrn_size = (out_patterns.tell()-pattrn_start)
 	lastpatt = out_patterns.tell()
-	#out_patterns.seek(curr_PattInc)
-	#out_patterns.write(bytes([pattrn_size&0xFF,(pattrn_size>>8)&0xFF]))
-	#print(hex(pattrn_start),hex(pattrn_size))
 	out_patterns.seek(lastpatt)
 	
 	# Next block
 	curr_PattInc += 4
 	numof_Patt -= 1
-
-
-# last size...
-# b = out_patterns.tell()
-# out_patterns.seek(curr_PattInc)
-# a = b
-# out_patterns.write(bytes([a&0xFF,(a>>8)&0xFF]))
 
 # ----------------------------
 # End
