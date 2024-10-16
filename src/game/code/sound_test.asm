@@ -69,27 +69,6 @@ sizeof_thisbuff		ds.l 0
 		bsr	System_Default
 	; ----------------------------------------------
 	; Load assets
-; 	if MARS|MARSCD
-; 		lea	file_tscrn_mars(pc),a0			; Load DATA BANK for 32X stuff
-; 		bsr	System_SetDataBank
-; 		lea	(PalMars_STest),a0
-; 		move.w	#0,d0
-; 		move.w	#256,d1
-; 		moveq	#0,d2
-; 		bsr	Video_MdMars_FadePal
-; 		clr.w	(RAM_MdMars_PalFd).w
-; 		lea	(ArtMars_Test2D),a0
-; 		move.l	#0,a1
-; 		move.l	#ArtMars_Test2D_e-ArtMars_Test2D,d0
-; 		bsr	Video_MdMars_LoadVram
-; 		lea	(RAM_MdMars_Models).w,a0
-; 		move.l	#MarsObj_test_2,mmdl_data(a0)
-; 		move.l	#0,mmdl_z_pos(a0)
-; 		moveq	#2,d0					; 32X 3D mode
-; 		bsr	Video_MdMars_VideoMode
-; 	endif
-	; ----------------------------------------------
-	; Load assets
 		lea	file_tscrn_main(pc),a0		; ** LOAD BANK **
 		bsr	System_SetDataBank
 	; ----------------------------------------------
@@ -99,7 +78,7 @@ sizeof_thisbuff		ds.l 0
 		move.l	#ASCII_FONT_W,d0
 		move.w	#DEF_PrintVramW|$6000,d1
 		bsr	Video_PrintInitW
-		lea	(RAM_PaletteFade+$40).w,a0	; Palette line 4:
+		lea	(RAM_PaletteFade+$40).w,a0
 		move.w	#$0000,(a0)
 		move.w	#$00E0,2(a0)
 		move.w	#$00A0,4(a0)
@@ -115,7 +94,6 @@ sizeof_thisbuff		ds.l 0
 		bsr	Video_FadePal
 		lea	ArtList_Stuff(pc),a0
 		bsr	Video_LoadArt_List
-
 	; ----------------------------------------------
 		lea	str_TesterTitle(pc),a0
 		moveq	#6,d0
@@ -134,7 +112,6 @@ sizeof_thisbuff		ds.l 0
 		bsr	Video_Print
 		lea	str_Instruc(pc),a0
 		moveq	#2,d0
-; 		moveq	#14,d1
 		moveq	#21,d1
 		move.w	#DEF_PrintVram|$4000,d2
 		bsr	Video_Print

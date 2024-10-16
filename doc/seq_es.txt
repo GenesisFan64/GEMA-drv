@@ -1,21 +1,49 @@
-=============================================================================
-GEMA Sequence format
-=============================================================================
+/=============================================================================
+| GEMA Sequence format
+\=============================================================================
 
-Los sequence son los datos de musica o sfx, estan basados en los formato ImpulseTracker pero fueron modificados para ahorrar espacio
+Los sequence son los datos de musica o sfx, están basados en el formato ImpulseTracker pero fueron modificados para ahorrar espacio
 
-Luego explico bien el formato por dentro, usen itextrct.py por ahora
+TODO Luego explico bien el formato, usen itextrct.py por ahora
 
+=========================================
+USANDO SEQUENCIAS EN EL DRIVER
+=========================================
 
-Se usan de esta forma:
+MasterList:
+	gemaTrk 0,16,gtrk_Example0		; No global sub-beats(0), Ticks: 16, pointer
+	gemaTrk 1,8,gtrk_Example1		; Use global sub-beats(0), Ticks: 8, pointer
 
 gtrk_Test0:
-	gemaHead .blk,.pat,.ins,numof_chnls		; Pointers to blocks and patt, number of channels used in module
-.blk:	binclude "_blk.bin"				; Blocks
-.pat:	binclude "_patt.bin"				; Patterns and headers
-.ins:
-	; ver inst_es.txt para mas detalles
+	gemaHead loc_blocks,loc_patterns,loc_instr,num_channels
+loc_blocks:
+loc_patterns:
 
+-------------------------------------
+loc_blocks:
+Orden de los bloques de la sequencia
+
+loc_patterns:
+Headers y todos los Patterns de la sequencia
+
+loc_instr:
+Lista de instrumentos a usar dentro del driver, inst_es.txt
+
+num_channels:
+El numero de canales usados en el modulo, si se pone un 0 se leeran TODOS los canales del module,
+pero no es recomendable porque alentaría el Z80 (y mucho)
+
+
+=========================================
+EJEMPLO
+=========================================
+
+gtrk_Test0:
+	gemaHead .blk,.pat,.ins,10		; Pointers to blocks and patt, numero de canales: 10
+.blk:	binclude "_blk.bin"			; Block list
+.pat:	binclude "_patt.bin"			; Patterns and headers
+.ins:
+	; ver inst_es.txt para más detalles
 	gInsPsg    0,$00,$00,$00,$00,$01,$00
 	gInsPsgN +12,$00,$00,$00,$00,$01,$00,%011	; Tone3
 	gInsFm   -12,FmIns_Trumpet_bus,0
@@ -23,6 +51,3 @@ gtrk_Test0:
 	gInsDac    0,DacIns_TEST,0
 	gInsPcm    0,PcmIns_TEST,0
 	gInsPwm    0,PwmIns_TEST,%10
-
-
-
