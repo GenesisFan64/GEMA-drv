@@ -39,7 +39,7 @@ A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 ### Setting up the assembler
 
-* Go to `/tester/tools`<br>
+* Go to `/dev/tools`<br>
 * Extract the AS assembler to these locations depending of the system you are currently using:<br>
 `/tools/AS/win32`<br>
 `/tools/AS/linux`<br>
