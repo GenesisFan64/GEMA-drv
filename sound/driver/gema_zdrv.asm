@@ -1,6 +1,6 @@
 ; ===========================================================================
 ; -------------------------------------------------------------------
-; GEMA/Nikona Z80 code v1.0
+; GEMA Z80 code
 ; -------------------------------------------------------------------
 
 		phase 0
@@ -56,7 +56,7 @@ trk_RomPattRead	equ 19h ; [3b] ROM current pattern data to be cache'd
 trk_RomPatt	equ 1Ch ; [3b] ROM BASE pattern data
 trk_RomInst	equ 1Fh ; [3b] ROM instrument data
 trk_RomBlks	equ 22h ; [3b] ROM blocks data
-trk_ChnIndx	equ 25h	; CHANNEL INDEXES START HERE
+trk_ChnIndx	equ 25h	; CHANNEL INDEXING START HERE
 
 ; chnBuff struct, 8 BYTES ONLY.
 ;
@@ -67,9 +67,10 @@ trk_ChnIndx	equ 25h	; CHANNEL INDEXES START HERE
 ; 	 v - Volume*
 ; 	 i - Intrument*
 ; 	 n - Note*
+
 chnl_Flags	equ 0	; !! Playback flags: %E0LRevin ** MUST BE LOCATED AT 0 **
 chnl_Chip	equ 1	; %ccccpppp c - Current Chip ID / p - Priority level
-chnl_Note	equ 2	; IT Musical note or command
+chnl_Note	equ 2	; IT Music note or command
 chnl_Ins	equ 3	; IT Instrument starting from 1 (0 is invalid)
 chnl_Vol	equ 4	; IT Volume: MAX(64) to MIN(0)
 chnl_EffId	equ 5	; IT Effect number
@@ -1768,8 +1769,6 @@ dtbl_singl:
 		call	dac_off
 .siln_fm:
 		jp	.fm_keyoff
-; 		call	.fm_keyoff
-; 		jp	.fm_tloff
 
 ; ----------------------------------------
 ; Process channel now
@@ -2123,11 +2122,13 @@ dtbl_singl:
 		jp	.chnl_ulnkcut
 
 ; ----------------------------------------
+; iy - current FM table
 
 .fm_keyoff:
 		ld	d,28h
 		ld	e,(iy+ztbl_Chip)
 		jp	fm_send_1
+
 .fm_tloff:
 		ld	b,4
 		ld	c,(iy+ztbl_Chip)

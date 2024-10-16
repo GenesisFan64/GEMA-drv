@@ -1,11 +1,11 @@
 # GEMA-drv
-A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X<br>
+A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 ## FEATURES
 
-* Runs entirely on Z80<br>
-* All sound chips supported and can be used at the same time, a single track can use up to 26 channels<br>
-* Works on real hardware (ONLY tested Genesis and 32X, I don't have the Sega CD but it should work)<br>
+* Runs entirely on Z80
+* All sound chips supported and can be used at the same time<br>
+* Works on real hardware (ONLY tested Genesis and 32X, I don't have the Sega CD but it should work)
 
 
 ### PSG
@@ -22,7 +22,7 @@ A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 ### RF5C164 (SCD)
 * Sample rate at 16000hz base, can be looped.<br>
-* Support for larger samples by streaming data on Sub-CPU (from SUB-CPU's memory to PCM memory)<br>
+* Support for larger samples with the help of data streaming on Sub-CPU (from Sub's memory to PCM memory)<br>
 
 
 ### PWM (32X)
@@ -39,24 +39,14 @@ A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 ## HOW TO USE
 
-### Setting up the assembler
+## Setting up the assembler
 
-* Go to /tester/tools<br>
+* Go to /tester
 * Extract the AS assembler to these locations depending of the system you are currently using:<br>
-'/tools/AS/win32'<br>
-'/tools/AS/linux'<br>
-
-### Building the sound tester
-
-* Run 'make_tester.sh' on Linux or 'make_tester.bat' on Windows
-* output ROMS will be located at bin, rom_() are for real hardware and rom_emu_(system) are for emulators, for SegaCD/CD32X: the letters j, u, e represent the region.
-
-The tester uses code from NikonaMD which you can check here: https://github.com/GenesisFan64/NikonaMD
-
-### Building the Z80 driver binary
-
-* Run 'make_driver.sh' on Linux or 'make_driver.bat' on Windows
-* output binaries are located at /drvbin, zdrv_(system) are for real hardware and zdrv_emu(system) for emulation, only difference is the minimal DAC playback.
+/tools/AS/win32<br>
+/tools/AS/linux<br>
+* Python 3 is required for a script to convert the .p file output into a working binary, It is also required to convert the music modules.<br>
+* Run build.bat (Windows) or build.sh (Linux) to compile the sound tester<br>
 
 ## TODO
 
