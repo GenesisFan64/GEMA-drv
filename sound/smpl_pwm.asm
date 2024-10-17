@@ -1,9 +1,9 @@
 ; ===========================================================================
 ; -------------------------------------------------------------------
 ; GEMA/Nikona PWM instruments located at SDRAM
-;
 ; *** VERY LIMITED STORAGE ***
-; If you are using CD32X consider using PCM samples instead
+;
+; If you are using CD32X use Sega CD's PCM samples instead.
 ;
 ; MACRO:
 ; gSmplData Label,"file_path",loop_start

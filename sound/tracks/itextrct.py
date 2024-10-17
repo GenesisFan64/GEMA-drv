@@ -1,5 +1,8 @@
 #======================================================================
-# Convert Impulse tracker module to GEMA/Nicona
+# Convert ImpulseTracker module to GEMA V1.0
+#
+# Input:
+# python itextrct.py file.it
 #======================================================================
 
 import sys
@@ -11,7 +14,8 @@ import os.path
 # -------------------------------------------------
 
 MAX_TIME	= 0x7F
-MAX_CHAN	= 32
+MAX_CHAN	= 32			# !! Maximum 32
+IN_FOLDER	= "./trkr/"		# Location of the IT files
 
 #======================================================================
 # -------------------------------------------------
@@ -21,13 +25,12 @@ MAX_CHAN	= 32
 if len(sys.argv) != 1+1:
 	print("Usage: itextrct.py inputfile")
 	exit()
-	
-# if os.path.exists(sys.argv[1]) == False:
-# 	print("File not found")
-# 	exit()
-	
+if os.path.exists(IN_FOLDER+sys.argv[1]+".it") == False:
+	print("File not found")
+	exit()
+
 MASTERNAME = sys.argv[1]
-input_file = open("./trkr/"+MASTERNAME+".it","rb")
+input_file = open(IN_FOLDER+MASTERNAME+".it","rb")
 out_patterns = open(MASTERNAME+"_patt.bin","wb")
 out_blocks   = open(MASTERNAME+"_blk.bin","wb")
 
@@ -38,122 +41,115 @@ out_blocks   = open(MASTERNAME+"_blk.bin","wb")
 
 working=True
 
-input_file.seek(0x20)
-OrdNum = ord(input_file.read(1)) | (ord(input_file.read(1)) << 8)
+input_file.seek(0x20)							# go to 0x40
+OrdNum = ord(input_file.read(1)) | (ord(input_file.read(1)) << 8)	# Get Num for these
 InsNum = ord(input_file.read(1)) | (ord(input_file.read(1)) << 8)
 SmpNum = ord(input_file.read(1)) | (ord(input_file.read(1)) << 8)
 PatNum = ord(input_file.read(1)) | (ord(input_file.read(1)) << 8)
-input_file.seek(0x40)
+
+# TODO, mejorar esta parte...
+input_file.seek(0x40)		# Go to 0x40
 ChnNum = 0
 for i in range(64):
 	a = ord(input_file.read(1))
 	if (a & 0x80) == False:
 		ChnNum += 1
-addr_BlockList = 0xC0
-addr_PattList  = 0xC0+( (OrdNum) + (InsNum*4) + (SmpNum*4) )
-#print("Channels:",ChnNum)
+
+
+addr_BlockList = 0xC0					# Block order pos
+addr_PattList  = 0xC0+((OrdNum)+(InsNum*4)+(SmpNum*4))	# BlkOrder + these variables
+
 #======================================================================
 # -------------------------------------------------
-# Start
+# build BLOCKS file
 # -------------------------------------------------
 
-#$00 - $77  | notas
-#$78 - $7F  | free
-#$FE        | note CUT (rest ===)
-#$FF        | note OFF (FM: key off)
-
-
-# 0x00      = next row and reset channel counter to 0-8
-# 0x01-0x7B = timer
-# 0x7C      = next 8 channels (can't go back)
-# 0x7D      = loop checkpoint
-# 0x7E      = end and loop track (set loop with 0x7D)
-# 0x7F      = end of track (NO loop)
-
-# -------------------------------------------------
-
-buff_Notes = [0]*(MAX_CHAN)			# mode, note, instr, volume, effects
-
-# build BLOCKS
+# build BLOCKS list
 input_file.seek(addr_BlockList)
 for b in range(0,OrdNum):
-	a = ord(input_file.read(1))
+	a = ord(input_file.read(1))		# Copy and Paste
 	out_blocks.write(bytes([a]))
 
-# build patterns
-curr_PattInc = 0				# OUT header counter
+# -------------------------------------------------
+# build Headers and Patterns
+# -------------------------------------------------
+
+buff_Notes = [0]*(MAX_CHAN)			# IT note storage
+curr_PattInc = 0				# current Pattern pos
 numof_Patt   = PatNum
-out_patterns.write(bytes(numof_Patt*4))		# make room for pointers
+out_patterns.write(bytes(numof_Patt*4))		# Make room for the pointers
 
 while numof_Patt:
-	input_file.seek(addr_PattList)
-	addr_PattList += 4
+	input_file.seek(addr_PattList)		# Get pattern location in module
+	addr_PattList += 4			# Increment for the next one
+
+	# Read MODULE pattern address and jump
 	addr_CurrPat = ord(input_file.read(1)) | ord(input_file.read(1)) << 8 | ord(input_file.read(1)) << 16 | ord(input_file.read(1)) << 24
 	input_file.seek(addr_CurrPat)
+	# Get pattern size and number of rows
 	sizeof_Patt = ord(input_file.read(1)) | ord(input_file.read(1)) << 8
 	sizeof_Rows = ord(input_file.read(1)) | ord(input_file.read(1)) << 8
-	input_file.seek(4,True)
+	input_file.seek(4,True)		# Skip 4 bytes
 
-	b = out_patterns.tell()
+	# Make a header for this pattern
+	last_pattout = out_patterns.tell()
 	out_patterns.seek(curr_PattInc)
-	pattrn_start = b
-	# set point to pattern, size is set below
-	out_patterns.write(bytes([pattrn_start&0xFF,(pattrn_start>>8)&0xFF]))
-	out_patterns.write(bytes([sizeof_Rows&0xFF,(sizeof_Rows>>8)&0xFF]))
+	pattrn_start = last_pattout
+	out_patterns.write(bytes([pattrn_start&0xFF,(pattrn_start>>8)&0xFF]))	# dw .patt_loc
+	out_patterns.write(bytes([sizeof_Rows&0xFF,(sizeof_Rows>>8)&0xFF]))	# dw row_size
 	last_pattrstart = pattrn_start
-
-	# ****************************************
-	out_patterns.seek(b)
 
 	# ---------------------------
 	# read pattern head
 	# ---------------------------
-	set_End = False
-	timerOut = 0
+	out_patterns.seek(last_pattout)
+	set_End = False					# Reset end-of-row flag
+	timerOut = 0					# Reset RLE timer
 
 	# ---------------------------
 	while sizeof_Rows:
 		a = ord(input_file.read(1))
 		
-		# TIMER or END set.
+		# 0x00
 		if a == 0:
-			# Set note data end flag
-			if set_End == True:
+			if set_End == True:				# Is the end of the row?
 				set_End = False
 				out_patterns.write(bytes(1))
-				
-			# Make wait timer
-			else:
-				if timerOut != 0:
-					out_patterns.seek(-1,True)
-				out_patterns.write(bytes([timerOut&0x7F]))
-				timerOut += 1
+			else:							# Else, it's a timer
+				if timerOut != 0:				# RLE timer is non-zero?
+					out_patterns.seek(-1,True)		# then go back
+
+				out_patterns.write(bytes([timerOut&0x7F]))	# Write/Update timer
+				timerOut += 1					# Next
 				if timerOut > MAX_TIME:
 					timerOut = MAX_TIME
-			sizeof_Rows -= 1
+			sizeof_Rows -= 1					# DECREMENT ROW
 
 		# 0x01-0xFF
 		else:
-			timerOut = 0
-			b = (a-1) & 0x3F
+			timerOut = 0					# Reset RLE timer
+			gotChnlIndx = (a-1) & 0x3F			# Get channel index
+
+			# NEW note, new control byte (+0x80)
 			if (a & 128) != 0:
-				# NEW data and format
-				a = 0xC0 | b
-				out_patterns.write(bytes([a&0xFF]))	# save format
+				a = 0xC0 | gotChnlIndx
+				out_patterns.write(bytes([a&0xFF]))	# Save format
 				a = ord(input_file.read(1))
-				buff_Notes[b] = a
-				out_patterns.write(bytes([a&0xFF]))	# storage
+				buff_Notes[gotChnlIndx] = a		# Get NEW control byte
+				out_patterns.write(bytes([a&0xFF]))	# and store it
+
+			# NEW note, same control
 			else:
 				# NEW data, reuse format
-				a = 0x80 | b
+				a = 0x80 | gotChnlIndx
 				out_patterns.write(bytes([a&0xFF]))
 
-			if b >= MAX_CHAN:
+			if gotChnlIndx >= MAX_CHAN:
 				print("Error: RAN OUT OF CHANNELS")
 				exit()
 
-			# grab note/ins/etc.
-			a = buff_Notes[b]
+			# Read data changes trough control byte
+			a = buff_Notes[gotChnlIndx]
 			if (a & 1) != 0:
 				out_patterns.write(bytes([ord(input_file.read(1))&0xFF]))
 			if (a & 2) != 0:
@@ -164,12 +160,7 @@ while numof_Patt:
 				out_patterns.write(bytes([ord(input_file.read(1))&0xFF]))
 				out_patterns.write(bytes([ord(input_file.read(1))&0xFF]))
 			set_End = True
-			
-	# Save size
-	pattrn_size = (out_patterns.tell()-pattrn_start)
-	lastpatt = out_patterns.tell()
-	out_patterns.seek(lastpatt)
-	
+
 	# Next block
 	curr_PattInc += 4
 	numof_Patt -= 1

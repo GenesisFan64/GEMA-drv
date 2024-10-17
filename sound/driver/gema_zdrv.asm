@@ -16,10 +16,10 @@ MAX_TRKCHN	equ 32		; !! Max internal shared tracker channel slots *** LIMTED to 
 MAX_RCACH	equ 20h		; !! Max storage for ROM pattern data *** 1-BIT SIZES ONLY, MUST BE ALIGNED ***
 MAX_BUFFNTRY	equ 4*2		; !! nikona_BuffList buffer entry size
 MAX_SLOTS	equ 3		; !! Number of buffers
+MAX_ZCMND	equ 20h		; !! Size of command array ** 1-bit SIZES ONLY ** (68k uses this label too)
 
 MAX_TBLSIZE	equ 12h		; Maximum size for chip tables
 MAX_TRKINDX	equ 26		; Max channel indexes per buffer: 4PSG+6FM+8PCM+8PWM
-MAX_ZCMND	equ 20h		; Size of command array ** 1-bit SIZES ONLY ** (68k uses this label too)
 
 ; --------------------------------------------------------
 ; Structs
@@ -201,15 +201,14 @@ dac_fill:	push	af		; Save af <-- Changes between PUSH AF(play) and RET(stop)
 ; --------------------------------------------------------
 ; 02Eh - User read/write values
 
-mcdBlock	db 0			; 36h: Flag to BLOCK PCM transfers.
-marsBlock	db 0			; 37h: Flag to BLOCK PWM transfers.
-palMode		db 0			; 3Eh: PAL mode flag
-
 commZRead	db 0			; cmd fifo READ pointer (here)
 psgHatMode	db 0			; Current PSGN mode
 fmSpecial	db 0			; copy of FM3 enable bit
 sbeatAcc	dw 0			; Accumulates on each tick to trigger the sub beats
 sbeatPtck	dw 214			; Default global subbeats (this-32 for PAL) 214=125
+x68ksrclsb	db 0			; readRom temporal LSB
+x68ksrcmid	db 0			; readRom temporal MID
+dDacFifoMid	db 0			; WAVE play halfway refill flag (00h/80h)
 
 ; --------------------------------------------------------
 ; Z80 Interrupt at 0038h
@@ -219,10 +218,6 @@ sbeatPtck	dw 214			; Default global subbeats (this-32 for PAL) 214=125
 		ld	(tickSpSet),sp		; Write TICK flag using current sp (read tickFlag only)
 		di				; Disable interrupt
 		ret
-
-; --------------------------------------------------------
-; 03Eh - More user settings
-
 
 ; --------------------------------------------------------
 ; Initialize
@@ -1852,6 +1847,8 @@ dtbl_singl:
 		and	0011b
 		jr	z,.psgc_proc		; Process only
 		ld	a,c			; c - Note
+		or	a
+		ret	z
 		cp	-2			; Key cut?
 		jr	z,.kycut_psg
 		cp	-1			; Key off?
@@ -1968,6 +1965,8 @@ dtbl_singl:
 		and	0011b
 		jr	z,.mkfm_proc		; Process only
 		ld	a,(ix+chnl_Note)	; Get IT note
+		or	a
+		ret	z
 		cp	-2			; Key-cut?
 		jp	z,.fm_cut
 		cp	-1			; Key-off?
@@ -2067,6 +2066,8 @@ dtbl_singl:
 		and	0011b
 		jp	z,.mkfm_set		; Process only
 		ld	a,(ix+chnl_Note)
+		or	a
+		ret	z
 		cp	-2
 		jp	z,.fm_cut
 		cp	-1
@@ -2312,6 +2313,8 @@ dtbl_singl:
 		and	0011b
 		jr	z,.dac_proc
 		ld	a,(ix+chnl_Note)
+		or	a
+		ret	z
 		cp	-2
 		jp	z,.dac_cut
 		cp	-1
@@ -2373,6 +2376,8 @@ dtbl_singl:
 		and	0011b			; Note and Ins?
 		jr	z,.mkpcm_wrton
 		ld	a,c
+		or	a
+		ret	z
 		cp	-2
 		jp	z,.pcm_cut
 		cp	-1
@@ -2456,6 +2461,8 @@ dtbl_singl:
 		and	0011b			; Note and Ins?
 		jr	z,.pw_effc
 		ld	a,l
+		or	a
+		ret	z
 		cp	-2
 		jp	z,.pwm_cut
 		cp	-1
@@ -3248,7 +3255,7 @@ zmars_send:
 		jr	nz,.wait_in
 		ld	c,0C0h
 		ld	(iy),c		; Set our entrance ID
-		ld	b,8		; Retry times
+		ld	b,14		; Retry 14 times
 .make_sure:
 		ld	a,(iy)		; Check if did write
 		cp	c
@@ -3264,7 +3271,7 @@ zmars_send:
 		set	5,(iy)		; "MAIN" lock
 		rst	8
 		ld	de,10h+8	; ix - MAIN comm ports
-		add	hl,de		; starting at 8
+		add	hl,de
 	; ix - table
 	; hl - main data
 		ld	c,40h/8		; c - Packets to send
@@ -4280,9 +4287,6 @@ mcdUpd		db 0			; Flag to request a PCM transfer
 		dw fmcach_4		; Followup
 		dw fmcach_5
 		dw fmcach_6
-x68ksrclsb	db 0		; readRom temporal LSB
-x68ksrcmid	db 0		; readRom temporal MID
-dDacFifoMid	db 0		; WAVE play halfway refill flag (00h/80h)
 dDacPntr	db 0,0,0	; WAVE play current ROM position
 dDacCntr	db 0,0,0	; WAVE play length counter
 headerOut	ds 00Eh		; Temporal storage for 68k pointers
@@ -4418,16 +4422,20 @@ trkCach_2	ds MAX_RCACH
 ; ====================================================================
 ; ----------------------------------------------------------------
 ; Control area
+; * MANUAL ORDER, check gema.asm *
 ; ----------------------------------------------------------------
 
 		org 1F60h
 commZfifo	ds MAX_ZCMND			; Buffer for commands from 68k side
 commZWrite	db 0				; cmd fifo wptr (from 68k)
 commZRomBlk	db 0				; 68k ROM block flag
-cdRamLen	db 0				; Size + status flag
 cdRamDst	db 0,0				; ** Z80 destination
 cdRamSrc	db 0,0				; ** 68k 24-bit source
 cdRamSrcB	db 0				; **
+cdRamLen	db 0				; Size + status flag
+palMode		db 0				; PAL mode flag
+mcdBlock	db 0				; Flag to BLOCK PCM transfers.
+marsBlock	db 0				; Flag to BLOCK PWM transfers.
 
 ; --------------------------------------------------------
 		dephase

@@ -41,23 +41,24 @@ A Sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 * Go to `/src/tools`<br>
 * Extract the AS assembler to these locations depending of the system you are currently using:<br>
-`/tools/AS/win32`<br>
-`/tools/AS/linux`<br>
+`AS/win32`<br>
+`AS/linux`<br>
 
 ### Building the sound tester
 
 * Run `make_tester.sh` on Linux or `make_tester.bat` on Windows
-* Output ROMS will be located at bin, `rom_(system)` are for real hardware and `rom_emu_(system)` are for emulators, SegaCD/CD32X: the letters j, u, e represent th region.
+* Output ROMS will be located at /bin: the `rom_(system)` rom are for real hardware and `rom_emu_(system)` are for emulators, SegaCD/CD32X: the letters j, u, e represent th region.
 
 The tester uses code from NikonaMD which you can check here: https://github.com/GenesisFan64/NikonaMD
 
 ### Building the Z80 driver binary
 
 * Run `make_driver.sh` on Linux or `make_driver.bat` on Windows
-* Output binaries are located at /drvbin, `zdrv_(system)` are for real hardware and `zdrv_emu(system)` for emulation, only difference is a few NOPs with the DAC playback.
+* Output binaries are located at /drvbin: the `zdrv_(system)` files are for real hardware and `zdrv_emu(system)` for emulation, only difference is a few NOPs with the DAC playback.
+
 
 ## TODO
 
 Partial documentation for the driver is located at /doc *in Spanish, I'll do english later.*<br>
 
-Currently the standard driver (PSG+YM2612) is the only one that can be used on other SEGA-dev environments like SGDK, Support for the PCM and PWM chips require special playback code on SCD's Sub-CPU and 32X's Slave SH2<br>
+Currently the standard driver (PSG+YM2612) is the only one that can be used on other SEGA-dev environments like SGDK, support for the PCM and PWM chips require special playback code on SCD's Sub-CPU and 32X's Slave SH2<br>

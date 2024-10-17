@@ -37,25 +37,26 @@
 ; Variables
 ; --------------------------------------------------------
 
-; z80_cpu	equ $A00000		; Z80 CPU area, size: $2000
-; z80_bus 	equ $A11100		; only read bit 0 (bit 8 as WORD)
-; z80_reset	equ $A11200		; WRITE only: $0000 reset/$0100 cancel
+; z80_cpu	equ $A00000			; Z80 CPU area, size: $2000
+; z80_bus 	equ $A11100			; only read bit 0 (bit 8 as WORD)
+; z80_reset	equ $A11200			; WRITE only: $0000 reset/$0100 cancel
 
 ; Z80-area points:
-zDrvFifo	equ commZfifo		; FIFO command storage
-zDrvFWrt	equ commZWrite		; FIFO command index
-zDrvRomBlk	equ commZRomBlk		; ROM block flag
-zDrvMarsBlk	equ marsBlock		; Flag to disable 32X's PWM
-zDrvMcdBlk	equ mcdBlock		; Flag to disable SegaCD's PCM
-zDrvRamSrc	equ cdRamSrcB		; RAM-read source+dest pointers
-zDrvRamLen	equ cdRamLen		; RAM-read length and flag
+zDrvFifo	equ $1F60;commZfifo		; FIFO command storage
+zDrvFWrt	equ $1F80;commZWrite		; FIFO command index
+zDrvRomBlk	equ $1F81;commZRomBlk		; ROM block flag
+zDrvRamSrc	equ $1F82+4;cdRamSrcB		; !! RAM-read source+dest pointers
+zDrvRamLen	equ $1F87;cdRamLen		; RAM-read length + flag
+zDrvPalMode	equ $1F88;palMode		; PAL speed flag
+zDrvMarsBlk	equ $1F89;marsBlock		; Flag to disable 32X's PWM
+zDrvMcdBlk	equ $1F8A;mcdBlock		; Flag to disable SegaCD's PCM
 
 ; ====================================================================
 ; --------------------------------------------------------
 ; Labels
 ; --------------------------------------------------------
 
-RAM_ZCdFlag_D	equ RAM_SoundBuff	; transferRom flag (shared with Z80)
+RAM_ZCdFlag_D	equ RAM_SoundBuff		; transferRom flag (shared with Z80)
 
 ; ====================================================================
 ; --------------------------------------------------------
@@ -89,7 +90,7 @@ gemaInit:
 		move.b	(sys_io).l,d0			; Write PAL mode flag from here
 		btst	#6,d0
 		beq.s	.not_pal
-		move.b	#1,(z80_cpu+palMode).l
+		move.b	#1,(z80_cpu+zDrvPalMode).l
 .not_pal:
 		nop
 		nop

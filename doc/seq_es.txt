@@ -4,7 +4,7 @@
 
 Los sequence son los datos de musica o sfx, están basados en el formato ImpulseTracker pero fueron modificados para ahorrar espacio
 
-TODO Luego explico bien el formato, usen itextrct.py por ahora
+(Luego explico bien el formato, usen itextrct.py por ahora.)
 
 =========================================
 USANDO SEQUENCIAS EN EL DRIVER

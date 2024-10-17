@@ -144,19 +144,10 @@ sizeof_thisbuff		ds.l 0
 		bsr	.gema_view
 		bsr	Object_Run
 		bsr	Video_BuildSprites
-; 	if MARS|MARSCD
-; 		lea	(RAM_MdMars_Models).w,a0
-; 		add.l	#1,mmdl_y_rot(a0)
-; 		add.l	#1,mmdl_x_rot(a0)
-; 	endif
-
-
-; 		lea	str_Info(pc),a0
-; 		moveq	#31,d0
-; 		moveq	#4,d1
-; 		move.w	#DEF_PrintVramW|DEF_PrintPal,d2
-; 		move.l	#splitw(DEF_HSIZE_64,DEF_VRAM_FG),d3
-; 		bsr	Video_PrintW
+	if MCD|MARSCD
+		bsr	System_MdMcd_CheckHome
+		bcs	.exit_shell
+	endif
 
 	; NEW controls
 		lea	(Controller_1).w,a6
@@ -278,11 +269,12 @@ sizeof_thisbuff		ds.l 0
 
 ; ------------------------------------------------------
 
-.exit_all:
-		bsr	gemaStopAll
+.exit_shell:
 		bsr	Video_FadeOut_Full
-		move.w	#0,(RAM_ScreenMode).w	; Return to mode 0
-		rts				; EXIT
+		bsr	gemaStopAll
+		bsr	System_Render
+		bsr	System_Render
+		bra	System_MdMcd_ExitShell
 
 ; ------------------------------------------------------
 

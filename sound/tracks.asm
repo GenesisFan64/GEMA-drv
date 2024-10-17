@@ -8,10 +8,11 @@ MainGemaSeqList:
 	gemaTrk 1,3,gtrk_BGM0
 	gemaTrk 0,3,gtrk_BGM1
 	gemaTrk 1,6,gtrk_sauron
+	gemaTrk 1,3,gtrk_song0
 
 ; ----------------------------------------------------
 gtrk_Test0:
-	gemaHead .blk,.pat,.ins,4	; Pointers to blocks, patterns, instruments and number of channels in the track
+	gemaHead .blk,.pat,.ins,4
 .blk:	binclude "sound/tracks/test_blk.bin"
 .pat:	binclude "sound/tracks/test_patt.bin"
 .ins:
@@ -63,14 +64,6 @@ gtrk_BGM1:
 	gInsNull
 	gInsNull
 
-; 	gInsFm -24,FmIns_Trumpet_bus
-; 	gInsFm -12,FmIns_Piano_Aqua
-; 	gInsFm -12,FmIns_Bass_Groove_1
-; 	gInsPsg 0,$50,$30,$30,$04,$03,$00
-; 	gInsPsg -12,$00,$00,$00,$00,$01,$00
-; 	gInsFm -12,FmIns_Vibraphone_1
-; 	gInsFm -12,FmIns_Brass_eur
-
 ; ----------------------------------------------------
 gtrk_sauron:
 	gemaHead .blk,.pat,.ins,4
@@ -89,11 +82,38 @@ gtrk_sauron:
 	gInsPcm -12,PcmIns_sauron_10,0
 	gInsPcm -12,PcmIns_sauron_11,0
 	gInsPcm -12,PcmIns_sauron_12,0
-	gInsNull
+
+; ----------------------------------------------------
+gtrk_song0:
+	gemaHead .blk,.pat,.ins,8
+.blk:	binclude "sound/tracks/song0_blk.bin"
+.pat:	binclude "sound/tracks/song0_patt.bin"
+.ins:
+ if MARS
+	gInsPwm -12,PwmIns_song0_01,0
+	gInsPwm -12,PwmIns_song0_02,0
+	gInsFm    0,FmIns_Hats_1
+	gInsFm3    0,FmIns_Sp_OpenHat
+	gInsPwm -12,PwmIns_song0_05,1
+	gInsPwm -12,PwmIns_song0_06,0
+	gInsPwm -12,PwmIns_song0_07,0
+	gInsPwm -12,PwmIns_song0_08,0
+	gInsPwm -12,PwmIns_song0_09,0
+ else
+	gInsPcm -12,PcmIns_song0_01,0
+	gInsPcm -12,PcmIns_song0_02,0
+	gInsFm    0,FmIns_Hats_1
+	gInsFm3    0,FmIns_Sp_OpenHat
+	gInsPcm -12,PcmIns_song0_05,1
+	gInsPcm -12,PcmIns_song0_06,0
+	gInsPcm -12,PcmIns_song0_07,0
+	gInsPcm -12,PcmIns_song0_08,0
+	gInsPcm -12,PcmIns_song0_09,0
+ endif
 
 ; ===========================================================================
 ; -------------------------------------------------------------------
-; GEMA/Nikona FM instruments
+; GEMA FM instruments
 ; -------------------------------------------------------------------
 
 ; -----------------------------------------------------------
