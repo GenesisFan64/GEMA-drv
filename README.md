@@ -54,12 +54,12 @@ The tester uses code a copy of NikonaMD which you can check here: https://github
 
 * Build the Z80 binary by running `make_driver.sh` on Linux or `make_driver.bat` on Windows, output files will be located at /drvbin: The `zdrv_(system)` files are for real hardware and `zdrv_emu_(system)` for emulation, only difference is a few NOPs with the DAC playback.<br>
 **Currently the standard driver zdrv_md.bin / zdrv_emu_md.bin is the only one that can be used on other SEGA-dev environments like SGDK, support for the PCM and PWM chips require special playback code on SCD's Sub-CPU and 32X's Slave SH2**<br>
-The `gema_macros.asm` file requires the variables `MCD`, `MARS` and `MARSCD` for detecting the current target system, if you are not using PCM and PWM you can delete the macros `gInsPcm` and `gInsPwm`, also the variables at `gSmplData`,`gSmplRaw`
+The `gema_macros.asm` file requires the variables `MCD`, `MARS` and `MARSCD` for detecting the current target system, if you are not using PCM and PWM you can delete the macros `gInsPcm` and `gInsPwm`, also the variables at `gSmplData`, `gSmplRaw`.
 
 * Include the Z80 binary like this:<br>
-`Z80_CODE:<br>
-		include "sound/driver/gema_zdrv.asm"<br>
-Z80_CODE_END:<br>`
+`Z80_CODE:`<br>
+`		include "sound/driver/gema_zdrv.asm"`<br>
+`Z80_CODE_END:`<br>
 
 * Include the files `sound/driver/gema.asm`, `sound/driver/gema_macros.asm` in your code.<br>
 If your assembler doesn't support dotted labels (ASM68k...) change the dots to @
