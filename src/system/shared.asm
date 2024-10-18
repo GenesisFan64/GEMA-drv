@@ -218,7 +218,7 @@ RAM_MdMars_ScrlData	ds.w (512/16)*(256/16)
 RAM_MdMars_SuperSpr	ds.b sspr_len*MAX_MARSSPR
 .sizeof_this		ds.l 0
 			endmemory
-			erreport "This DREQ MEMORY: 2D",.sizeof_this-RAM_MdMars_CommBuff,Dreq_len
+; 			erreport "This DREQ MEMORY: 2D",.sizeof_this-RAM_MdMars_CommBuff,Dreq_len
 
 ; ====================================================================
 ; ----------------------------------------------------------------
@@ -232,7 +232,7 @@ RAM_MdMars_MSprites	ds.b mspr_len*MAX_MARSMSPR	; $400
 RAM_MdMars_Models	ds.b mmdl_len*MAX_MARSOBJ	; $400
 .sizeof_this		ds.l 0
 			endmemory
-			erreport "This DREQ MEMORY: 3D",.sizeof_this-RAM_MdMars_CommBuff,Dreq_len
+; 			erreport "This DREQ MEMORY: 3D",.sizeof_this-RAM_MdMars_CommBuff,Dreq_len
 
 ; ============================================================
 

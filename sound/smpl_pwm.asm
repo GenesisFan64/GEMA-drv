@@ -14,6 +14,7 @@
 	align 4
 	;gSmplData Label,"file_path",loop_start
 ; -----------------------------------------------------------
-	gSmplData PwmIns_TEST,"sound/instr/smpl/test_st.wav",0
+	gSmplData PwmIns_TEST,"sound/ins/smpl/test_st.wav",0
+
 
 

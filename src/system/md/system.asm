@@ -354,11 +354,11 @@ System_DmaExit_ROM:
 ; ------------------------------------------------
 
 sys_MarsSlvCmd:
-		move.b	(sysmars_reg+comm14).l,d7
+		move.b	(sysmars_reg+comm14).l,d7	; Slave busy?
 		bne.s	sys_MarsSlvCmd
 		move.b	(sysmars_reg+comm14).l,d7
-		or.b	d6,d7
-		or.b	#$80,d7				; We got first.
+		or.b	d6,d7				; Write task number
+		or.b	#$80,d7				; num | $80
 		move.b	d7,(sysmars_reg+comm14).l
 		bset	#1,(sysmars_reg+standby).l	; Slave CMD request
 		nop
@@ -366,7 +366,7 @@ sys_MarsSlvCmd:
 .wait_exit:
 		nop
 		nop
-		move.b	(sysmars_reg+comm14).l,d7
+		move.b	(sysmars_reg+comm14).l,d7	; Wait until CMD clears
 		bne.s	.wait_exit
 		rts
 

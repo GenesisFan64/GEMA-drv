@@ -66,7 +66,7 @@ sizeof_MdGlbl	ds.l 0
 	if (sizeof_MdGlbl&1 == 1)
 		error "GLOBALS ARE MISALIGNED"
 	endif
-		erreport "USER Globals",(sizeof_MdGlbl-RAM_MdGlobal),MAX_Globals	; Report error if ran out
+; 		erreport "USER Globals",(sizeof_MdGlbl-RAM_MdGlobal),MAX_Globals	; Report error if ran out
 		endmemory
 
 ; ====================================================================
@@ -82,7 +82,7 @@ sizeof_SaveInfo	ds.l 0
 	if (sizeof_MdGlbl&1 == 1)
 		error "SAVE STRUCT IS MISALIGNED"
 	endif
-		erreport "USER Globals",(sizeof_SaveInfo-RAM_SaveData),SET_SRAMSIZE	; Report error if ran out
+; 		erreport "USER Globals",(sizeof_SaveInfo-RAM_SaveData),SET_SRAMSIZE	; Report error if ran out
 		endmemory
 
 ; ====================================================================
@@ -188,8 +188,8 @@ Md_SysCode:
 	endif
 ; ---------------------------------------------
 
-		include	"sound/driver/gema_macros.asm"
-		include	"sound/driver/gema.asm"
+		include	"sound/drv/gema_macros.asm"
+		include	"sound/drv/gema.asm"
 		include	"system/md/video.asm"
 		include	"system/md/system.asm"
 
@@ -310,7 +310,7 @@ Z80_CODE:
 	if MARS
 		dephase
 	endif
-		include "sound/driver/gema_zdrv.asm"
+		include "sound/drv/gema_zdrv.asm"
 	if MARS
 		phase $880000+*
 	endif

@@ -1,0 +1,185 @@
+===========================================================================
+GEMA Instrument format
+===========================================================================
+
+All the instruments are organized the same way as the original it module, minus 1
+(Instrument 01 is 00 in the list)
+
+This sound driver will automaticly detect which channel is available to use, can swap chips if needed
+
+If the chip runs out of usable channels it will get either overwriten or skipped.
+
+MACROS list with example parameters:
+
+	gInsNull					; NULL/unused slot
+	gInsPsg  0,$00,$00,$00,$00,$01,$00		; PSG normal
+	gInsPsgN 0,$00,$00,$00,$00,$01,$00,%011		; PSG noise
+	gInsFm   0,FmIns_TEST,0				; FM normal
+	gInsFm3  0,FmIns_Sp_TEST,0			; FM3 special
+	gInsDac  0,DacIns_TEST,0			; DAC sample (FM6)
+	gInsPcm  0,PcmIns_TEST,0			; PCM sample (SCD)
+	gInsPwm  0,PwmIns_TEST,%00			; PWM sample (32X)
+
+=========================================
+ Null instrument
+=========================================
+
+	gInsNull
+
+This is the null instrument, use this on instruments that you don't want use (ex. while making your sequence)
+
+=========================================
+ PSG  - PSG Tone
+ PSGN - PSG Noise and Bass
+=========================================
+
+	gInsPsg  PITCH,ALV,ART,SLV,DKY,RRT,VIB
+	gInsPsgN PITCH,ALV,ART,SLV,DKY,RRT,VIB,MODE
+
+3 Square waves and 1 Noise channel
+
+The NOISE channel can only reproduce sound by using the CLOCK frequency, module notes are ignored (always play the same note)
+To use notes enable Tone3 mode, using this make the NOISE channel play the notes by stealing PSG3's frequency, but because of this the channel 3 will be turned off until another gInsPsgN sets CLOCK again.
+If PSG3 was already in use it will be turned OFF automaticly, but the sequence will still update the channel internally.
+
+=========================================
+Parameters go inside the instrument:
+
+pitch | Pitch/Octave up or down
+alv   | Attack level *1
+art   | Attack rate *1
+slv   | Sustain *1
+dky   | Decay rate (up) *1
+rrt   | Release rate (down) *1
+vib   | $00, Reserved for vibrato
+mode  | Noise mode: %00000tmm
+      | t - Bass(0)|Noise(1)
+      | m - CLOCK(00)|CLOCK/2(01)|CLOCK/4(10)|Tone3(11)
+
+-------------------------------------
+NOTAS:
+
+*1
+In 4-bit float: %0000.0000, $0x is HIGHEST y $Fx LOWEST (full silence)
+
+=========================================
+ FM synthesizer
+
+ FM  - YM2612 normal
+ FM3 - YM2612 special
+=========================================
+
+6 FM Channels, 2 of them have special purpose:
+- Channel 3 is the SPECIAL channel, can play more complicated with separate frequencies for each operator, Note will not work in this mode.
+- Channel 6 is the DAC sample *see gInsDac section for details*
+
+If gInsFm3 and gInsDac are used and Channel 3 and 6 where playing a NORMAL instrument those channels will be lost/overwritten.
+
+	gInsFm  PITCH,LOCATION
+	gInsFm3 PITCH,LOCATION
+
+=========================================
+Parameters
+
+pitch    | Pitch/Octave up or down
+location | Pointer to ROM or RAM
+
+* To read from RAM, you have to call gemaReadRam MANUALLY EVERY TIME, the best place to call it is during the VBlank wait loop *
+
+-------------------------------------
+gInsFm y gInsFm3 FORMAT:
+
+FmIns_DATA:
+	;    OP1,OP2,OP3,OP4
+	dc.b $30,$34,$38,$3C	; Multiply MUL and Detune DT
+	dc.b $40,$44,$48,$4C	; Total Level TL
+	dc.b $50,$54,$58,$5C	; Attack rate AR and Release rate RS
+	dc.b $60,$64,$68,$6C	; Decay rate DR and AM Enable
+	dc.b $70,$74,$78,$7C	; Sustain rate SR
+	dc.b $80,$84,$88,$8C	; Release rate RR and Sustain Level SL
+	dc.b $90,$94,$98,$9C	; SSG-EG
+	dc.b $B0,$B4,$22,$28	; Algorithm and Feedback, PMS/AMS, LFO, Keys
+	dc.w FQ1,FQ2,FQ3,FQ4	; gInsFm3 only: manual frequencies for these operators
+
+SSG-EG might not work properly on non-genunine system, set all to 0 if you are not using those.
+
+$B4 AMS/PMS: %00aa0ppp
+a | AMS
+p | PMS
+Keep panning bits 0 and set the panning manually in your sequence with effect X
+
+$22 LFO: %0000evvv
+e | Enable
+v | Value
+This is a global setting, affects ALL FM sound.
+
+$28 KEYS: %oooo0000
+o | Operators 4-1
+
+=========================================
+ Sample data (WAVE)
+
+ DAC - YM2612 sample
+ PCM - Sega CD PCM
+ PWM - Sega 32X PWM
+=========================================
+
+1 channel (YM2612)
+8 channels PCM (with Sega CD)
+8 channels PWM (with Sega 32X)
+
+	gInsDac PITCH,LOCATION,FLAGS
+	gInsPcm PITCH,LOCATION,FLAGS
+	gInsPwm PITCH,LOCATION,FLAGS
+
+NOTAS/Limitations:
+
+gInsDac
+Samples can only be inside the 68000's memory area: 0-400000, with 32X: 880000, 900000
+RAM Area (FF0000) might be possible but not recommended.
+
+gInsPcm
+Sample can only be stored on Sub-CPU's memory, must be loaded manually during boot
+LOCATION points to Sub-CPU's memory area
+
+gInsPwm
+Can be used between SH2's ROM area (CS1) and SDRAM (CS3)
+
+- SDRAM is the safest and compatible with CD32X, but the storage is low, VERY LOW.
+- On ROM there's a lot of space, all 4MB can be used but CANNOT BE USED ON CD32X. (**with Mode 1 would be possible)
+there's a limitation where if the RV bit is set all the ROM area will be locked, a temporal data protection method is implemented when ROM isn't available to use when the Genesis is doing DMA
+(** needs more testing, has clicking issues)
+
+LOCATION points to SH2's memory
+
+=========================================
+Parametros:
+
+pitch    | Pitch/Octave up or down
+location | Pointer depending of the CPU
+flags    | DAC and PCM: %0000000L
+         | PWM:         %000000SL
+         |
+         | L - Enable looping No/Yes
+         | S - Sample data is in STEREO (PWM only)
+
+-------------------------------------
+FORMATO:
+
+Samples are stored in 8-bit unsigned at 16000hz MONORUAL, PWM can use STEREO samples.
+
+Sample_DATA:
+	dc.b ((labl_e-labl_s)&$FF),(((labl_e-labl_s)>>8)&$FF),(((labl_e-labl_s)>>16)&$FF) ; Sample size
+	dc.b ((st_loop)&$FF),(((st_loop)>>8)&$FF),(((st_loop)>>16)&$FF)			; Starting loop point
+labl_s:
+	binclude "file.wav",$2C	; Skip $2C bytes from WAV
+labl_e:
+
+
+A MACRO is available to include the samples easily:
+	gSmplData label,"filename.wav",loop_start	; This skips the first $2C
+	gSmplRaw  label,"filename.bin",loop_start
+
+NOTAS:
+- If using WAV make sure there nothing other that sound data or you will hear clicks, modern audio programs add stuff at the end of the sample
+- Sega CD PCM: Convertion is not required, the data is converted on-the-fly during streaming

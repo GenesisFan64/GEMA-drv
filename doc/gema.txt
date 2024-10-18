@@ -1,0 +1,100 @@
+==================================================================================
+GEMA Sound Driver version 1.0.x
+==================================================================================
+
+==================================================================
+TECHNICAL NOTES
+==================================================================
+
+IT effects supported:
+A - Set ticks
+B - Position jump
+C - Pattern break	| Stops the sequence and clears slot, parameter ignored (for SFX)
+D - Volume Slide	| *1
+E - Portametro down	| *1
+F - Portametro up	| *1
+X - Panning		| Setting varies depending of the chip
+
+*1 Works differently in the driver
+
+==================================================================
+LIMITATIONS:
+==================================================================
+
+- Note C-0 can't be used
+- Notes have limited range depending of the chip:
+-- PSG, PCM, PWM can only play octaves -4 to -6
+-- FM can handle up to 7 octaves
+
+==================================================================
+CURRENT ISSUES ON THIS VERSION
+==================================================================
+
+- SCD PCM: Samples may rarely break if playing all of them at the same time.
+- 32X PWM: The sample volume is lower than the other chips
+
+==================================================================
+/sound FILE STRUCTURE
+==================================================================
+
+/drv
+ -> gema.asm			68000 code API
+ -> gema_macros.asm		Macros used by the driver in AS format
+ -> gema_zdrv.asm		Z80 driver itself *1
+/ins
+ -> /fm				YM2612 patches
+    -> /bin			Patches as binaries
+    -> /gsx			Patches saved as a save states made by FM_EDITOR.bin
+       -> FM_EDITOR.bin		Real-time YM editor
+
+ -> /smpl			All sample data DAC, PCM, PWM
+/seq
+ -> /trkr			All the .it files to be converted by itextrct.py
+ -> itextrct.py			Python3 script: Convert .it files to sequence
+data.asm			All the sequences and Genesis-side instruments PSG,FM,DAC
+smpl_pcm.asm			Sega CD PCM Samples, loaded on beoot
+smpl_pwm.asm			Sega 32X PWM Samples at SDRAM compatible with CD32X **very low storage***
+smpl_pwm_ROM.asm		Sega 32X PWM Samples on Cartridge, more storage but CANNOT be used with CD32X
+
+*1 If you can't use the Z80 code as is you can build a separate binary with make_driver.sh/make_driver.bat
+*2 Using FM patches made requires skipping the first $2478 bytes and only include the data used by the driver:
+$20 bytes for normal and $28 for special:
+
+	binclude "sound/ins/fm/gsx/normal.gsx",$2478,$20
+	binclude "sound/ins/fm/gsx/special.gsx",$2478,$28
+
+==================================================================
+MAKING A TEST TRACK
+==================================================================
+
+You can use the file test.it located at /sound/tracks/trkr/
+Open the file in any tracker that supports ImpulseTracker files (OpenMPT for example), after saving the file you need to go back one folder and run the Python3 script itextrct.py and load the file with this command:
+
+python itextrct.py test
+
+It will output the files test_blk.bin and test_patt.bin: _blk contains the pattern order and _patt contains the music data and it's pointers
+
+To change the instrumentation:
+Open the file tracks.asm locate .ins after gtrk_Test0 you'll see the macros gIns(chip), check driver/gema_macros.asm for more info on each chip.
+
+Now run build.bat or build.sh to see the result.
+
+==================================================================
+MISC.
+
+To change your "master list" use:
+	move.l	#Gema_DefaultList,d0
+	bsr	gemaSetMasterList
+
+To use sub-beats:
+	move.w	#beats_num,d0
+	bsr	gemaSetBeats
+	move.w	#sequence_id,d0
+	move.w  #start_block,d1
+	move.w  #slot_id,d2
+	bsr	gemaPlaySeq
+
+The sequence must have the sub-beats enabled on the
+master list
+
+------------------------------------------------------------

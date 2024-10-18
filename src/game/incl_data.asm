@@ -24,7 +24,7 @@
 
 	data_dset DATA_BANK0
 	; ------------------------------------------------
-		include "sound/tracks.asm"		; GEMA user sound data
+		include "sound/data.asm"		; GEMA user sound data
 		include "game/data/bank_main.asm"
 	; ------------------------------------------------
 	data_dend DATA_BANK0_e

@@ -15,10 +15,10 @@
 ; EXTERNAL
 ; ----------------------------------------------------------------
 
-; 68K RAM location to write a flag for the readRom RAM-area
-; patch
+; 68K RAM location at the area $FF8000-$FFFFFF
+; to write a flag for the readRom RAM-area patch
 
-RAM_ZCdFlag_D	equ $FFFFFF00
+RAM_ZCdFlagD	equ $FFFFFF00
 
 ; ====================================================================
 ; ----------------------------------------------------------------
