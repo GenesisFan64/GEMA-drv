@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 1 - 10/18/2024 05:50:36 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 1 - 10/18/2024 06:33:50 AM
 
 
        1/       0 :                     ; ===========================================================================
@@ -12350,7 +12350,7 @@
      425/   4B260 : 00                  		dc.b 0
      426/   4B261 :                     		align $8000
      427/   50000 :                     
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 2 - 10/18/2024 05:50:36 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 2 - 10/18/2024 06:33:50 AM
 
 
   Symbol Table (* = unused):
@@ -12847,7 +12847,7 @@
  TBLPWM :                      1C58 C |  TBLZ_CLEAR :                   ED5 C |
  TH :                      20000000 - |  TICKCNT :                     1CF8 C |
  TICKFLAG :                    1CF7 C |  TICKSPSET :                   1CF6 C |
-*TIME :               "05:50:36 AM" - | *TIMERCTL :                      30 - |
+*TIME :               "06:33:50 AM" - | *TIMERCTL :                      30 - |
  TRACK_OUT :                    5AF C |  TRACK_OUT.INDX_DEL :           5BD C |
  TRACK_OUT.NOTHIN :             5EB C |  TRKBLKS_0 :                   1694 C |
  TRKBLKS_1 :                   169C C |  TRKBLKS_2 :                   16A4 C |
@@ -13037,7 +13037,7 @@
    1324 symbols
     425 unused symbols
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 3 - 10/18/2024 05:50:36 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 3 - 10/18/2024 06:33:50 AM
 
 
   Defined Macros:
@@ -13061,7 +13061,7 @@ VDP_SHOWME                            |
 
      29 macros
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 4 - 10/18/2024 05:50:36 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 4 - 10/18/2024 06:33:50 AM
 
 
   Defined Structures/Unions:
@@ -13112,7 +13112,7 @@ PALFD
   5      (I8) TIMER
   6      (I16) NUM
 3 structures
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 5 - 10/18/2024 05:50:36 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 5 - 10/18/2024 06:33:50 AM
 
 
   Defined Functions:
@@ -13122,7 +13122,7 @@ FULL_LOC                              | PSTR_MEM
 COLOR_INDX                            | CELL_VRAM                            
 SPLITW                                |
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 6 - 10/18/2024 05:50:36 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 6 - 10/18/2024 06:33:50 AM
 
 
   Code Pages:
@@ -13132,7 +13132,7 @@ STANDARD (0 changed characters)
 
 1 code page
 
-0.18 seconds assembly time
+0.19 seconds assembly time
 
   14266 lines source file
   15135 lines incl. macro expansions

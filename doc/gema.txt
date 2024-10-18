@@ -2,6 +2,10 @@
 GEMA Sound Driver version 1.0.x
 ==================================================================================
 
+Can play up to 3 sequences at the same time, any type BGM and SFX.
+
+Priorities low to high: high prio sequence overwrites channels of the lowest.
+
 ==================================================================
 TECHNICAL NOTES
 ==================================================================
@@ -15,7 +19,7 @@ E - Portametro down	| *1
 F - Portametro up	| *1
 X - Panning		| Setting varies depending of the chip
 
-*1 Works differently in the driver
+*1 Effect behaves differently in this driver.
 
 ==================================================================
 LIMITATIONS:
@@ -26,10 +30,14 @@ LIMITATIONS:
 -- PSG, PCM, PWM can only play octaves -4 to -6
 -- FM can handle up to 7 octaves
 
+- Sequence can handle up to 63 channels, but only 26 are available to use (In case the sequence format get used on something else)
+- A sequence can use all 26 chip channels, but the Z80 can only hold up to 31 sequence channels for all 3 slots
+
 ==================================================================
 CURRENT ISSUES ON THIS VERSION
 ==================================================================
 
+V1.0.0:
 - SCD PCM: Samples may rarely break if playing all of them at the same time.
 - 32X PWM: The sample volume is lower than the other chips
 
