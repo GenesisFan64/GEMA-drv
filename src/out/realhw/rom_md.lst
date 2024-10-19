@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 1 - 10/18/2024 06:33:50 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 1 - 10/19/2024 10:22:37 AM
 
 
        1/       0 :                     ; ===========================================================================
@@ -1427,7 +1427,7 @@
 (1)   79/     314 :                     ; ----------------------------------------------------------------
 (1)   80/     314 :                     
 (1)   81/     314 :                     gemaReset:
-(1)   82/     314 : 41F8 480A           		lea	(MainGemaSeqList),a0
+(1)   82/     314 : 41F8 480C           		lea	(MainGemaSeqList),a0
 (1)   83/     318 : 6100 0140           		bsr	gemaSetMasterList
 (1)   84/     31C : 7E05                		moveq	#6-1,d7				; Make sure it finishes.
 (1)   85/     31E : 51CF FFFE           		dbf	d7,*
@@ -10469,8 +10469,8 @@
 (2)    8/    3E68 :                     ; Settings
 (2)    9/    3E68 :                     ; ------------------------------------------------------
 (2)   10/    3E68 :                     
-(2)   11/    3E68 : =$1                  VIEW_GEMAINFO		equ 1		; ** Using this causes loss of DAC quality **
-(2)   12/    3E68 : =$1                  VIEW_FAIRY		equ 1		; Show status Dodo/Mifi/Fifi
+(2)   11/    3E68 : =$1                  VIEW_GEMAINFO		equ True		; ** Using this causes loss of DAC quality **
+(2)   12/    3E68 : =$1                  VIEW_FAIRY		equ True		; Show status Dodo/Mifi/Fifi
 (2)   13/    3E68 :                     
 (2)   14/    3E68 :                     ; ====================================================================
 (2)   15/    3E68 :                     ; ------------------------------------------------------
@@ -10567,21 +10567,21 @@
 (2)   92/    3ECE : 7001                		moveq	#1,d0
 (2)   93/    3ED0 : 323C 000F           		move.w	#15,d1
 (2)   94/    3ED4 : 6100 D23A           		bsr	Video_FadePal
-(2)   95/    3ED8 : 41FA 04D8           		lea	ArtList_Stuff(pc),a0
+(2)   95/    3ED8 : 41FA 04DA           		lea	ArtList_Stuff(pc),a0
 (2)   96/    3EDC : 6100 CD00           		bsr	Video_LoadArt_List
 (2)   97/    3EE0 :                     	; ----------------------------------------------
-(2)   98/    3EE0 : 41FA 04EA           		lea	str_TesterTitle(pc),a0
+(2)   98/    3EE0 : 41FA 04EC           		lea	str_TesterTitle(pc),a0
 (2)   99/    3EE4 : 7006                		moveq	#6,d0
 (2)  100/    3EE6 : 7202                		moveq	#2,d1
 (2)  101/    3EE8 : 343C 64E0           		move.w	#DEF_PrintVramW|DEF_PrintPal,d2
 (2)  102/    3EEC : 263C 0080 C000      		move.l	#splitw(DEF_HSIZE_64,DEF_VRAM_FG),d3
 (2)  103/    3EF2 : 6100 D3B2           		bsr	Video_PrintW
-(2)  104/    3EF6 : 41FA 04F2           		lea	str_TesterInfo(pc),a0
+(2)  104/    3EF6 : 41FA 04F4           		lea	str_TesterInfo(pc),a0
 (2)  106/    3EFA : 7006                		moveq	#6,d0
 (2)  110/    3EFC : 7207                		moveq	#7,d1
 (2)  111/    3EFE : 343C 45A0           		move.w	#DEF_PrintVram|$4000,d2
 (2)  112/    3F02 : 6100 D2B0           		bsr	Video_Print
-(2)  113/    3F06 : 41FA 04FE           		lea	str_Instruc(pc),a0
+(2)  113/    3F06 : 41FA 0500           		lea	str_Instruc(pc),a0
 (2)  114/    3F0A : 7002                		moveq	#2,d0
 (2)  115/    3F0C : 7215                		moveq	#21,d1
 (2)  116/    3F0E : 343C 45A0           		move.w	#DEF_PrintVram|$4000,d2
@@ -10682,7 +10682,7 @@
 (2)  215/    3FD2 : 3038 B86E           		move.w	(RAM_GemaSeq).w,d0	; External beats
 (2)  216/    3FD6 : 3200                		move.w	d0,d1
 (2)  217/    3FD8 : D241                		add.w	d1,d1
-(2)  218/    3FDA : 41FA 03A6           		lea	exgema_beats(pc),a0
+(2)  218/    3FDA : 41FA 03A8           		lea	exgema_beats(pc),a0
 (2)  219/    3FDE : 3030 1000           		move.w	(a0,d1.w),d0
 (2)  220/    3FE2 : 31C0 B87C           		move.w	d0,(RAM_CurrBeats).w
 (2)  221/    3FE6 : 6100 C534           		bsr	gemaSetBeats
@@ -10749,17 +10749,17 @@
 (2)  282/    4026 : 3038 B86E           		move.w	(RAM_GemaSeq).w,d0	; External beats
 (2)  283/    402A : 3200                		move.w	d0,d1
 (2)  284/    402C : D241                		add.w	d1,d1
-(2)  285/    402E : 41FA 0352           		lea	exgema_beats(pc),a0
+(2)  285/    402E : 41FA 0354           		lea	exgema_beats(pc),a0
 (2)  286/    4032 : 3030 1000           		move.w	(a0,d1.w),d0
 (2)  287/    4036 : 31C0 B87C           		move.w	d0,(RAM_CurrBeats).w
 (2)  288/    403A :                     
-(2)  289/    403A : 41FA 07C2           		lea	str_ShowBeats(pc),a0
+(2)  289/    403A : 41FA 07C4           		lea	str_ShowBeats(pc),a0
 (2)  291/    403E : 700D                		moveq	#13,d0
 (2)  295/    4040 : 720C                		moveq	#12,d1
 (2)  296/    4042 : 343C 65A0           		move.w	#DEF_PrintVram|DEF_PrintPal,d2
 (2)  297/    4046 : 263C 0080 C000      		move.l	#splitw(DEF_HSIZE_64,DEF_VRAM_FG),d3
 (2)  298/    404C : 6100 D166           		bsr	Video_Print
-(2)  299/    4050 : 41FA 0798           		lea	str_ShowVars(pc),a0
+(2)  299/    4050 : 41FA 079A           		lea	str_ShowVars(pc),a0
 (2)  301/    4054 : 7007                		moveq	#7,d0
 (2)  305/    4056 : 7209                		moveq	#9,d1
 (2)  306/    4058 : 343C 64E0           		move.w	#DEF_PrintVramW|DEF_PrintPal,d2
@@ -10947,7 +10947,7 @@
 (2)  489/    4078 : 5242                		addq.w	#1,d2			;
 (2)  490/    407A : 6100 DC08           		bsr	Object_Make		; <-- until here
 (2)  492/    407E :                     
-(2)  494/    407E : 41FA 03FA           		lea	str_VmInfo(pc),a0
+(2)  494/    407E : 41FA 03FC           		lea	str_VmInfo(pc),a0
 (2)  495/    4082 : 7002                		moveq	#2,d0
 (2)  496/    4084 : 7210                		moveq	#SET_SNDVIEWY,d1
 (2)  497/    4086 : 343C 65A0           		move.w	#DEF_PrintVram|DEF_PrintPal,d2
@@ -10955,1069 +10955,1071 @@
 (2)  499/    4090 : 6100 D122           		bsr	Video_Print
 (2)  501/    4094 :                     
 (2)  502/    4094 :                     .gema_view:
-(2)  503/    4094 : 33FC 0100 00A1      		move.w	#$0100,(z80_bus).l
+(2)  504/    4094 : 33FC 0100 00A1      		move.w	#$0100,(z80_bus).l
              409A : 1100             
-(2)  504/    409C : 43F8 B872           		lea	(RAM_GemaStatus),a1
-(2)  505/    40A0 : 7000                		moveq	#0,d0
-(2)  506/    40A2 : 7200                		moveq	#0,d1
-(2)  507/    40A4 : 7400                		moveq	#0,d2
-(2)  508/    40A6 : 0839 0000 00A1      .wait:		btst	#0,(z80_bus).l
+(2)  505/    409C : 43F8 B872           		lea	(RAM_GemaStatus),a1
+(2)  506/    40A0 : 7000                		moveq	#0,d0
+(2)  507/    40A2 : 7200                		moveq	#0,d1
+(2)  508/    40A4 : 7400                		moveq	#0,d2
+(2)  509/    40A6 : 0839 0000 00A1      .wait:		btst	#0,(z80_bus).l
              40AC : 1100             
-(2)  509/    40AE : 66F6                		bne.s	.wait
-(2)  510/    40B0 : 1039 00A0 16AC      		move.b	(z80_cpu+trkBuff_0),d0
-(2)  511/    40B6 : 1239 00A0 16EB      		move.b	(z80_cpu+trkBuff_1),d1
-(2)  512/    40BC : 1439 00A0 172A      		move.b	(z80_cpu+trkBuff_2),d2
-(2)  513/    40C2 : 6100 C2C8           		bsr	sndUnlockZ80
-(2)  514/    40C6 : 32C0                		move.w	d0,(a1)+
-(2)  515/    40C8 : 32C1                		move.w	d1,(a1)+
-(2)  516/    40CA : 32C2                		move.w	d2,(a1)+
-(2)  517/    40CC :                     
-(2)  519/    40CC : 6100 C2AA           		bsr	sndLockZ80
-(2)  520/    40D0 : 41F9 00A0 1C0E      		lea	(z80_cpu+tblPSG),a0
-(2)  521/    40D6 : 43F8 B800           		lea	(RAM_GemaCache_PSG),a1
-(2)  522/    40DA : 7E02                		moveq	#3-1,d7
-(2)  523/    40DC : 6100 00F0           		bsr	.copy_me
-(2)  524/    40E0 : 41F9 00A0 1C46      		lea	(z80_cpu+tblPSGN),a0
-(2)  525/    40E6 : 43F8 B80C           		lea	(RAM_GemaCache_PSGN),a1
-(2)  526/    40EA : 7E00                		moveq	#1-1,d7
-(2)  527/    40EC : 6100 00E0           		bsr	.copy_me
-(2)  528/    40F0 : 41F9 00A0 1BA0      		lea	(z80_cpu+tblFM),a0
-(2)  529/    40F6 : 43F8 B810           		lea	(RAM_GemaCache_FM),a1
-(2)  530/    40FA : 7E05                		moveq	#6-1,d7
-(2)  531/    40FC : 6100 00D0           		bsr	.copy_me
-(2)  532/    4100 : 41F9 00A0 1B0E      		lea	(z80_cpu+tblPCM),a0
-(2)  533/    4106 : 43F8 B828           		lea	(RAM_GemaCache_PCM),a1
-(2)  534/    410A : 7E07                		moveq	#8-1,d7
-(2)  535/    410C : 6100 00C0           		bsr	.copy_me
-(2)  536/    4110 : 41F9 00A0 1C58      		lea	(z80_cpu+tblPWM),a0
-(2)  537/    4116 : 43F8 B848           		lea	(RAM_GemaCache_PWM),a1
-(2)  538/    411A : 7E07                		moveq	#8-1,d7
-(2)  539/    411C : 6100 00B0           		bsr	.copy_me
-(2)  540/    4120 : 7E00                		moveq	#0,d7
-(2)  541/    4122 : 1E39 00A0 0030      		move.b	(z80_cpu+fmSpecial),d7
-(2)  542/    4128 : 31C7 B87E           		move.w	d7,(RAM_Copy_fmSpecial).w
-(2)  543/    412C : 1E39 00A0 0008      		move.b	(z80_cpu+8),d7
-(2)  544/    4132 : 31C7 B880           		move.w	d7,(RAM_Copy_HasDac).w
-(2)  545/    4136 : 6100 C254           		bsr	sndUnlockZ80
-(2)  547/    413A :                     
-(2)  549/    413A : 343C 65A0           		move.w	#DEF_PrintVram|DEF_PrintPal,d2
-(2)  550/    413E : 263C 0080 C000      		move.l	#splitw(DEF_HSIZE_64,DEF_VRAM_FG),d3
-(2)  551/    4144 : 47F8 B800           		lea	(RAM_GemaCache_PSG),a3
-(2)  552/    4148 : 7007                		moveq	#7,d0
-(2)  553/    414A : 7210                		moveq	#SET_SNDVIEWY,d1
-(2)  554/    414C : 7E02                		moveq	#3-1,d7
-(2)  555/    414E : 6100 00E6           		bsr	.show_table
-(2)  556/    4152 : 47F8 B80C           		lea	(RAM_GemaCache_PSGN),a3
-(2)  557/    4156 : 7013                		moveq	#7+12,d0
-(2)  558/    4158 : 7210                		moveq	#SET_SNDVIEWY,d1
-(2)  559/    415A : 7E00                		moveq	#1-1,d7
-(2)  560/    415C : 6100 00D8           		bsr	.show_table
-(2)  561/    4160 : 47F8 B810           		lea	(RAM_GemaCache_FM),a3
-(2)  562/    4164 : 7007                		moveq	#7,d0
-(2)  563/    4166 : 7211                		moveq	#SET_SNDVIEWY+1,d1
-(2)  564/    4168 : 7E04                		moveq	#5-1,d7
-(2)  565/    416A : 6100 0084           		bsr	.show_table_fm
-(2)  566/    416E : 47F8 B820           		lea	(RAM_GemaCache_FM3),a3
-(2)  567/    4172 : 7017                		moveq	#7+16,d0
-(2)  568/    4174 : 7211                		moveq	#SET_SNDVIEWY+1,d1
-(2)  569/    4176 : 3E38 B87E           		move.w	(RAM_Copy_fmSpecial).w,d7
-(2)  570/    417A : 4A07                		tst.b	d7
-(2)  571/    417C : 6712                		beq.s	.no_spec
-(2)  572/    417E : 41F8 478E           		lea	(strL_FmOnly),a0
-(2)  573/    4182 : 4A53                		tst.w	(a3)
-(2)  574/    4184 : 6B04                		bmi.s	.no_prnt3
-(2)  575/    4186 : 41F8 47E2           		lea	(str_Speci),a0
-(2)  576/    418A :                     .no_prnt3:
-(2)  577/    418A : 6100 D028           		bsr	Video_Print
-(2)  578/    418E : 6004                		bra.s	.b_sampl
-(2)  579/    4190 :                     .no_spec:
-(2)  580/    4190 : 7E00                		moveq	#1-1,d7
-(2)  581/    4192 : 615C                		bsr	.show_table_fm
-(2)  582/    4194 :                     .b_sampl:
-(2)  583/    4194 :                     
-(2)  584/    4194 : 701B                		moveq	#7+20,d0
-(2)  585/    4196 : 7211                		moveq	#SET_SNDVIEWY+1,d1
-(2)  586/    4198 : 3E38 B880           		move.w	(RAM_Copy_HasDac).w,d7
-(2)  587/    419C : BE3C 00D9           		cmp.b	#$D9,d7
-(2)  588/    41A0 : 660A                		bne.s	.no_sampl
-(2)  589/    41A2 : 41F8 47E6           		lea	(str_Sampl),a0
-(2)  590/    41A6 : 6100 D00C           		bsr	Video_Print
-(2)  591/    41AA : 6008                		bra.s	.c_sampl
-(2)  592/    41AC :                     .no_sampl:
-(2)  593/    41AC : 47F8 B824           		lea	(RAM_GemaCache_FM6),a3
-(2)  594/    41B0 : 7E00                		moveq	#1-1,d7
-(2)  595/    41B2 : 613C                		bsr	.show_table_fm
-(2)  596/    41B4 :                     .c_sampl:
-(2)  597/    41B4 : 47F8 B828           		lea	(RAM_GemaCache_PCM),a3
-(2)  598/    41B8 : 7007                		moveq	#7,d0
-(2)  599/    41BA : 7212                		moveq	#SET_SNDVIEWY+2,d1
-(2)  600/    41BC : 7E07                		moveq	#8-1,d7
-(2)  601/    41BE : 6176                		bsr	.show_table
-(2)  602/    41C0 : 47F8 B848           		lea	(RAM_GemaCache_PWM),a3
-(2)  603/    41C4 : 7007                		moveq	#7,d0
-(2)  604/    41C6 : 7213                		moveq	#SET_SNDVIEWY+3,d1
-(2)  605/    41C8 : 7E07                		moveq	#8-1,d7
-(2)  606/    41CA : 616A                		bsr	.show_table
-(2)  608/    41CC :                     
-(2)  609/    41CC : 4E75                		rts
-(2)  610/    41CE :                     
-(2)  611/    41CE :                     ; ----------------------------------------------
+(2)  510/    40AE : 66F6                		bne.s	.wait
+(2)  511/    40B0 : 1039 00A0 16AC      		move.b	(z80_cpu+trkBuff_0),d0
+(2)  512/    40B6 : 1239 00A0 16EB      		move.b	(z80_cpu+trkBuff_1),d1
+(2)  513/    40BC : 1439 00A0 172A      		move.b	(z80_cpu+trkBuff_2),d2
+(2)  514/    40C2 : 6100 C2C8           		bsr	sndUnlockZ80
+(2)  515/    40C6 : 32C0                		move.w	d0,(a1)+
+(2)  516/    40C8 : 32C1                		move.w	d1,(a1)+
+(2)  517/    40CA : 32C2                		move.w	d2,(a1)+
+(2)  519/    40CC :                     
+(2)  521/    40CC : 6100 C2AA           		bsr	sndLockZ80
+(2)  522/    40D0 : 41F9 00A0 1C0E      		lea	(z80_cpu+tblPSG),a0
+(2)  523/    40D6 : 43F8 B800           		lea	(RAM_GemaCache_PSG),a1
+(2)  524/    40DA : 7E02                		moveq	#3-1,d7
+(2)  525/    40DC : 6100 00F0           		bsr	.copy_me
+(2)  526/    40E0 : 41F9 00A0 1C46      		lea	(z80_cpu+tblPSGN),a0
+(2)  527/    40E6 : 43F8 B80C           		lea	(RAM_GemaCache_PSGN),a1
+(2)  528/    40EA : 7E00                		moveq	#1-1,d7
+(2)  529/    40EC : 6100 00E0           		bsr	.copy_me
+(2)  530/    40F0 : 41F9 00A0 1BA0      		lea	(z80_cpu+tblFM),a0
+(2)  531/    40F6 : 43F8 B810           		lea	(RAM_GemaCache_FM),a1
+(2)  532/    40FA : 7E05                		moveq	#6-1,d7
+(2)  533/    40FC : 6100 00D0           		bsr	.copy_me
+(2)  534/    4100 : 41F9 00A0 1B0E      		lea	(z80_cpu+tblPCM),a0
+(2)  535/    4106 : 43F8 B828           		lea	(RAM_GemaCache_PCM),a1
+(2)  536/    410A : 7E07                		moveq	#8-1,d7
+(2)  537/    410C : 6100 00C0           		bsr	.copy_me
+(2)  538/    4110 : 41F9 00A0 1C58      		lea	(z80_cpu+tblPWM),a0
+(2)  539/    4116 : 43F8 B848           		lea	(RAM_GemaCache_PWM),a1
+(2)  540/    411A : 7E07                		moveq	#8-1,d7
+(2)  541/    411C : 6100 00B0           		bsr	.copy_me
+(2)  542/    4120 : 7E00                		moveq	#0,d7
+(2)  543/    4122 : 1E39 00A0 0030      		move.b	(z80_cpu+fmSpecial),d7
+(2)  544/    4128 : 31C7 B87E           		move.w	d7,(RAM_Copy_fmSpecial).w
+(2)  545/    412C : 1E39 00A0 0008      		move.b	(z80_cpu+8),d7
+(2)  546/    4132 : 31C7 B880           		move.w	d7,(RAM_Copy_HasDac).w
+(2)  547/    4136 : 6100 C254           		bsr	sndUnlockZ80
+(2)  549/    413A :                     
+(2)  551/    413A : 343C 65A0           		move.w	#DEF_PrintVram|DEF_PrintPal,d2
+(2)  552/    413E : 263C 0080 C000      		move.l	#splitw(DEF_HSIZE_64,DEF_VRAM_FG),d3
+(2)  553/    4144 : 47F8 B800           		lea	(RAM_GemaCache_PSG),a3
+(2)  554/    4148 : 7007                		moveq	#7,d0
+(2)  555/    414A : 7210                		moveq	#SET_SNDVIEWY,d1
+(2)  556/    414C : 7E02                		moveq	#3-1,d7
+(2)  557/    414E : 6100 00E6           		bsr	.show_table
+(2)  558/    4152 : 47F8 B80C           		lea	(RAM_GemaCache_PSGN),a3
+(2)  559/    4156 : 7013                		moveq	#7+12,d0
+(2)  560/    4158 : 7210                		moveq	#SET_SNDVIEWY,d1
+(2)  561/    415A : 7E00                		moveq	#1-1,d7
+(2)  562/    415C : 6100 00D8           		bsr	.show_table
+(2)  563/    4160 : 47F8 B810           		lea	(RAM_GemaCache_FM),a3
+(2)  564/    4164 : 7007                		moveq	#7,d0
+(2)  565/    4166 : 7211                		moveq	#SET_SNDVIEWY+1,d1
+(2)  566/    4168 : 7E04                		moveq	#5-1,d7
+(2)  567/    416A : 6100 0084           		bsr	.show_table_fm
+(2)  568/    416E : 47F8 B820           		lea	(RAM_GemaCache_FM3),a3
+(2)  569/    4172 : 7017                		moveq	#7+16,d0
+(2)  570/    4174 : 7211                		moveq	#SET_SNDVIEWY+1,d1
+(2)  571/    4176 : 3E38 B87E           		move.w	(RAM_Copy_fmSpecial).w,d7
+(2)  572/    417A : 4A07                		tst.b	d7
+(2)  573/    417C : 6712                		beq.s	.no_spec
+(2)  574/    417E : 41F8 4790           		lea	(strL_FmOnly),a0
+(2)  575/    4182 : 4A53                		tst.w	(a3)
+(2)  576/    4184 : 6B04                		bmi.s	.no_prnt3
+(2)  577/    4186 : 41F8 47E4           		lea	(str_Speci),a0
+(2)  578/    418A :                     .no_prnt3:
+(2)  579/    418A : 6100 D028           		bsr	Video_Print
+(2)  580/    418E : 6004                		bra.s	.b_sampl
+(2)  581/    4190 :                     .no_spec:
+(2)  582/    4190 : 7E00                		moveq	#1-1,d7
+(2)  583/    4192 : 615C                		bsr	.show_table_fm
+(2)  584/    4194 :                     .b_sampl:
+(2)  585/    4194 :                     
+(2)  586/    4194 : 701B                		moveq	#7+20,d0
+(2)  587/    4196 : 7211                		moveq	#SET_SNDVIEWY+1,d1
+(2)  588/    4198 : 3E38 B880           		move.w	(RAM_Copy_HasDac).w,d7
+(2)  589/    419C : BE3C 00D9           		cmp.b	#$D9,d7
+(2)  590/    41A0 : 660A                		bne.s	.no_sampl
+(2)  591/    41A2 : 41F8 47E8           		lea	(str_Sampl),a0
+(2)  592/    41A6 : 6100 D00C           		bsr	Video_Print
+(2)  593/    41AA : 6008                		bra.s	.c_sampl
+(2)  594/    41AC :                     .no_sampl:
+(2)  595/    41AC : 47F8 B824           		lea	(RAM_GemaCache_FM6),a3
+(2)  596/    41B0 : 7E00                		moveq	#1-1,d7
+(2)  597/    41B2 : 613C                		bsr	.show_table_fm
+(2)  598/    41B4 :                     .c_sampl:
+(2)  599/    41B4 : 47F8 B828           		lea	(RAM_GemaCache_PCM),a3
+(2)  600/    41B8 : 7007                		moveq	#7,d0
+(2)  601/    41BA : 7212                		moveq	#SET_SNDVIEWY+2,d1
+(2)  602/    41BC : 7E07                		moveq	#8-1,d7
+(2)  603/    41BE : 6176                		bsr	.show_table
+(2)  604/    41C0 : 47F8 B848           		lea	(RAM_GemaCache_PWM),a3
+(2)  605/    41C4 : 7007                		moveq	#7,d0
+(2)  606/    41C6 : 7213                		moveq	#SET_SNDVIEWY+3,d1
+(2)  607/    41C8 : 7E07                		moveq	#8-1,d7
+(2)  608/    41CA : 616A                		bsr	.show_table
+(2)  610/    41CC :                     
+(2)  611/    41CC : 4E75                		rts
 (2)  612/    41CE :                     
-(2)  613/    41CE :                     .copy_me:
-(2)  614/    41CE : 7200                		moveq	#0,d1
-(2)  615/    41D0 :                     ; 		bsr	sndLockZ80
-(2)  616/    41D0 : 1228 0005           		move.b	ztbl_FreqIndx(a0),d1
-(2)  617/    41D4 : 1428 0001           		move.b	ztbl_Link+1(a0),d2
-(2)  618/    41D8 : 1010                		move.b	ztbl_Link(a0),d0
-(2)  619/    41DA :                     ; 		bsr	sndUnlockZ80
-(2)  620/    41DA : 8002                		or.b	d2,d0
-(2)  621/    41DC : 6602                		bne.s	.link_ok
-(2)  622/    41DE : 72FF                		moveq	#-1,d1
-(2)  623/    41E0 :                     .link_ok:
-(2)  624/    41E0 : 3281                		move.w	d1,(a1)
-(2)  625/    41E2 : D0FC 0012           		adda	#MAX_TBLSIZE,a0		; *** EXTERNAL LABEL
-(2)  626/    41E6 : D2FC 0004           		adda	#4,a1
-(2)  627/    41EA : 51CF FFE2           		dbf	d7,.copy_me
-(2)  628/    41EE : 4E75                		rts
-(2)  629/    41F0 :                     
-(2)  630/    41F0 :                     ; ----------------------------------------------
+(2)  613/    41CE :                     ; ----------------------------------------------
+(2)  614/    41CE :                     
+(2)  615/    41CE :                     .copy_me:
+(2)  616/    41CE : 7200                		moveq	#0,d1
+(2)  617/    41D0 :                     ; 		bsr	sndLockZ80
+(2)  618/    41D0 : 1228 0005           		move.b	ztbl_FreqIndx(a0),d1
+(2)  619/    41D4 : 1428 0001           		move.b	ztbl_Link+1(a0),d2
+(2)  620/    41D8 : 1010                		move.b	ztbl_Link(a0),d0
+(2)  621/    41DA :                     ; 		bsr	sndUnlockZ80
+(2)  622/    41DA : 8002                		or.b	d2,d0
+(2)  623/    41DC : 6602                		bne.s	.link_ok
+(2)  624/    41DE : 72FF                		moveq	#-1,d1
+(2)  625/    41E0 :                     .link_ok:
+(2)  626/    41E0 : 3281                		move.w	d1,(a1)
+(2)  627/    41E2 : D0FC 0012           		adda	#MAX_TBLSIZE,a0		; *** EXTERNAL LABEL
+(2)  628/    41E6 : D2FC 0004           		adda	#4,a1
+(2)  629/    41EA : 51CF FFE2           		dbf	d7,.copy_me
+(2)  630/    41EE : 4E75                		rts
 (2)  631/    41F0 :                     
-(2)  632/    41F0 :                     .show_table_fm:
-(2)  633/    41F0 : 41F8 478E           		lea	(strL_FmOnly),a0
-(2)  634/    41F4 : 7C00                		moveq	#0,d6
-(2)  635/    41F6 : 7A00                		moveq	#0,d5
-(2)  636/    41F8 : 3C13                		move.w	(a3),d6
-(2)  637/    41FA : 6A06                		bpl.s	.is_fmgood
-(2)  638/    41FC : 6100 CFB6           		bsr	Video_Print
-(2)  639/    4200 : 6028                		bra.s	.from_fmbad
-(2)  640/    4202 :                     .is_fmgood:
-(2)  641/    4202 : 3A06                		move.w	d6,d5
-(2)  642/    4204 : D0FC 0004           		adda	#4,a0
-(2)  643/    4208 : 0246 001F           		andi.w	#%00011111,d6
-(2)  644/    420C : E34E                		lsl.w	#1,d6
-(2)  645/    420E : D0C6                		adda	d6,a0
-(2)  646/    4210 : 6100 CFA2           		bsr	Video_Print
-(2)  647/    4214 : 3800                		move.w	d0,d4
-(2)  648/    4216 : 5440                		addq.w	#2,d0
-(2)  649/    4218 : 0245 00E0           		andi.w	#%11100000,d5
-(2)  650/    421C : E84D                		lsr.w	#4,d5
-(2)  651/    421E : 41F8 47CE           		lea	(strL_LazyVal),a0
-(2)  652/    4222 : D0C5                		adda	d5,a0
-(2)  653/    4224 : 6100 CF8E           		bsr	Video_Print
-(2)  654/    4228 : 3004                		move.w	d4,d0
-(2)  655/    422A :                     .from_fmbad:
-(2)  656/    422A :                     ; 		addq.w	#1,d1
-(2)  657/    422A : 5840                		addq.w	#4,d0
-(2)  658/    422C : D6FC 0004           		adda	#4,a3
-(2)  659/    4230 : 51CF FFBE           		dbf	d7,.show_table_fm
-(2)  660/    4234 : 4E75                		rts
-(2)  661/    4236 :                     
-(2)  662/    4236 :                     .show_table:
-(2)  663/    4236 : 41F8 448A           		lea	(strL_NoteList),a0
-(2)  664/    423A : 7C00                		moveq	#0,d6
-(2)  665/    423C : 3C13                		move.w	(a3),d6
-(2)  666/    423E : 6B08                		bmi.s	.val_bad
-(2)  667/    4240 : D0FC 0004           		adda	#4,a0
-(2)  668/    4244 : DC46                		add.w	d6,d6
-(2)  669/    4246 : D0C6                		adda	d6,a0
-(2)  670/    4248 :                     .val_bad:
-(2)  671/    4248 : 6100 CF6A           		bsr	Video_Print
-(2)  672/    424C :                     ; 		addq.w	#1,d1
-(2)  673/    424C : 5840                		addq.w	#4,d0
-(2)  674/    424E : D6FC 0004           		adda	#4,a3
-(2)  675/    4252 : 51CF FFE2           		dbf	d7,.show_table
-(2)  676/    4256 : 4E75                		rts
-(2)  677/    4258 :                     
-(2)  678/    4258 :                     ; ====================================================================
-(2)  679/    4258 :                     ; ------------------------------------------------------
-(2)  680/    4258 :                     ; DATA asset locations
+(2)  632/    41F0 :                     ; ----------------------------------------------
+(2)  633/    41F0 :                     
+(2)  634/    41F0 :                     .show_table_fm:
+(2)  635/    41F0 : 41F8 4790           		lea	(strL_FmOnly),a0
+(2)  636/    41F4 : 7C00                		moveq	#0,d6
+(2)  637/    41F6 : 7A00                		moveq	#0,d5
+(2)  638/    41F8 : 3C13                		move.w	(a3),d6
+(2)  639/    41FA : 6A06                		bpl.s	.is_fmgood
+(2)  640/    41FC : 6100 CFB6           		bsr	Video_Print
+(2)  641/    4200 : 6028                		bra.s	.from_fmbad
+(2)  642/    4202 :                     .is_fmgood:
+(2)  643/    4202 : 3A06                		move.w	d6,d5
+(2)  644/    4204 : D0FC 0004           		adda	#4,a0
+(2)  645/    4208 : 0246 001F           		andi.w	#%00011111,d6
+(2)  646/    420C : E34E                		lsl.w	#1,d6
+(2)  647/    420E : D0C6                		adda	d6,a0
+(2)  648/    4210 : 6100 CFA2           		bsr	Video_Print
+(2)  649/    4214 : 3800                		move.w	d0,d4
+(2)  650/    4216 : 5440                		addq.w	#2,d0
+(2)  651/    4218 : 0245 00E0           		andi.w	#%11100000,d5
+(2)  652/    421C : E84D                		lsr.w	#4,d5
+(2)  653/    421E : 41F8 47D0           		lea	(strL_LazyVal),a0
+(2)  654/    4222 : D0C5                		adda	d5,a0
+(2)  655/    4224 : 6100 CF8E           		bsr	Video_Print
+(2)  656/    4228 : 3004                		move.w	d4,d0
+(2)  657/    422A :                     .from_fmbad:
+(2)  658/    422A :                     ; 		addq.w	#1,d1
+(2)  659/    422A : 5840                		addq.w	#4,d0
+(2)  660/    422C : D6FC 0004           		adda	#4,a3
+(2)  661/    4230 : 51CF FFBE           		dbf	d7,.show_table_fm
+(2)  662/    4234 : 4E75                		rts
+(2)  663/    4236 :                     
+(2)  664/    4236 :                     .show_table:
+(2)  665/    4236 : 41F8 448C           		lea	(strL_NoteList),a0
+(2)  666/    423A : 7C00                		moveq	#0,d6
+(2)  667/    423C : 3C13                		move.w	(a3),d6
+(2)  668/    423E : 6B08                		bmi.s	.val_bad
+(2)  669/    4240 : D0FC 0004           		adda	#4,a0
+(2)  670/    4244 : DC46                		add.w	d6,d6
+(2)  671/    4246 : D0C6                		adda	d6,a0
+(2)  672/    4248 :                     .val_bad:
+(2)  673/    4248 : 6100 CF6A           		bsr	Video_Print
+(2)  674/    424C :                     ; 		addq.w	#1,d1
+(2)  675/    424C : 5840                		addq.w	#4,d0
+(2)  676/    424E : D6FC 0004           		adda	#4,a3
+(2)  677/    4252 : 51CF FFE2           		dbf	d7,.show_table
+(2)  678/    4256 : 4E75                		rts
+(2)  679/    4258 :                     
+(2)  680/    4258 :                     ; ====================================================================
 (2)  681/    4258 :                     ; ------------------------------------------------------
-(2)  682/    4258 :                     
-(2)  683/    4258 :                     file_tscrn_main:
-(2)  684/    4258 : 0000 480A           		dc.l DATA_BANK0
-(2)  685/    425C : 424E 4B5F 4D41      		dc.b "BNK_MAIN.BIN",0
+(2)  682/    4258 :                     ; DATA asset locations
+(2)  683/    4258 :                     ; ------------------------------------------------------
+(2)  684/    4258 :                     
+(2)  685/    4258 :                     file_tscrn_main:
+(2)  686/    4258 : 0000 480C           		dc.l DATA_BANK0
+(2)  687/    425C : 424E 4B5F 4D41      		dc.b "BNK_MAIN.BIN",0
              4262 : 494E 2E42 494E 00 
-(2)  686/    4269 :                     		align 2
-(2)  687/    426A :                     ; file_tscrn_mars:
-(2)  688/    426A :                     ; 		dc.l DATA_BANK1
-(2)  689/    426A :                     ; 		dc.b "BNK_MARS.BIN",0
-(2)  690/    426A :                     ; 		align 2
-(2)  691/    426A :                     
-(2)  692/    426A :                     ; ====================================================================
-(2)  693/    426A :                     ; ------------------------------------------------------
-(2)  694/    426A :                     ; Objects
+(2)  688/    4269 :                     		align 2
+(2)  689/    426A :                     ; file_tscrn_mars:
+(2)  690/    426A :                     ; 		dc.l DATA_BANK1
+(2)  691/    426A :                     ; 		dc.b "BNK_MARS.BIN",0
+(2)  692/    426A :                     ; 		align 2
+(2)  693/    426A :                     
+(2)  694/    426A :                     ; ====================================================================
 (2)  695/    426A :                     ; ------------------------------------------------------
-(2)  696/    426A :                     
-(2)  697/    426A :                     ; ====================================================================
-(2)  698/    426A :                     ; ------------------------------------------------------
-(2)  699/    426A :                     ; Objects
+(2)  696/    426A :                     ; Objects
+(2)  697/    426A :                     ; ------------------------------------------------------
+(2)  698/    426A :                     
+(2)  699/    426A :                     ; ====================================================================
 (2)  700/    426A :                     ; ------------------------------------------------------
-(2)  701/    426A :                     
-(2)  702/    426A :                     ; --------------------------------------------------
-(2)  703/    426A :                     ; Sisi
+(2)  701/    426A :                     ; Objects
+(2)  702/    426A :                     ; ------------------------------------------------------
+(2)  703/    426A :                     
 (2)  704/    426A :                     ; --------------------------------------------------
-(2)  705/    426A :                     
-(2)  706/    426A :                     obj_Fairy:
-(2)  707/    426A : 7000                		moveq	#0,d0
-(2)  708/    426C : 102E 001C           		move.b	obj_index(a6),d0
-(2)  709/    4270 : D040                		add.w	d0,d0
-(2)  710/    4272 : 323B 0006           		move.w	.list(pc,d0.w),d1
-(2)  711/    4276 : 4EFB 1002           		jmp	.list(pc,d1.w)
-(2)  712/    427A :                     ; ----------------------------------------------
-(2)  713/    427A : 0004                .list:		dc.w .init-.list
-(2)  714/    427C : 0038                		dc.w .main-.list
-(2)  715/    427E :                     ; ----------------------------------------------
-(2)  716/    427E :                     .init:
-(2)  717/    427E : 1D7C 0001 001C      		move.b	#1,obj_index(a6)
-(2)  718/    4284 : 426E 0020           		clr.w	obj_frame(a6)
-(2)  719/    4288 : 6100 DA64           		bsr	object_ResetAnim
-(2)  720/    428C :                     
-(2)  721/    428C : 1E2E 001D           		move.b	obj_subid(a6),d7
-(2)  722/    4290 : 3C07                		move.w	d7,d6
-(2)  723/    4292 : E54E                		lsl.w	#2,d6
-(2)  724/    4294 : 41FA 00E0           		lea	.fixd_pos(pc),a0
-(2)  725/    4298 : 43EE 0028           		lea	obj_ram(a6),a1
-(2)  726/    429C : D0C6                		adda	d6,a0
-(2)  727/    429E : 32D8                		move.w	(a0)+,(a1)+
-(2)  728/    42A0 : 32D8                		move.w	(a0)+,(a1)+
-(2)  729/    42A2 :                     
-(2)  730/    42A2 : 1E2E 001D           		move.b	obj_subid(a6),d7
-(2)  731/    42A6 : CEFC 002A           		mulu.w	#42,d7
-(2)  732/    42AA : E94F                		lsl.w	#4,d7
-(2)  733/    42AC : 4447                		neg.w	d7
-(2)  734/    42AE : 3347 0004           		move.w	d7,4(a1)
-(2)  735/    42B2 :                     
-(2)  736/    42B2 :                     ; ----------------------------------------------
-(2)  737/    42B2 :                     .main:
-(2)  738/    42B2 : 4BEE 0028           		lea	obj_ram(a6),a5
-(2)  739/    42B6 : 49F8 B872           		lea	(RAM_GemaStatus).w,a4
-(2)  740/    42BA :                     	; a5
-(2)  741/    42BA :                     	; 0 - X base
-(2)  742/    42BA :                     	; 2 - Y base
-(2)  743/    42BA :                     	; 4 - Tan
-(2)  744/    42BA : 7600                		moveq	#0,d3
-(2)  745/    42BC : 162E 001D           		move.b	obj_subid(a6),d3
-(2)  746/    42C0 : D643                		add.w	d3,d3
-(2)  747/    42C2 : D8C3                		adda	d3,a4
-(2)  748/    42C4 :                     ; 		lsl.w	#3,d3
-(2)  749/    42C4 : 3415                		move.w	(a5),d2
-(2)  750/    42C6 : 362D 0002           		move.w	2(a5),d3
-(2)  751/    42CA : 383C 0001           		move.w	#1,d4			; Multiply
-(2)  752/    42CE : 082C 0007 0001      		btst	#7,1(a4)
-(2)  753/    42D4 : 6704                		beq.s	.not_enbls
-(2)  754/    42D6 : 383C 0004           		move.w	#4,d4
-(2)  755/    42DA :                     .not_enbls:
-(2)  756/    42DA : 302D 0004           		move.w	4(a5),d0
-(2)  757/    42DE : E848                		lsr.w	#4,d0
-(2)  758/    42E0 : 6100 D70A           		bsr	System_SineWave
-(2)  759/    42E4 : C3C4                		muls.w	d4,d1
-(2)  760/    42E6 : E041                		asr.w	#8,d1
-(2)  761/    42E8 : 9441                		sub.w	d1,d2
-(2)  762/    42EA : 302D 0004           		move.w	4(a5),d0
-(2)  763/    42EE : E848                		lsr.w	#4,d0
-(2)  764/    42F0 : 082C 0000 0001      		btst	#0,1(a4)
-(2)  765/    42F6 : 6702                		beq.s	.not_enbl2
-(2)  766/    42F8 : D040                		add.w	d0,d0
-(2)  767/    42FA :                     .not_enbl2:
-(2)  768/    42FA : 6100 D6E6           		bsr	System_SineWave_Cos
-(2)  769/    42FE : C3C4                		muls.w	d4,d1
-(2)  770/    4300 : E041                		asr.w	#8,d1
-(2)  771/    4302 : 9641                		sub.w	d1,d3
-(2)  772/    4304 :                     
-(2)  773/    4304 : 383C 0040           		move.w	#$40,d4
-(2)  774/    4308 : 082C 0007 0001      		btst	#7,1(a4)
-(2)  775/    430E : 6704                		beq.s	.not_enbl
-(2)  776/    4310 : 383C 0090           		move.w	#$90,d4
-(2)  777/    4314 :                     .not_enbl:
-(2)  778/    4314 : D96D 0004           		addi.w	d4,4(a5)
-(2)  779/    4318 : 3D42 0004           		move.w	d2,obj_x(a6)
-(2)  780/    431C : 3D43 0008           		move.w	d3,obj_y(a6)
-(2)  781/    4320 :                     
-(2)  782/    4320 :                     .not_mouse:
-(2)  783/    4320 : 41FA 002E           		lea	.anim_data(pc),a0
-(2)  784/    4324 : 6100 DA00           		bsr	object_Animate
-(2)  785/    4328 :                     
-(2)  786/    4328 : 7000                		moveq	#0,d0
-(2)  787/    432A : 102E 001D           		move.b	obj_subid(a6),d0
-(2)  788/    432E : E748                		lsl.w	#3,d0
-(2)  789/    4330 : 41FB 002C           		lea	.sub_ids(pc,d0.w),a0
-(2)  790/    4334 : 3428 0004           		move.w	4(a0),d2
-(2)  791/    4338 : 2250                		move.l	(a0),a1
-(2)  792/    433A : 207C 0000 0000      		move.l	#0,a0
-(2)  793/    4340 : 302E 0004           		move.w	obj_x(a6),d0
-(2)  794/    4344 : 322E 0008           		move.w	obj_y(a6),d1
-(2)  795/    4348 : 362E 0020           		move.w	obj_frame(a6),d3
-(2)  796/    434C : 6000 D1DE           		bra	Video_MakeSprMap
-(2)  797/    4350 :                     
-(2)  798/    4350 :                     ; ----------------------------------------------
-(2)  799/    4350 :                     
-(2)  800/    4350 :                     .anim_data:
-(2)  801/    4350 : 0002                		dc.w .anim_00-.anim_data
-(2)  802/    4352 :                     .anim_00:
-(2)  803/    4352 : 0008                		dc.w 8
-(2)  804/    4354 : 0000 0001 0002      		dc.w 0,1,2,1
-             435A : 0001             
-(2)  805/    435C : FFFE                		dc.w -2
-(2)  806/    435E :                     		align 2
-(2)  807/    435E :                     .sub_ids:
-(2)  808/    435E : 0001 78EE           		dc.l objMap_Dodo
-(2)  809/    4362 : 0002 0000           		dc.w setVram_Dodo,0
-(2)  810/    4366 : 0001 7912           		dc.l objMap_Mimi
-(2)  811/    436A : 0032 0000           		dc.w setVram_Mimi,0
-(2)  812/    436E : 0001 7936           		dc.l objMap_Fifi
-(2)  813/    4372 : 0062 0000           		dc.w setVram_Fifi,0
-(2)  814/    4376 :                     		align 2
-(2)  815/    4376 :                     
-(2)  816/    4376 :                     .fixd_pos:
-(2)  817/    4376 : 00B8 0050           		dc.w $B8,$50
-(2)  818/    437A : 00DC 0050           		dc.w $B8+$24,$50
-(2)  819/    437E : 0100 0050           		dc.w $B8+$48,$50
-(2)  820/    4382 :                     		align 2
-(2)  821/    4382 :                     
-(2)  822/    4382 :                     ; ====================================================================
-(2)  823/    4382 :                     ; ------------------------------------------------------
-(2)  824/    4382 :                     ; Subroutines
-(2)  825/    4382 :                     ; ------------------------------------------------------
-(2)  826/    4382 :                     
-(2)  827/    4382 :                     ; ====================================================================
-(2)  828/    4382 :                     ; ------------------------------------------------------
-(2)  829/    4382 :                     ; Includes for this screen
-(2)  830/    4382 :                     ; ------------------------------------------------------
-(2)  831/    4382 :                     
-(2)  832/    4382 :                     ; ====================================================================
-(2)  833/    4382 :                     ; ------------------------------------------------------
-(2)  834/    4382 :                     ; Custom VBlank
-(2)  835/    4382 :                     ; ------------------------------------------------------
-(2)  836/    4382 :                     
-(2)  837/    4382 :                     ; ------------------------------------------------------
-(2)  838/    4382 :                     ; Custom HBlank
-(2)  839/    4382 :                     ; ------------------------------------------------------
-(2)  840/    4382 :                     
-(2)  841/    4382 :                     ; ====================================================================
-(2)  842/    4382 :                     ; ------------------------------------------------------
-(2)  843/    4382 :                     ; Small data section
-(2)  844/    4382 :                     ; ------------------------------------------------------
-(2)  845/    4382 :                     
-(2)  846/    4382 :                     ; EXTERNAL BEATS FOR EACH TRACK
-(2)  847/    4382 :                     exgema_beats:
-(2)  848/    4382 : 00D6                	dc.w 214
-(2)  849/    4384 : 00E8                	dc.w 214+18
-(2)  850/    4386 : 00D6                	dc.w 214
-(2)  851/    4388 : 00D6                	dc.w 214
-(2)  852/    438A : 00D6                	dc.w 214
-(2)  853/    438C : 00D6                	dc.w 214
-(2)  854/    438E : 00B8                	dc.w $00B8
-(2)  855/    4390 : 00C0                	dc.w 192
-(2)  856/    4392 : 00C0                	dc.w 192
-(2)  857/    4394 : 00D6                	dc.w 214
-(2)  858/    4396 : 00D6                	dc.w 214
-(2)  859/    4398 : 00D6                	dc.w 214
-(2)  860/    439A : 00D6                	dc.w 214
-(2)  861/    439C : 00D6                	dc.w 214
-(2)  862/    439E : 00D6                	dc.w 214
-(2)  863/    43A0 : 00D6                	dc.w 214
-(2)  864/    43A2 : 00D6                	dc.w 214
-(2)  865/    43A4 : 00D6                	dc.w 214
-(2)  866/    43A6 : 00D6                	dc.w 214
-(2)  867/    43A8 : 00D6                	dc.w 214
-(2)  868/    43AA : 00D6                	dc.w 214
-(2)  869/    43AC : 00D6                	dc.w 214
-(2)  870/    43AE : 00D6                	dc.w 214
-(2)  871/    43B0 : 00D6                	dc.w 214
-(2)  872/    43B2 :                     
-(2)  873/    43B2 :                     ArtList_Stuff:
-(2)  874/    43B2 : 0003                		dc.w 3
-(2)  875/    43B4 : 0001 66EA           		dc.l Art_FairyDodo
-(2)  876/    43B8 : 0040                		dc.w cell_vram(setVram_Dodo)
-(2)  877/    43BA : 0600                		dc.w cell_vram($30)
-(2)  878/    43BC : 0001 6CEA           		dc.l Art_FairyMimi
-(2)  879/    43C0 : 0640                		dc.w cell_vram(setVram_Mimi)
-(2)  880/    43C2 : 0600                		dc.w cell_vram($30)
-(2)  881/    43C4 : 0001 72EA           		dc.l Art_FairyFifi
-(2)  882/    43C8 : 0C40                		dc.w cell_vram(setVram_Fifi)
-(2)  883/    43CA : 0600                		dc.w cell_vram($30)
-(2)  884/    43CC :                     
-(2)  885/    43CC :                     str_TesterTitle:
-(2)  886/    43CC : 4745 4D41 2053      		dc.b "GEMA Sound Driver       V1.0",0
-             43D2 : 6F75 6E64 2044 
-             43D8 : 7269 7665 7220 
-             43DE : 2020 2020 2020 
-             43E4 : 5631 2E30 00       
-(2)  887/    43E9 :                     		align 2
-(2)  888/    43EA :                     str_TesterInfo:
-(2)  889/    43EA : 5365 7123 2042      		dc.b "Seq# Blk# Indx",$0A
-             43F0 : 6C6B 2320 496E 
-             43F6 : 6478 0A          
-(2)  890/    43F9 : 0A0A 0A0A           		dc.b $0A,$0A,$0A,$0A
-(2)  891/    43FD : 4265 6174 733A 20   		dc.b "Beats: "
-(2)  892/    4404 : 00                  		dc.b 0
-(2)  893/    4405 :                     		align 2
-(2)  894/    4406 :                     str_Instruc:
-(2)  895/    4406 : 4C52 202D 2053      		dc.b "LR - Seq. Num#   XY - Track index",$0A
-             440C : 6571 2E20 4E75 
-             4412 : 6D23 2020 2058 
-             4418 : 5920 2D20 5472 
-             441E : 6163 6B20 696E 
-             4424 : 6465 780A          
-(2)  896/    4428 : 5544 202D 2053      		dc.b "UD - Seq. Blk#",$0A
-             442E : 6571 2E20 426C 
-             4434 : 6B23 0A          
-(2)  897/    4437 : 2041 202D 2053      		dc.b " A - STOP ALL",$0A
-             443D : 544F 5020 414C 
-             4443 : 4C0A             
-(2)  898/    4445 : 2042 202D 2053      		dc.b " B - STOP Seq.",$0A
-             444B : 544F 5020 5365 
-             4451 : 712E 0A          
-(2)  899/    4454 : 2043 202D 2050      		dc.b " C - PLAY Seq.    Z - PLAY auto-fill"
-             445A : 4C41 5920 5365 
-             4460 : 712E 2020 2020 
-             4466 : 5A20 2D20 504C 
-             446C : 4159 2061 7574 
-             4472 : 6F2D 6669 6C6C    
-(2)  900/    4478 : 00                  		dc.b 0
-(2)  901/    4479 :                     		align 2
-(2)  902/    447A :                     
-(2)  903/    447A :                     str_VmInfo:
-(2)  904/    447A : 5053 470A           		dc.b "PSG",$0A
-(2)  905/    447E : 464D 0A             		dc.b "FM",$0A
-(2)  906/    4481 : 5043 4D0A           		dc.b "PCM",$0A
-(2)  907/    4485 : 5057 4D             		dc.b "PWM"
-(2)  908/    4488 : 00                  		dc.b 0
-(2)  909/    4489 :                     		align 2
-(2)  910/    448A :                     
-(2)  911/    448A : 2D2D 2D00           strL_NoteList:	dc.b "---",0
-(2)  912/    448E : 432D 3000 4323      		dc.b "C-0",0,"C#0",0,"D-0",0,"D#0",0,"E-0",0,"F-0",0,"F#0",0,"G-0",0,"G#0",0,"A-0",0,"A#0",0,"B-0",0
-             4494 : 3000 442D 3000 
-             449A : 4423 3000 452D 
-             44A0 : 3000 462D 3000 
-             44A6 : 4623 3000 472D 
-             44AC : 3000 4723 3000 
-             44B2 : 412D 3000 4123 
-             44B8 : 3000 422D 3000    
-(2)  913/    44BE : 432D 3100 4323      		dc.b "C-1",0,"C#1",0,"D-1",0,"D#1",0,"E-1",0,"F-1",0,"F#1",0,"G-1",0,"G#1",0,"A-1",0,"A#1",0,"B-1",0
-             44C4 : 3100 442D 3100 
-             44CA : 4423 3100 452D 
-             44D0 : 3100 462D 3100 
-             44D6 : 4623 3100 472D 
-             44DC : 3100 4723 3100 
-             44E2 : 412D 3100 4123 
-             44E8 : 3100 422D 3100    
-(2)  914/    44EE : 432D 3200 4323      		dc.b "C-2",0,"C#2",0,"D-2",0,"D#2",0,"E-2",0,"F-2",0,"F#2",0,"G-2",0,"G#2",0,"A-2",0,"A#2",0,"B-2",0
-             44F4 : 3200 442D 3200 
-             44FA : 4423 3200 452D 
-             4500 : 3200 462D 3200 
-             4506 : 4623 3200 472D 
-             450C : 3200 4723 3200 
-             4512 : 412D 3200 4123 
-             4518 : 3200 422D 3200    
-(2)  915/    451E : 432D 3300 4323      		dc.b "C-3",0,"C#3",0,"D-3",0,"D#3",0,"E-3",0,"F-3",0,"F#3",0,"G-3",0,"G#3",0,"A-3",0,"A#3",0,"B-3",0
-             4524 : 3300 442D 3300 
-             452A : 4423 3300 452D 
-             4530 : 3300 462D 3300 
-             4536 : 4623 3300 472D 
-             453C : 3300 4723 3300 
-             4542 : 412D 3300 4123 
-             4548 : 3300 422D 3300    
-(2)  916/    454E : 432D 3400 4323      		dc.b "C-4",0,"C#4",0,"D-4",0,"D#4",0,"E-4",0,"F-4",0,"F#4",0,"G-4",0,"G#4",0,"A-4",0,"A#4",0,"B-4",0
-             4554 : 3400 442D 3400 
-             455A : 4423 3400 452D 
-             4560 : 3400 462D 3400 
-             4566 : 4623 3400 472D 
-             456C : 3400 4723 3400 
-             4572 : 412D 3400 4123 
-             4578 : 3400 422D 3400    
-(2)  917/    457E : 432D 3500 4323      		dc.b "C-5",0,"C#5",0,"D-5",0,"D#5",0,"E-5",0,"F-5",0,"F#5",0,"G-5",0,"G#5",0,"A-5",0,"A#5",0,"B-5",0
-             4584 : 3500 442D 3500 
-             458A : 4423 3500 452D 
-             4590 : 3500 462D 3500 
-             4596 : 4623 3500 472D 
-             459C : 3500 4723 3500 
-             45A2 : 412D 3500 4123 
-             45A8 : 3500 422D 3500    
-(2)  918/    45AE : 432D 3600 4323      		dc.b "C-6",0,"C#6",0,"D-6",0,"D#6",0,"E-6",0,"F-6",0,"F#6",0,"G-6",0,"G#6",0,"A-6",0,"A#6",0,"B-6",0
-             45B4 : 3600 442D 3600 
-             45BA : 4423 3600 452D 
-             45C0 : 3600 462D 3600 
-             45C6 : 4623 3600 472D 
-             45CC : 3600 4723 3600 
-             45D2 : 412D 3600 4123 
-             45D8 : 3600 422D 3600    
-(2)  919/    45DE : 432D 3700 4323      		dc.b "C-7",0,"C#7",0,"D-7",0,"D#7",0,"E-7",0,"F-7",0,"F#7",0,"G-7",0,"G#7",0,"A-7",0,"A#7",0,"B-7",0
-             45E4 : 3700 442D 3700 
-             45EA : 4423 3700 452D 
-             45F0 : 3700 462D 3700 
-             45F6 : 4623 3700 472D 
-             45FC : 3700 4723 3700 
-             4602 : 412D 3700 4123 
-             4608 : 3700 422D 3700    
-(2)  920/    460E : 432D 3800 4323      		dc.b "C-8",0,"C#8",0,"D-8",0,"D#8",0,"E-8",0,"F-8",0,"F#8",0,"G-8",0,"G#8",0,"A-8",0,"A#8",0,"B-8",0
-             4614 : 3800 442D 3800 
-             461A : 4423 3800 452D 
-             4620 : 3800 462D 3800 
-             4626 : 4623 3800 472D 
-             462C : 3800 4723 3800 
-             4632 : 412D 3800 4123 
-             4638 : 3800 422D 3800    
-(2)  921/    463E : 432D 3900 4323      		dc.b "C-9",0,"C#9",0,"D-9",0,"D#9",0,"E-9",0,"F-9",0,"F#9",0,"G-9",0,"G#9",0,"A-9",0,"A#9",0,"B-9",0
-             4644 : 3900 442D 3900 
-             464A : 4423 3900 452D 
-             4650 : 3900 462D 3900 
-             4656 : 4623 3900 472D 
-             465C : 3900 4723 3900 
-             4662 : 412D 3900 4123 
-             4668 : 3900 422D 3900    
-(2)  922/    466E : 3F2D 4100 3F2D      		dc.b "?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0
-             4674 : 4100 3F2D 4100 
-             467A : 3F2D 4100 3F2D 
-             4680 : 4100 3F2D 4100 
-             4686 : 3F2D 4100 3F2D 
-             468C : 4100 3F2D 4100 
-             4692 : 3F2D 4100 3F2D 
-             4698 : 4100 3F2D 4100    
-(2)  923/    469E : 3F2D 4200 3F2D      		dc.b "?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0
-             46A4 : 4200 3F2D 4200 
-             46AA : 3F2D 4200 3F2D 
-             46B0 : 4200 3F2D 4200 
-             46B6 : 3F2D 4200 3F2D 
-             46BC : 4200 3F2D 4200 
-             46C2 : 3F2D 4200 3F2D 
-             46C8 : 4200 3F2D 4200    
-(2)  924/    46CE : 3F2D 4300 3F2D      		dc.b "?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0
-             46D4 : 4300 3F2D 4300 
-             46DA : 3F2D 4300 3F2D 
-             46E0 : 4300 3F2D 4300 
-             46E6 : 3F2D 4300 3F2D 
-             46EC : 4300 3F2D 4300 
-             46F2 : 3F2D 4300 3F2D 
-             46F8 : 4300 3F2D 4300    
-(2)  925/    46FE : 3F2D 4400 3F2D      		dc.b "?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0
-             4704 : 4400 3F2D 4400 
-             470A : 3F2D 4400 3F2D 
-             4710 : 4400 3F2D 4400 
-             4716 : 3F2D 4400 3F2D 
-             471C : 4400 3F2D 4400 
-             4722 : 3F2D 4400 3F2D 
-             4728 : 4400 3F2D 4400    
-(2)  926/    472E : 3F2D 4500 3F2D      		dc.b "?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0
-             4734 : 4500 3F2D 4500 
-             473A : 3F2D 4500 3F2D 
-             4740 : 4500 3F2D 4500 
-             4746 : 3F2D 4500 3F2D 
-             474C : 4500 3F2D 4500 
-             4752 : 3F2D 4500 3F2D 
-             4758 : 4500 3F2D 4500    
-(2)  927/    475E : 3F2D 4600 3F2D      		dc.b "?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0
-             4764 : 4600 3F2D 4600 
-             476A : 3F2D 4600 3F2D 
-             4770 : 4600 3F2D 4600 
-             4776 : 3F2D 4600 3F2D 
-             477C : 4600 3F2D 4600 
-             4782 : 3F2D 4600 3F2D 
-             4788 : 4600 3F2D 4600    
-(2)  928/    478E : 2D2D 2D00           strL_FmOnly:	dc.b "---",0
-(2)  929/    4792 : 432D 2000 4323      		dc.b "C- ",0,"C# ",0,"D- ",0,"D# ",0,"E- ",0,"F- ",0,"F# ",0,"G- ",0,"G# ",0,"A- ",0,"A# ",0,"B- ",0
-             4798 : 2000 442D 2000 
-             479E : 4423 2000 452D 
-             47A4 : 2000 462D 2000 
-             47AA : 4623 2000 472D 
-             47B0 : 2000 4723 2000 
-             47B6 : 412D 2000 4123 
-             47BC : 2000 422D 2000    
-(2)  930/    47C2 : 3F2D 2000 3F2D      		dc.b "?- ",0,"?- ",0,"?- ",0
-             47C8 : 2000 3F2D 2000    
-(2)  931/    47CE : 3000 3100 3200      strL_LazyVal:	dc.b "0",0,"1",0,"2",0,"3",0,"4",0,"5",0,"6",0,"7",0,"8",0,"9",0
-             47D4 : 3300 3400 3500 
-             47DA : 3600 3700 3800 
-             47E0 : 3900             
-(2)  932/    47E2 :                     
-(2)  933/    47E2 : 464D 3300           str_Speci:	dc.b "FM3",0
-(2)  934/    47E6 : 4441 4300           str_Sampl:	dc.b "DAC",0
-(2)  935/    47EA :                     
-(2)  936/    47EA :                     str_ShowVars:
-(2)  937/    47EA : 80FF B86F           		dc.l pstr_mem(0,RAM_GemaSeq+1)
-(2)  938/    47EE : 2020 20             		dc.b "   "
-(2)  939/    47F1 : 80FF B871           		dc.l pstr_mem(0,RAM_GemaBlk+1)
-(2)  940/    47F5 : 2020 20             		dc.b "   "
-(2)  941/    47F8 : 80FF B86D           		dc.l pstr_mem(0,RAM_GemaIndx+1)
-(2)  942/    47FC : 00                  		dc.b 0
-(2)  943/    47FD :                     		align 2
-(2)  944/    47FE :                     str_ShowBeats:
-(2)  945/    47FE : 81FF B87C           		dc.l pstr_mem(1,RAM_CurrBeats)
-(2)  946/    4802 : 00                  		dc.b 0
-(2)  947/    4803 :                     		align 2
-(2)  948/    4804 :                     
-(2)  949/    4804 :                     str_Info:
-(2)  950/    4804 : 83FF D7DC           		dc.l pstr_mem(3,RAM_Framecount)
-(2)  951/    4808 : 00                  		dc.b 0
-(2)  952/    4809 :                     		align 2
-(2)  953/    480A :                     
-(1)   15/    480A :                     mcscrn_e:
-(1)   15/    480A :                     ; Md_Screen00_e:
-(1)   15/    480A : =$480A               MD_SCREEN00_E label *
-(1)   15/    480A :  (MACRO-2)                   erreport "SCREEN CODE: MD_SCREEN00",mcscrn_e-mcscrn_s,MAX_UserCode
-(1)   16/    480A :                     
-     376/    480A :                     
-     377/    480A :                     ; ====================================================================
-     378/    480A :                     ; ----------------------------------------------------------------
-     379/    480A :                     ; DATA BLOCK (banks)
-     380/    480A :                     ; ----------------------------------------------------------------
-     381/    480A :                     
-     382/    480A :                     		include "game/incl_data.asm"
-(1)    1/    480A :                     ; ===========================================================================
-(1)    2/    480A :                     ; ----------------------------------------------------------------
-(1)    3/    480A :                     ; 68K DATA BANKS
-(1)    4/    480A :                     ;
-(1)    5/    480A :                     ; Size limits:
-(1)    6/    480A :                     ;  $40000 for SegaCD's Word-RAM **compatible to all**
-(1)    7/    480A :                     ;  $80000 for Sega-Mapper(SSF2) bank
-(1)    8/    480A :                     ; $100000 for 32X Cartridge
-(1)    9/    480A :                     ; All 4MB for Genesis/Pico
-(1)   10/    480A :                     ;
-(1)   11/    480A :                     ; SCD/CD32:
-(1)   12/    480A :                     ; Add your BANK entries and filenames on iso_files.asm
-(1)   13/    480A :                     ;
-(1)   14/    480A :                     ; MACRO Usage:
-(1)   15/    480A :                     ;	data_dset LABEL_START
-(1)   16/    480A :                     ;	; your data
-(1)   17/    480A :                     ;	data_dend LABEL_END
-(1)   18/    480A :                     ; ----------------------------------------------------------------
-(1)   19/    480A :                     
-(1)   20/    480A :                     ; ============================================================
-(1)   21/    480A :                     ; --------------------------------------------------------
-(1)   22/    480A :                     ; MAIN bank
-(1)   23/    480A :                     ; --------------------------------------------------------
-(1)   24/    480A :                     
-(1)   25/    480A : (MACRO)              	data_dset DATA_BANK0
-(1)   25/    480A :                     ; MCD_DBANK0:
-(1)   25/    480A : =$480A               DATA_BANK0 label *
-(1)   25/    480A : =$480A               GLBL_MDATA_ST := *
-(1)   26/    480A :                     	; ------------------------------------------------
-(1)   27/    480A :                     		include "sound/data.asm"		; GEMA user sound data
-(2)    1/    480A :                     ; ===========================================================================
-(2)    2/    480A :                     ; -------------------------------------------------------------------
-(2)    3/    480A :                     ; Default sound data
-(2)    4/    480A :                     ; -------------------------------------------------------------------
-(2)    5/    480A :                     
-(2)    6/    480A :                     MainGemaSeqList:
-(2)    7/    480A : (MACRO)              	gemaTrk 0,16,gtrk_Test0
-(2)    7/    480A : 1000 481E                   dc.l ((0&$01)<<31)|((16&$7F)<<24)|(GTRK_TEST0&$FFFFFF)
-(2)    8/    480E : (MACRO)              	gemaTrk 1,3,gtrk_BGM0
-(2)    8/    480E : 8300 4A39                   dc.l ((1&$01)<<31)|((3&$7F)<<24)|(GTRK_BGM0&$FFFFFF)
-(2)    9/    4812 : (MACRO)              	gemaTrk 0,3,gtrk_BGM1
-(2)    9/    4812 : 0300 6639                   dc.l ((0&$01)<<31)|((3&$7F)<<24)|(GTRK_BGM1&$FFFFFF)
-(2)   10/    4816 : (MACRO)              	gemaTrk 1,6,gtrk_savage
-(2)   10/    4816 : 8600 865E                   dc.l ((1&$01)<<31)|((6&$7F)<<24)|(GTRK_SAVAGE&$FFFFFF)
-(2)   11/    481A : (MACRO)              	gemaTrk 1,3,gtrk_song0
-(2)   11/    481A : 8300 98A6                   dc.l ((1&$01)<<31)|((3&$7F)<<24)|(GTRK_SONG0&$FFFFFF)
-(2)   12/    481E :                     
-(2)   13/    481E :                     ; ----------------------------------------------------
-(2)   14/    481E :                     gtrk_Test0:
-(2)   15/    481E : (MACRO)              	gemaHead .blk,.pat,.ins,4
-(2)   15/    481E : 0004                        dc.w 4
-(2)   15/    4820 : 0000 482C                   dc.l .BLK
-(2)   15/    4824 : 0000 4834                   dc.l .PAT
-(2)   15/    4828 : 0000 4A01                   dc.l .INS
-(2)   16/    482C :                     .blk:	binclude "sound/seq/test_blk.bin"
-(2)   17/    4834 :                     .pat:	binclude "sound/seq/test_patt.bin"
-(2)   18/    4A01 :                     .ins:
-(2)   19/    4A01 : (MACRO)              	gInsPsg    0,$00,$00,$00,$00,$01,$00
-(2)   19/    4A01 : 8000 0000                   dc.b $80,0,$00,$00
-(2)   19/    4A05 : 0000 0100                   dc.b $00,$00,$01,$00
-(2)   20/    4A09 : (MACRO)              	gInsPsgN +12,$00,$00,$00,$00,$01,$00,%011	; Tone3
-(2)   20/    4A09 : 930C 0000                   dc.b $90|%011,+12,$00,$00
-(2)   20/    4A0D : 0000 0100                   dc.b $00,$00,$01,$00
-(2)   21/    4A11 : (MACRO)              	gInsFm   -12,FmIns_Trumpet_bus,0
-(2)   21/    4A11 : A0F4 00B3                   dc.b $A0,-12,((FMINS_TRUMPET_BUS>>16)&$FF),((FMINS_TRUMPET_BUS>>8)&$FF)
-(2)   21/    4A15 : 8600 0000                   dc.b FMINS_TRUMPET_BUS&$FF,$00,$00,$00
-(2)   22/    4A19 : (MACRO)              	gInsFm3    0,FmIns_Sp_OpenHat,0
-(2)   22/    4A19 : B000 00B6                   dc.b $B0,0,((FMINS_SP_OPENHAT>>16)&$FF),((FMINS_SP_OPENHAT>>8)&$FF)
-(2)   22/    4A1D : 0E00 0000                   dc.b FMINS_SP_OPENHAT&$FF,$00,$00,$00
-(2)   23/    4A21 : (MACRO)              	gInsDac    0,DacIns_TEST,0
-(2)   23/    4A21 : C000 00C0                   dc.b $C0|0,0,((DACINS_TEST>>16)&$FF),((DACINS_TEST>>8)&$FF)
-(2)   23/    4A25 : 0000 0000                   dc.b DACINS_TEST&$FF,0,0,0
-(2)   24/    4A29 : (MACRO)              	gInsPcm    0,PcmIns_TEST,0
-(2)   24/    4A29 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   24/    4A2D : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   25/    4A31 : (MACRO)              	gInsPwm    0,PwmIns_TEST,%10
-(2)   25/    4A31 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   25/    4A35 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   26/    4A39 :                     
-(2)   27/    4A39 :                     ; ----------------------------------------------------
-(2)   28/    4A39 :                     gtrk_BGM0:
-(2)   29/    4A39 : (MACRO)              	gemaHead .blk,.pat,.ins,12
-(2)   29/    4A39 : 000C                        dc.w 12
-(2)   29/    4A3B : 0000 4A47                   dc.l .BLK
-(2)   29/    4A3F : 0000 4A52                   dc.l .PAT
-(2)   29/    4A43 : 0000 6601                   dc.l .INS
-(2)   30/    4A47 :                     .blk:	binclude "sound/seq/bgm0_blk.bin"
-(2)   31/    4A52 :                     .pat:	binclude "sound/seq/bgm0_patt.bin"
-(2)   32/    6601 :                     .ins:
-(2)   33/    6601 : (MACRO)              	gInsFm -24,FmIns_Trumpet_bus
-(2)   33/    6601 : A0E8 00B3                   dc.b $A0,-24,((FMINS_TRUMPET_BUS>>16)&$FF),((FMINS_TRUMPET_BUS>>8)&$FF)
-(2)   33/    6605 : 8600 0000                   dc.b FMINS_TRUMPET_BUS&$FF,$00,$00,$00
-(2)   34/    6609 : (MACRO)              	gInsFm -12,FmIns_Organ_86;FmIns_Piano_Aqua
-(2)   34/    6609 : A0F4 00B2                   dc.b $A0,-12,((FMINS_ORGAN_86>>16)&$FF),((FMINS_ORGAN_86>>8)&$FF)
-(2)   34/    660D : 2600 0000                   dc.b FMINS_ORGAN_86&$FF,$00,$00,$00
-(2)   35/    6611 : (MACRO)              	gInsFm -12,FmIns_Bass_Groove_1
-(2)   35/    6611 : A0F4 00AF                   dc.b $A0,-12,((FMINS_BASS_GROOVE_1>>16)&$FF),((FMINS_BASS_GROOVE_1>>8)&$FF)
-(2)   35/    6615 : E600 0000                   dc.b FMINS_BASS_GROOVE_1&$FF,$00,$00,$00
-(2)   36/    6619 : (MACRO)              	gInsPsg 0,$40,$30,$30,$02,$01,$00
-(2)   36/    6619 : 8000 4030                   dc.b $80,0,$40,$30
-(2)   36/    661D : 3002 0100                   dc.b $30,$02,$01,$00
-(2)   37/    6621 : (MACRO)              	gInsPsg -12,$00,$00,$00,$00,$01,$00
-(2)   37/    6621 : 80F4 0000                   dc.b $80,-12,$00,$00
-(2)   37/    6625 : 0000 0100                   dc.b $00,$00,$01,$00
-(2)   38/    6629 : (MACRO)              	gInsFm -12,FmIns_Organ_121;FmIns_Vibraphone_1
-(2)   38/    6629 : A0F4 00B2                   dc.b $A0,-12,((FMINS_ORGAN_121>>16)&$FF),((FMINS_ORGAN_121>>8)&$FF)
-(2)   38/    662D : 6600 0000                   dc.b FMINS_ORGAN_121&$FF,$00,$00,$00
-(2)   39/    6631 : (MACRO)              	gInsFm -12,FmIns_Brass_eur
-(2)   39/    6631 : A0F4 00B7                   dc.b $A0,-12,((FMINS_BRASS_EUR>>16)&$FF),((FMINS_BRASS_EUR>>8)&$FF)
-(2)   39/    6635 : E600 0000                   dc.b FMINS_BRASS_EUR&$FF,$00,$00,$00
-(2)   40/    6639 :                     ; ----------------------------------------------------
-(2)   41/    6639 :                     gtrk_BGM1:
-(2)   42/    6639 : (MACRO)              	gemaHead .blk,.pat,.ins,12
-(2)   42/    6639 : 000C                        dc.w 12
-(2)   42/    663B : 0000 6647                   dc.l .BLK
-(2)   42/    663F : 0000 6652                   dc.l .PAT
-(2)   42/    6643 : 0000 85BE                   dc.l .INS
-(2)   43/    6647 :                     .blk:	binclude "sound/seq/bgm1_blk.bin"
-(2)   44/    6652 :                     .pat:	binclude "sound/seq/bgm1_patt.bin"
-(2)   45/    85BE :                     .ins:
-(2)   46/    85BE : (MACRO)              	gInsFm -12,FmIns_Trumpet_1
-(2)   46/    85BE : A0F4 00B6                   dc.b $A0,-12,((FMINS_TRUMPET_1>>16)&$FF),((FMINS_TRUMPET_1>>8)&$FF)
-(2)   46/    85C2 : E600 0000                   dc.b FMINS_TRUMPET_1&$FF,$00,$00,$00
-(2)   47/    85C6 : (MACRO)              	gInsPsg 0,$30,$10,$10,$03,$05,$00
-(2)   47/    85C6 : 8000 3010                   dc.b $80,0,$30,$10
-(2)   47/    85CA : 1003 0500                   dc.b $10,$03,$05,$00
-(2)   48/    85CE : (MACRO)              	gInsFm 0,FmIns_Bass_club
-(2)   48/    85CE : A000 00B7                   dc.b $A0,0,((FMINS_BASS_CLUB>>16)&$FF),((FMINS_BASS_CLUB>>8)&$FF)
-(2)   48/    85D2 : 6600 0000                   dc.b FMINS_BASS_CLUB&$FF,$00,$00,$00
-(2)   49/    85D6 : (MACRO)              	gInsFm -12,FmIns_Vibraphone_2
-(2)   49/    85D6 : A0F4 00B2                   dc.b $A0,-12,((FMINS_VIBRAPHONE_2>>16)&$FF),((FMINS_VIBRAPHONE_2>>8)&$FF)
-(2)   49/    85DA : E600 0000                   dc.b FMINS_VIBRAPHONE_2&$FF,$00,$00,$00
-(2)   50/    85DE : (MACRO)              	gInsDac +24,DacIns_Kick,0
-(2)   50/    85DE : C018 012F                   dc.b $C0|0,+24,((DACINS_KICK>>16)&$FF),((DACINS_KICK>>8)&$FF)
-(2)   50/    85E2 : 3E00 0000                   dc.b DACINS_KICK&$FF,0,0,0
-(2)   51/    85E6 : (MACRO)              	gInsNull
-(2)   51/    85E6 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   51/    85EA : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   52/    85EE : (MACRO)              	gInsFm3 0,FmIns_Sp_ClosedHat
-(2)   52/    85EE : B000 00B6                   dc.b $B0,0,((FMINS_SP_CLOSEDHAT>>16)&$FF),((FMINS_SP_CLOSEDHAT>>8)&$FF)
-(2)   52/    85F2 : 3600 0000                   dc.b FMINS_SP_CLOSEDHAT&$FF,$00,$00,$00
-(2)   53/    85F6 : (MACRO)              	gInsDac +24,DacIns_Snare,0
-(2)   53/    85F6 : C018 0133                   dc.b $C0|0,+24,((DACINS_SNARE>>16)&$FF),((DACINS_SNARE>>8)&$FF)
-(2)   53/    85FA : E800 0000                   dc.b DACINS_SNARE&$FF,0,0,0
-(2)   54/    85FE : (MACRO)              	gInsFm3 0,FmIns_Sp_OpenHat
-(2)   54/    85FE : B000 00B6                   dc.b $B0,0,((FMINS_SP_OPENHAT>>16)&$FF),((FMINS_SP_OPENHAT>>8)&$FF)
-(2)   54/    8602 : 0E00 0000                   dc.b FMINS_SP_OPENHAT&$FF,$00,$00,$00
-(2)   55/    8606 : (MACRO)              	gInsFm -24,FmIns_Vibraphone_1
-(2)   55/    8606 : A0E8 00B2                   dc.b $A0,-24,((FMINS_VIBRAPHONE_1>>16)&$FF),((FMINS_VIBRAPHONE_1>>8)&$FF)
-(2)   55/    860A : C600 0000                   dc.b FMINS_VIBRAPHONE_1&$FF,$00,$00,$00
-(2)   56/    860E : (MACRO)              	gInsFm -12,FmIns_Trumpet_bus
-(2)   56/    860E : A0F4 00B3                   dc.b $A0,-12,((FMINS_TRUMPET_BUS>>16)&$FF),((FMINS_TRUMPET_BUS>>8)&$FF)
-(2)   56/    8612 : 8600 0000                   dc.b FMINS_TRUMPET_BUS&$FF,$00,$00,$00
-(2)   57/    8616 : (MACRO)              	gInsFm 0,FmIns_Xylophone
-(2)   57/    8616 : A000 00B3                   dc.b $A0,0,((FMINS_XYLOPHONE>>16)&$FF),((FMINS_XYLOPHONE>>8)&$FF)
-(2)   57/    861A : 0600 0000                   dc.b FMINS_XYLOPHONE&$FF,$00,$00,$00
-(2)   58/    861E : (MACRO)              	gInsNull
-(2)   58/    861E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   58/    8622 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   59/    8626 : (MACRO)              	gInsNull
-(2)   59/    8626 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   59/    862A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   60/    862E : (MACRO)              	gInsNull
-(2)   60/    862E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   60/    8632 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   61/    8636 : (MACRO)              	gInsNull
-(2)   61/    8636 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   61/    863A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   62/    863E : (MACRO)              	gInsNull
-(2)   62/    863E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   62/    8642 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   63/    8646 : (MACRO)              	gInsNull
-(2)   63/    8646 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   63/    864A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   64/    864E : (MACRO)              	gInsNull
-(2)   64/    864E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   64/    8652 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   65/    8656 : (MACRO)              	gInsNull
-(2)   65/    8656 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   65/    865A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   66/    865E :                     
-(2)   67/    865E :                     ; ----------------------------------------------------
-(2)   68/    865E :                     gtrk_savage:
-(2)   69/    865E : (MACRO)              	gemaHead .blk,.pat,.ins,4
-(2)   69/    865E : 0004                        dc.w 4
-(2)   69/    8660 : 0000 866C                   dc.l .BLK
-(2)   69/    8664 : 0000 8688                   dc.l .PAT
-(2)   69/    8668 : 0000 9836                   dc.l .INS
-(2)   70/    866C :                     .blk:	binclude "sound/seq/savage_blk.bin"
-(2)   71/    8688 :                     .pat:	binclude "sound/seq/savage_patt.bin"
-(2)   72/    9836 :                     .ins:
-(2)   89/    9836 : (MACRO)              	gInsPcm -12,PcmIns_savage_01,0
-(2)   89/    9836 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   89/    983A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   90/    983E : (MACRO)              	gInsPcm -12,PcmIns_savage_02,0
-(2)   90/    983E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   90/    9842 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   91/    9846 : (MACRO)              	gInsPcm -12,PcmIns_savage_03,0
-(2)   91/    9846 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   91/    984A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   92/    984E : (MACRO)              	gInsPcm -12,PcmIns_savage_04,0
-(2)   92/    984E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   92/    9852 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   93/    9856 : (MACRO)              	gInsPcm -12,PcmIns_savage_05,0
-(2)   93/    9856 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   93/    985A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   94/    985E : (MACRO)              	gInsPcm -12,PcmIns_savage_06,0
-(2)   94/    985E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   94/    9862 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   95/    9866 : (MACRO)              	gInsPcm -12,PcmIns_savage_07,0
-(2)   95/    9866 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   95/    986A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   96/    986E : (MACRO)              	gInsPcm -12,PcmIns_savage_08,0
-(2)   96/    986E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   96/    9872 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   97/    9876 : (MACRO)              	gInsPcm -12,PcmIns_savage_09,0
-(2)   97/    9876 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   97/    987A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   98/    987E : (MACRO)              	gInsPcm -12,PcmIns_savage_10,0
-(2)   98/    987E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   98/    9882 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   99/    9886 : (MACRO)              	gInsPcm -12,PcmIns_savage_11,0
-(2)   99/    9886 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)   99/    988A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  100/    988E : (MACRO)              	gInsPcm -12,PcmIns_savage_12,0
-(2)  100/    988E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  100/    9892 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  101/    9896 : (MACRO)              	gInsPcm -12,PcmIns_savage_13,0
-(2)  101/    9896 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  101/    989A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  102/    989E : (MACRO)              	gInsPcm -12,PcmIns_savage_14,0
-(2)  102/    989E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  102/    98A2 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  104/    98A6 :                     
-(2)  105/    98A6 :                     ; ----------------------------------------------------
-(2)  106/    98A6 :                     gtrk_song0:
-(2)  107/    98A6 : (MACRO)              	gemaHead .blk,.pat,.ins,8
-(2)  107/    98A6 : 0008                        dc.w 8
-(2)  107/    98A8 : 0000 98B4                   dc.l .BLK
-(2)  107/    98AC : 0000 98C5                   dc.l .PAT
-(2)  107/    98B0 : 0000 ADFE                   dc.l .INS
-(2)  108/    98B4 :                     .blk:	binclude "sound/seq/song0_blk.bin"
-(2)  109/    98C5 :                     .pat:	binclude "sound/seq/song0_patt.bin"
-(2)  110/    ADFE :                     .ins:
-(2)  122/    ADFE : (MACRO)              	gInsPcm -12,PcmIns_song0_01,0
-(2)  122/    ADFE : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  122/    AE02 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  123/    AE06 : (MACRO)              	gInsPcm -12,PcmIns_song0_02,0
-(2)  123/    AE06 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  123/    AE0A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  124/    AE0E : (MACRO)              	gInsFm    0,FmIns_Hats_1
-(2)  124/    AE0E : A000 00B3                   dc.b $A0,0,((FMINS_HATS_1>>16)&$FF),((FMINS_HATS_1>>8)&$FF)
-(2)  124/    AE12 : A600 0000                   dc.b FMINS_HATS_1&$FF,$00,$00,$00
-(2)  125/    AE16 : (MACRO)              	gInsFm3    0,FmIns_Sp_OpenHat
-(2)  125/    AE16 : B000 00B6                   dc.b $B0,0,((FMINS_SP_OPENHAT>>16)&$FF),((FMINS_SP_OPENHAT>>8)&$FF)
-(2)  125/    AE1A : 0E00 0000                   dc.b FMINS_SP_OPENHAT&$FF,$00,$00,$00
-(2)  126/    AE1E : (MACRO)              	gInsPcm -12,PcmIns_song0_05,1
-(2)  126/    AE1E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  126/    AE22 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  127/    AE26 : (MACRO)              	gInsPcm -12,PcmIns_song0_06,0
-(2)  127/    AE26 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  127/    AE2A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  128/    AE2E : (MACRO)              	gInsPcm -12,PcmIns_song0_07,0
-(2)  128/    AE2E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  128/    AE32 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  129/    AE36 : (MACRO)              	gInsPcm -12,PcmIns_song0_08,0
-(2)  129/    AE36 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  129/    AE3A : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  130/    AE3E : (MACRO)              	gInsPcm -12,PcmIns_song0_09,0
-(2)  130/    AE3E : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  130/    AE42 : 0000 0000                   dc.b $00,$00,$00,$00
-(2)  132/    AE46 :                     
-(2)  133/    AE46 :                     ; ===========================================================================
-(2)  134/    AE46 :                     ; -------------------------------------------------------------------
-(2)  135/    AE46 :                     ; GEMA FM instruments
-(2)  136/    AE46 :                     ; -------------------------------------------------------------------
-(2)  137/    AE46 :                     
-(2)  138/    AE46 :                     ; -----------------------------------------------------------
-(2)  139/    AE46 :                     ; Normal FM Instruments
-(2)  140/    AE46 :                     ; -----------------------------------------------------------
-(2)  141/    AE46 :                     
-(2)  142/    AE46 :                     FmIns_Bass_big_81:
-(2)  143/    AE46 :                     		binclude "sound/ins/fm/bin/bass_big_82.bin"
-(2)  144/    AE66 :                     FmIns_Bass_big_110:
-(2)  145/    AE66 :                     		binclude "sound/ins/fm/bin/bass_big_110.bin"
-(2)  146/    AE86 :                     FmIns_Bass_big_114:
-(2)  147/    AE86 :                     		binclude "sound/ins/fm/bin/bass_big_114.bin"
-(2)  148/    AEA6 :                     FmIns_Bass_big_122:
-(2)  149/    AEA6 :                     		binclude "sound/ins/fm/bin/bass_big_122.bin"
-(2)  150/    AEC6 :                     FmIns_Bass_cave_47:
-(2)  151/    AEC6 :                     		binclude "sound/ins/fm/bin/bass_cave_47.bin"
-(2)  152/    AEE6 :                     FmIns_Bass_club_108:
-(2)  153/    AEE6 :                     		binclude "sound/ins/fm/bin/bass_club_108.bin"
-(2)  154/    AF06 :                     FmIns_Bass_foot_75:
-(2)  155/    AF06 :                     		binclude "sound/ins/fm/bin/bass_foot_75.bin"
-(2)  156/    AF26 :                     FmIns_Bass_gem_26:
-(2)  157/    AF26 :                     		binclude "sound/ins/fm/bin/bass_gem_26.bin"
-(2)  158/    AF46 :                     FmIns_Bass_groove_119:
-(2)  159/    AF46 :                     		binclude "sound/ins/fm/bin/bass_groove_119.bin"
-(2)  160/    AF66 :                     FmIns_Bass_heavy_107:
-(2)  161/    AF66 :                     		binclude "sound/ins/fm/bin/bass_heavy_107.bin"
-(2)  162/    AF86 :                     FmIns_Bass_heavy_118:
-(2)  163/    AF86 :                     		binclude "sound/ins/fm/bin/bass_heavy_118.bin"
-(2)  164/    AFA6 :                     FmIns_Bass_loud_117:
-(2)  165/    AFA6 :                     		binclude "sound/ins/fm/bin/bass_loud_117.bin"
-(2)  166/    AFC6 :                     FmIns_bass_low_46:
-(2)  167/    AFC6 :                     		binclude "sound/ins/fm/bin/bass_low_46.bin"
-(2)  168/    AFE6 :                     FmIns_Bass_Groove_1:
-(2)  169/    AFE6 :                     		binclude "sound/ins/fm/bin/bass_groove_1.bin"
-(2)  170/    B006 :                     FmIns_bass_low_81:
-(2)  171/    B006 :                     		binclude "sound/ins/fm/bin/bass_low_81.bin"
-(2)  172/    B026 :                     FmIns_bass_low_103:
-(2)  173/    B026 :                     		binclude "sound/ins/fm/bin/bass_low_103.bin"
-(2)  174/    B046 :                     FmIns_bass_low_106:
-(2)  175/    B046 :                     		binclude "sound/ins/fm/bin/bass_low_106.bin"
-(2)  176/    B066 :                     FmIns_bass_low_126:
-(2)  177/    B066 :                     		binclude "sound/ins/fm/bin/bass_low_126.bin"
-(2)  178/    B086 :                     FmIns_bass_mid_19:
-(2)  179/    B086 :                     		binclude "sound/ins/fm/bin/bass_mid_19.bin"
-(2)  180/    B0A6 :                     FmIns_bass_mid_80:
-(2)  181/    B0A6 :                     		binclude "sound/ins/fm/bin/bass_mid_80.bin"
-(2)  182/    B0C6 :                     FmIns_bass_mid_111:
-(2)  183/    B0C6 :                     		binclude "sound/ins/fm/bin/bass_mid_111.bin"
-(2)  184/    B0E6 :                     FmIns_bass_power_123:
-(2)  185/    B0E6 :                     		binclude "sound/ins/fm/bin/bass_power_123.bin"
-(2)  186/    B106 :                     FmIns_bass_silent_53:
-(2)  187/    B106 :                     		binclude "sound/ins/fm/bin/bass_silent_53.bin"
-(2)  188/    B126 :                     FmIns_bass_slap_10:
-(2)  189/    B126 :                     		binclude "sound/ins/fm/bin/bass_slap_10.bin"
-(2)  190/    B146 :                     FmIns_bass_slap_105:
-(2)  191/    B146 :                     		binclude "sound/ins/fm/bin/bass_slap_105.bin"
-(2)  192/    B166 :                     FmIns_bass_synth_60:
-(2)  193/    B166 :                     		binclude "sound/ins/fm/bin/bass_synth_60.bin"
-(2)  194/    B186 :                     FmIns_bass_synth_61:
-(2)  195/    B186 :                     		binclude "sound/ins/fm/bin/bass_synth_61.bin"
-(2)  196/    B1A6 :                     FmIns_bass_synth_72:
-(2)  197/    B1A6 :                     		binclude "sound/ins/fm/bin/bass_synth_72.bin"
-(2)  198/    B1C6 :                     FmIns_bass_synth_73:
-(2)  199/    B1C6 :                     		binclude "sound/ins/fm/bin/bass_synth_73.bin"
-(2)  200/    B1E6 :                     FmIns_bass_vlow_74:
-(2)  201/    B1E6 :                     		binclude "sound/ins/fm/bin/bass_vlow_74.bin"
-(2)  202/    B206 :                     FmIns_Organ_70:
-(2)  203/    B206 :                     		binclude "sound/ins/fm/bin/organ_70.bin"
-(2)  204/    B226 :                     FmIns_Organ_86:
-(2)  205/    B226 :                     		binclude "sound/ins/fm/bin/organ_86.bin"
-(2)  206/    B246 :                     FmIns_Organ_115:
-(2)  207/    B246 :                     		binclude "sound/ins/fm/bin/organ_115.bin"
-(2)  208/    B266 :                     FmIns_Organ_121:
-(2)  209/    B266 :                     		binclude "sound/ins/fm/bin/organ_121.bin"
-(2)  210/    B286 :                     
-(2)  211/    B286 :                     FmIns_Flaute_1:
-(2)  212/    B286 :                     		binclude "sound/ins/fm/bin/flaute_1.bin"
-(2)  213/    B2A6 :                     FmIns_Flaute_2:
-(2)  214/    B2A6 :                     		binclude "sound/ins/fm/bin/flaute_2.bin"
-(2)  215/    B2C6 :                     FmIns_Vibraphone_1:
-(2)  216/    B2C6 :                     		binclude "sound/ins/fm/bin/vibraphone_1.bin"
-(2)  217/    B2E6 :                     FmIns_Vibraphone_2:
-(2)  218/    B2E6 :                     		binclude "sound/ins/fm/bin/vibraphone_2.bin"
-(2)  219/    B306 :                     FmIns_Xylophone:
-(2)  220/    B306 :                     		binclude "sound/ins/fm/bin/xylophone2_43.bin"
-(2)  221/    B326 :                     FmIns_Bass_low81:
-(2)  222/    B326 :                     		binclude "sound/ins/fm/bin/bass_low_46.bin"
-(2)  223/    B346 :                     FmIns_Trumpet_low:
-(2)  224/    B346 :                     		binclude "sound/ins/fm/bin/trumpet_low.bin"
-(2)  225/    B366 :                     FmIns_Trumpet_genie:
-(2)  226/    B366 :                     		binclude "sound/ins/fm/bin/trumpet_genie.bin"
-(2)  227/    B386 :                     FmIns_Trumpet_bus:
-(2)  228/    B386 :                     		binclude "sound/ins/fm/bin/trumpet_bus.bin"
-(2)  229/    B3A6 :                     FmIns_Hats_1:
-(2)  230/    B3A6 :                     		binclude "sound/ins/fm/bin/hats_96.bin"
-(2)  231/    B3C6 :                     FmIns_Bell_mid36:
-(2)  232/    B3C6 :                     		binclude "sound/ins/fm/bin/bell_mid_36.bin"
-(2)  233/    B3E6 :                     FmIns_Drum_Kick:
-(2)  234/    B3E6 :                     		binclude "sound/ins/fm/bin/kick_low.bin"
-(2)  235/    B406 :                     FmIns_Tick:
-(2)  236/    B406 :                     		binclude "sound/ins/fm/bin/tick_44.bin"
-(2)  237/    B426 :                     
-(2)  238/    B426 :                     ; -----------------------------------------------------------
-(2)  239/    B426 :                     ; Special FM3 Instruments
-(2)  240/    B426 :                     ; -----------------------------------------------------------
-(2)  241/    B426 :                     
-(2)  242/    B426 :                     FmSpIns_clack_1:
-(2)  243/    B426 :                     		binclude "sound/ins/fm/bin/fm3_clack_1.bin"
-(2)  244/    B44E :                     FmSpIns_cowbell_h:
-(2)  245/    B44E :                     		binclude "sound/ins/fm/bin/fm3_cowbell_h.bin"
-(2)  246/    B476 :                     FmSpIns_cowbell_l:
-(2)  247/    B476 :                     		binclude "sound/ins/fm/bin/fm3_cowbell_l.bin"
-(2)  248/    B49E :                     FmSpIns_hats_hq:
-(2)  249/    B49E :                     		binclude "sound/ins/fm/bin/fm3_hats_hq.bin"
-(2)  250/    B4C6 :                     FmSpIns_sfx_alien:
-(2)  251/    B4C6 :                     		binclude "sound/ins/fm/bin/fm3_sfx_alien.bin"
-(2)  252/    B4EE :                     FmSpIns_sfx_knckbuzz:
-(2)  253/    B4EE :                     		binclude "sound/ins/fm/bin/fm3_sfx_knckbuzz.bin"
-(2)  254/    B516 :                     FmSpIns_sfx_knock_h:
-(2)  255/    B516 :                     		binclude "sound/ins/fm/bin/fm3_sfx_knock_h.bin"
-(2)  256/    B53E :                     FmSpIns_sfx_knock_l:
-(2)  257/    B53E :                     		binclude "sound/ins/fm/bin/fm3_sfx_knock_l.bin"
-(2)  258/    B566 :                     FmSpIns_sfx_laser:
-(2)  259/    B566 :                     		binclude "sound/ins/fm/bin/fm3_sfx_laser.bin"
-(2)  260/    B58E :                     
-(2)  261/    B58E :                     ; -----------------------------------------------------------
-(2)  262/    B58E :                     ; FM sound effects
-(2)  263/    B58E :                     ; -----------------------------------------------------------
-(2)  264/    B58E :                     
-(2)  265/    B58E :                     FmIns_sfx_punch:
-(2)  266/    B58E :                     		binclude "sound/ins/fm/bin/sfx_punch.bin"
-(2)  267/    B5AE :                     FmIns_sfx_slash:
-(2)  268/    B5AE :                     		binclude "sound/ins/fm/bin/sfx_slash.bin"
-(2)  269/    B5CE :                     FmIns_sfx_alien1:
-(2)  270/    B5CE :                     		binclude "sound/ins/fm/bin/sfx_alien_83.bin"
-(2)  271/    B5EE :                     FmIns_sfx_alien2:
-(2)  272/    B5EE :                     		binclude "sound/ins/fm/bin/sfx_alien_84.bin"
-(2)  273/    B60E :                     
-(2)  274/    B60E :                     ; ====================================================================
-(2)  275/    B60E :                     ; OLD gsx patches:
-(2)  276/    B60E :                     
-(2)  277/    B60E :                     FmIns_Sp_OpenHat:
-(2)  278/    B60E :                     		binclude "sound/ins/fm/gsx/fm3_openhat.gsx",$2478,$28
-(2)  279/    B636 :                     FmIns_Sp_ClosedHat:
-(2)  280/    B636 :                     		binclude "sound/ins/fm/gsx/fm3_closedhat.gsx",$2478,$28
-(2)  281/    B65E :                     FmIns_Sp_Cowbell:
-(2)  282/    B65E :                     		binclude "sound/ins/fm/gsx/fm3_cowbell.gsx",$2478,$28
-(2)  283/    B686 :                     FmIns_Drums_Kick1:
-(2)  284/    B686 :                     		binclude "sound/ins/fm/gsx/drum_kick_gem.gsx",$2478,$20
-(2)  285/    B6A6 :                     FmIns_Piano_Aqua:
-(2)  286/    B6A6 :                     		binclude "sound/ins/fm/gsx/piano_aqua.gsx",$2478,$20
-(2)  287/    B6C6 :                     FmIns_HBeat_tom:
-(2)  288/    B6C6 :                     		binclude "sound/ins/fm/gsx/nadia_tom.gsx",$2478,$20
-(2)  289/    B6E6 :                     FmIns_Trumpet_1:
-(2)  290/    B6E6 :                     		binclude "sound/ins/fm/gsx/trumpet_1.gsx",$2478,$20
-(2)  291/    B706 :                     FmIns_Bass_duck:
-(2)  292/    B706 :                     		binclude "sound/ins/fm/gsx/bass_duck.gsx",$2478,$20
-(2)  293/    B726 :                     FmIns_ClosedHat:
-(2)  294/    B726 :                     		binclude "sound/ins/fm/gsx/hats_closed.gsx",$2478,$20
-(2)  295/    B746 :                     FmIns_Trumpet_carnival:
-(2)  296/    B746 :                     		binclude "sound/ins/fm/gsx/OLD_trumpet_carnivl.gsx",$2478,$20
-(2)  297/    B766 :                     FmIns_Bass_club:
-(2)  298/    B766 :                     		binclude "sound/ins/fm/gsx/OLD_bass_club.gsx",$2478,$20
-(2)  299/    B786 :                     FmIns_Bass_groove_2:
-(2)  300/    B786 :                     		binclude "sound/ins/fm/gsx/bass_groove_2.gsx",$2478,$20
-(2)  301/    B7A6 :                     FmIns_PSynth_plus:
-(2)  302/    B7A6 :                     		binclude "sound/ins/fm/gsx/psynth_plus.gsx",$2478,$20
-(2)  303/    B7C6 :                     FmIns_Brass_7:
-(2)  304/    B7C6 :                     		binclude "sound/ins/fm/gsx/brass_7.gsx",$2478,$20
-(2)  305/    B7E6 :                     FmIns_Brass_eur:
-(2)  306/    B7E6 :                     		binclude "sound/ins/fm/gsx/brass_eur.gsx",$2478,$20
-(2)  307/    B806 :                     
-(2)  308/    B806 :                     ; ===========================================================================
-(2)  309/    B806 :                     ; -------------------------------------------------------------------
-(2)  310/    B806 :                     ; GEMA/Nikona DAC samples
-(2)  311/    B806 :                     ;
-(2)  312/    B806 :                     ; 16000hz base
-(2)  313/    B806 :                     ; -------------------------------------------------------------------
-(2)  314/    B806 :                     
-(2)  315/    B806 :                     		align $800
+(2)  705/    426A :                     ; Sisi
+(2)  706/    426A :                     ; --------------------------------------------------
+(2)  707/    426A :                     
+(2)  708/    426A :                     obj_Fairy:
+(2)  709/    426A : 7000                		moveq	#0,d0
+(2)  710/    426C : 102E 001C           		move.b	obj_index(a6),d0
+(2)  711/    4270 : D040                		add.w	d0,d0
+(2)  712/    4272 : 323B 0006           		move.w	.list(pc,d0.w),d1
+(2)  713/    4276 : 4EFB 1002           		jmp	.list(pc,d1.w)
+(2)  714/    427A :                     ; ----------------------------------------------
+(2)  715/    427A : 0004                .list:		dc.w .init-.list
+(2)  716/    427C : 003A                		dc.w .main-.list
+(2)  717/    427E :                     ; ----------------------------------------------
+(2)  718/    427E :                     .init:
+(2)  719/    427E : 1D7C 0001 001C      		move.b	#1,obj_index(a6)
+(2)  720/    4284 : 426E 0020           		clr.w	obj_frame(a6)
+(2)  721/    4288 : 6100 DA64           		bsr	object_ResetAnim
+(2)  722/    428C :                     
+(2)  723/    428C : 1E2E 001D           		move.b	obj_subid(a6),d7
+(2)  724/    4290 : 3C07                		move.w	d7,d6
+(2)  725/    4292 : E54E                		lsl.w	#2,d6
+(2)  726/    4294 : 41FA 00E2           		lea	.fixd_pos(pc),a0
+(2)  727/    4298 : 43EE 0028           		lea	obj_ram(a6),a1
+(2)  728/    429C : D0C6                		adda	d6,a0
+(2)  729/    429E : 32D8                		move.w	(a0)+,(a1)+
+(2)  730/    42A0 : 32D8                		move.w	(a0)+,(a1)+
+(2)  731/    42A2 :                     
+(2)  732/    42A2 : 1E2E 001D           		move.b	obj_subid(a6),d7
+(2)  733/    42A6 : CEFC 002A           		mulu.w	#42,d7
+(2)  734/    42AA : EB4F                		lsl.w	#5,d7
+(2)  735/    42AC : 2007                		move.l	d7,d0
+(2)  736/    42AE : 6100 D718           		bsr	System_DiceRoll
+(2)  737/    42B2 :                     ; 		neg.w	d7
+(2)  738/    42B2 : 32C0                		move.w	d0,(a1)+
+(2)  739/    42B4 :                     
+(2)  740/    42B4 :                     ; ----------------------------------------------
+(2)  741/    42B4 :                     .main:
+(2)  742/    42B4 : 4BEE 0028           		lea	obj_ram(a6),a5
+(2)  743/    42B8 : 49F8 B872           		lea	(RAM_GemaStatus).w,a4
+(2)  744/    42BC :                     	; a5
+(2)  745/    42BC :                     	; 0 - X base
+(2)  746/    42BC :                     	; 2 - Y base
+(2)  747/    42BC :                     	; 4 - Tan
+(2)  748/    42BC : 7600                		moveq	#0,d3
+(2)  749/    42BE : 162E 001D           		move.b	obj_subid(a6),d3
+(2)  750/    42C2 : D643                		add.w	d3,d3
+(2)  751/    42C4 : D8C3                		adda	d3,a4
+(2)  752/    42C6 :                     ; 		lsl.w	#3,d3
+(2)  753/    42C6 : 3415                		move.w	(a5),d2
+(2)  754/    42C8 : 362D 0002           		move.w	2(a5),d3
+(2)  755/    42CC : 383C 0002           		move.w	#2,d4			; Multiply
+(2)  756/    42D0 : 082C 0007 0001      		btst	#7,1(a4)
+(2)  757/    42D6 : 6704                		beq.s	.not_enbls
+(2)  758/    42D8 : 383C 0004           		move.w	#4,d4
+(2)  759/    42DC :                     .not_enbls:
+(2)  760/    42DC : 302D 0004           		move.w	4(a5),d0
+(2)  761/    42E0 : E848                		lsr.w	#4,d0
+(2)  762/    42E2 : 6100 D708           		bsr	System_SineWave
+(2)  763/    42E6 : C3C4                		muls.w	d4,d1
+(2)  764/    42E8 : E041                		asr.w	#8,d1
+(2)  765/    42EA : 9441                		sub.w	d1,d2
+(2)  766/    42EC : 302D 0004           		move.w	4(a5),d0
+(2)  767/    42F0 : E848                		lsr.w	#4,d0
+(2)  768/    42F2 : 082C 0000 0001      		btst	#0,1(a4)
+(2)  769/    42F8 : 6702                		beq.s	.not_enbl2
+(2)  770/    42FA : D040                		add.w	d0,d0
+(2)  771/    42FC :                     .not_enbl2:
+(2)  772/    42FC : 6100 D6E4           		bsr	System_SineWave_Cos
+(2)  773/    4300 : C3C4                		muls.w	d4,d1
+(2)  774/    4302 : E041                		asr.w	#8,d1
+(2)  775/    4304 : 9641                		sub.w	d1,d3
+(2)  776/    4306 :                     
+(2)  777/    4306 : 383C 0040           		move.w	#$40,d4
+(2)  778/    430A : 082C 0007 0001      		btst	#7,1(a4)
+(2)  779/    4310 : 6704                		beq.s	.not_enbl
+(2)  780/    4312 : 383C 0090           		move.w	#$90,d4
+(2)  781/    4316 :                     .not_enbl:
+(2)  782/    4316 : D96D 0004           		addi.w	d4,4(a5)
+(2)  783/    431A : 3D42 0004           		move.w	d2,obj_x(a6)
+(2)  784/    431E : 3D43 0008           		move.w	d3,obj_y(a6)
+(2)  785/    4322 :                     
+(2)  786/    4322 :                     .not_mouse:
+(2)  787/    4322 : 41FA 002E           		lea	.anim_data(pc),a0
+(2)  788/    4326 : 6100 D9FE           		bsr	object_Animate
+(2)  789/    432A :                     
+(2)  790/    432A : 7000                		moveq	#0,d0
+(2)  791/    432C : 102E 001D           		move.b	obj_subid(a6),d0
+(2)  792/    4330 : E748                		lsl.w	#3,d0
+(2)  793/    4332 : 41FB 002C           		lea	.sub_ids(pc,d0.w),a0
+(2)  794/    4336 : 3428 0004           		move.w	4(a0),d2
+(2)  795/    433A : 2250                		move.l	(a0),a1
+(2)  796/    433C : 207C 0000 0000      		move.l	#0,a0
+(2)  797/    4342 : 302E 0004           		move.w	obj_x(a6),d0
+(2)  798/    4346 : 322E 0008           		move.w	obj_y(a6),d1
+(2)  799/    434A : 362E 0020           		move.w	obj_frame(a6),d3
+(2)  800/    434E : 6000 D1DC           		bra	Video_MakeSprMap
+(2)  801/    4352 :                     
+(2)  802/    4352 :                     ; ----------------------------------------------
+(2)  803/    4352 :                     
+(2)  804/    4352 :                     .anim_data:
+(2)  805/    4352 : 0002                		dc.w .anim_00-.anim_data
+(2)  806/    4354 :                     .anim_00:
+(2)  807/    4354 : 0008                		dc.w 8
+(2)  808/    4356 : 0000 0001 0002      		dc.w 0,1,2,1
+             435C : 0001             
+(2)  809/    435E : FFFE                		dc.w -2
+(2)  810/    4360 :                     		align 2
+(2)  811/    4360 :                     .sub_ids:
+(2)  812/    4360 : 0001 78EE           		dc.l objMap_Dodo
+(2)  813/    4364 : 0002 0000           		dc.w setVram_Dodo,0
+(2)  814/    4368 : 0001 7912           		dc.l objMap_Mimi
+(2)  815/    436C : 0032 0000           		dc.w setVram_Mimi,0
+(2)  816/    4370 : 0001 7936           		dc.l objMap_Fifi
+(2)  817/    4374 : 0062 0000           		dc.w setVram_Fifi,0
+(2)  818/    4378 :                     		align 2
+(2)  819/    4378 :                     
+(2)  820/    4378 :                     .fixd_pos:
+(2)  821/    4378 : 00B8 0050           		dc.w $B8,$50
+(2)  822/    437C : 00DC 0050           		dc.w $B8+$24,$50
+(2)  823/    4380 : 0100 0050           		dc.w $B8+$48,$50
+(2)  824/    4384 :                     		align 2
+(2)  825/    4384 :                     
+(2)  826/    4384 :                     ; ====================================================================
+(2)  827/    4384 :                     ; ------------------------------------------------------
+(2)  828/    4384 :                     ; Subroutines
+(2)  829/    4384 :                     ; ------------------------------------------------------
+(2)  830/    4384 :                     
+(2)  831/    4384 :                     ; ====================================================================
+(2)  832/    4384 :                     ; ------------------------------------------------------
+(2)  833/    4384 :                     ; Includes for this screen
+(2)  834/    4384 :                     ; ------------------------------------------------------
+(2)  835/    4384 :                     
+(2)  836/    4384 :                     ; ====================================================================
+(2)  837/    4384 :                     ; ------------------------------------------------------
+(2)  838/    4384 :                     ; Custom VBlank
+(2)  839/    4384 :                     ; ------------------------------------------------------
+(2)  840/    4384 :                     
+(2)  841/    4384 :                     ; ------------------------------------------------------
+(2)  842/    4384 :                     ; Custom HBlank
+(2)  843/    4384 :                     ; ------------------------------------------------------
+(2)  844/    4384 :                     
+(2)  845/    4384 :                     ; ====================================================================
+(2)  846/    4384 :                     ; ------------------------------------------------------
+(2)  847/    4384 :                     ; Small data section
+(2)  848/    4384 :                     ; ------------------------------------------------------
+(2)  849/    4384 :                     
+(2)  850/    4384 :                     ; EXTERNAL BEATS FOR EACH TRACK
+(2)  851/    4384 :                     exgema_beats:
+(2)  852/    4384 : 00D6                	dc.w 214
+(2)  853/    4386 : 00E8                	dc.w 214+18
+(2)  854/    4388 : 00D6                	dc.w 214
+(2)  855/    438A : 00D6                	dc.w 214
+(2)  856/    438C : 00D6                	dc.w 214
+(2)  857/    438E : 00D6                	dc.w 214
+(2)  858/    4390 : 00B8                	dc.w $00B8
+(2)  859/    4392 : 00C0                	dc.w 192
+(2)  860/    4394 : 00C0                	dc.w 192
+(2)  861/    4396 : 00D6                	dc.w 214
+(2)  862/    4398 : 00D6                	dc.w 214
+(2)  863/    439A : 00D6                	dc.w 214
+(2)  864/    439C : 00D6                	dc.w 214
+(2)  865/    439E : 00D6                	dc.w 214
+(2)  866/    43A0 : 00D6                	dc.w 214
+(2)  867/    43A2 : 00D6                	dc.w 214
+(2)  868/    43A4 : 00D6                	dc.w 214
+(2)  869/    43A6 : 00D6                	dc.w 214
+(2)  870/    43A8 : 00D6                	dc.w 214
+(2)  871/    43AA : 00D6                	dc.w 214
+(2)  872/    43AC : 00D6                	dc.w 214
+(2)  873/    43AE : 00D6                	dc.w 214
+(2)  874/    43B0 : 00D6                	dc.w 214
+(2)  875/    43B2 : 00D6                	dc.w 214
+(2)  876/    43B4 :                     
+(2)  877/    43B4 :                     ArtList_Stuff:
+(2)  878/    43B4 : 0003                		dc.w 3
+(2)  879/    43B6 : 0001 66EA           		dc.l Art_FairyDodo
+(2)  880/    43BA : 0040                		dc.w cell_vram(setVram_Dodo)
+(2)  881/    43BC : 0600                		dc.w cell_vram($30)
+(2)  882/    43BE : 0001 6CEA           		dc.l Art_FairyMimi
+(2)  883/    43C2 : 0640                		dc.w cell_vram(setVram_Mimi)
+(2)  884/    43C4 : 0600                		dc.w cell_vram($30)
+(2)  885/    43C6 : 0001 72EA           		dc.l Art_FairyFifi
+(2)  886/    43CA : 0C40                		dc.w cell_vram(setVram_Fifi)
+(2)  887/    43CC : 0600                		dc.w cell_vram($30)
+(2)  888/    43CE :                     
+(2)  889/    43CE :                     str_TesterTitle:
+(2)  890/    43CE : 4745 4D41 2053      		dc.b "GEMA Sound Driver       V1.0",0
+             43D4 : 6F75 6E64 2044 
+             43DA : 7269 7665 7220 
+             43E0 : 2020 2020 2020 
+             43E6 : 5631 2E30 00       
+(2)  891/    43EB :                     		align 2
+(2)  892/    43EC :                     str_TesterInfo:
+(2)  893/    43EC : 5365 7123 2042      		dc.b "Seq# Blk# Indx",$0A
+             43F2 : 6C6B 2320 496E 
+             43F8 : 6478 0A          
+(2)  894/    43FB : 0A0A 0A0A           		dc.b $0A,$0A,$0A,$0A
+(2)  895/    43FF : 4265 6174 733A 20   		dc.b "Beats: "
+(2)  896/    4406 : 00                  		dc.b 0
+(2)  897/    4407 :                     		align 2
+(2)  898/    4408 :                     str_Instruc:
+(2)  899/    4408 : 4C52 202D 2053      		dc.b "LR - Seq. Num#   XY - Track index",$0A
+             440E : 6571 2E20 4E75 
+             4414 : 6D23 2020 2058 
+             441A : 5920 2D20 5472 
+             4420 : 6163 6B20 696E 
+             4426 : 6465 780A          
+(2)  900/    442A : 5544 202D 2053      		dc.b "UD - Seq. Blk#",$0A
+             4430 : 6571 2E20 426C 
+             4436 : 6B23 0A          
+(2)  901/    4439 : 2041 202D 2053      		dc.b " A - STOP ALL",$0A
+             443F : 544F 5020 414C 
+             4445 : 4C0A             
+(2)  902/    4447 : 2042 202D 2053      		dc.b " B - STOP Seq.",$0A
+             444D : 544F 5020 5365 
+             4453 : 712E 0A          
+(2)  903/    4456 : 2043 202D 2050      		dc.b " C - PLAY Seq.    Z - PLAY auto-fill"
+             445C : 4C41 5920 5365 
+             4462 : 712E 2020 2020 
+             4468 : 5A20 2D20 504C 
+             446E : 4159 2061 7574 
+             4474 : 6F2D 6669 6C6C    
+(2)  904/    447A : 00                  		dc.b 0
+(2)  905/    447B :                     		align 2
+(2)  906/    447C :                     
+(2)  907/    447C :                     str_VmInfo:
+(2)  908/    447C : 5053 470A           		dc.b "PSG",$0A
+(2)  909/    4480 : 464D 0A             		dc.b "FM",$0A
+(2)  910/    4483 : 5043 4D0A           		dc.b "PCM",$0A
+(2)  911/    4487 : 5057 4D             		dc.b "PWM"
+(2)  912/    448A : 00                  		dc.b 0
+(2)  913/    448B :                     		align 2
+(2)  914/    448C :                     
+(2)  915/    448C : 2D2D 2D00           strL_NoteList:	dc.b "---",0
+(2)  916/    4490 : 432D 3000 4323      		dc.b "C-0",0,"C#0",0,"D-0",0,"D#0",0,"E-0",0,"F-0",0,"F#0",0,"G-0",0,"G#0",0,"A-0",0,"A#0",0,"B-0",0
+             4496 : 3000 442D 3000 
+             449C : 4423 3000 452D 
+             44A2 : 3000 462D 3000 
+             44A8 : 4623 3000 472D 
+             44AE : 3000 4723 3000 
+             44B4 : 412D 3000 4123 
+             44BA : 3000 422D 3000    
+(2)  917/    44C0 : 432D 3100 4323      		dc.b "C-1",0,"C#1",0,"D-1",0,"D#1",0,"E-1",0,"F-1",0,"F#1",0,"G-1",0,"G#1",0,"A-1",0,"A#1",0,"B-1",0
+             44C6 : 3100 442D 3100 
+             44CC : 4423 3100 452D 
+             44D2 : 3100 462D 3100 
+             44D8 : 4623 3100 472D 
+             44DE : 3100 4723 3100 
+             44E4 : 412D 3100 4123 
+             44EA : 3100 422D 3100    
+(2)  918/    44F0 : 432D 3200 4323      		dc.b "C-2",0,"C#2",0,"D-2",0,"D#2",0,"E-2",0,"F-2",0,"F#2",0,"G-2",0,"G#2",0,"A-2",0,"A#2",0,"B-2",0
+             44F6 : 3200 442D 3200 
+             44FC : 4423 3200 452D 
+             4502 : 3200 462D 3200 
+             4508 : 4623 3200 472D 
+             450E : 3200 4723 3200 
+             4514 : 412D 3200 4123 
+             451A : 3200 422D 3200    
+(2)  919/    4520 : 432D 3300 4323      		dc.b "C-3",0,"C#3",0,"D-3",0,"D#3",0,"E-3",0,"F-3",0,"F#3",0,"G-3",0,"G#3",0,"A-3",0,"A#3",0,"B-3",0
+             4526 : 3300 442D 3300 
+             452C : 4423 3300 452D 
+             4532 : 3300 462D 3300 
+             4538 : 4623 3300 472D 
+             453E : 3300 4723 3300 
+             4544 : 412D 3300 4123 
+             454A : 3300 422D 3300    
+(2)  920/    4550 : 432D 3400 4323      		dc.b "C-4",0,"C#4",0,"D-4",0,"D#4",0,"E-4",0,"F-4",0,"F#4",0,"G-4",0,"G#4",0,"A-4",0,"A#4",0,"B-4",0
+             4556 : 3400 442D 3400 
+             455C : 4423 3400 452D 
+             4562 : 3400 462D 3400 
+             4568 : 4623 3400 472D 
+             456E : 3400 4723 3400 
+             4574 : 412D 3400 4123 
+             457A : 3400 422D 3400    
+(2)  921/    4580 : 432D 3500 4323      		dc.b "C-5",0,"C#5",0,"D-5",0,"D#5",0,"E-5",0,"F-5",0,"F#5",0,"G-5",0,"G#5",0,"A-5",0,"A#5",0,"B-5",0
+             4586 : 3500 442D 3500 
+             458C : 4423 3500 452D 
+             4592 : 3500 462D 3500 
+             4598 : 4623 3500 472D 
+             459E : 3500 4723 3500 
+             45A4 : 412D 3500 4123 
+             45AA : 3500 422D 3500    
+(2)  922/    45B0 : 432D 3600 4323      		dc.b "C-6",0,"C#6",0,"D-6",0,"D#6",0,"E-6",0,"F-6",0,"F#6",0,"G-6",0,"G#6",0,"A-6",0,"A#6",0,"B-6",0
+             45B6 : 3600 442D 3600 
+             45BC : 4423 3600 452D 
+             45C2 : 3600 462D 3600 
+             45C8 : 4623 3600 472D 
+             45CE : 3600 4723 3600 
+             45D4 : 412D 3600 4123 
+             45DA : 3600 422D 3600    
+(2)  923/    45E0 : 432D 3700 4323      		dc.b "C-7",0,"C#7",0,"D-7",0,"D#7",0,"E-7",0,"F-7",0,"F#7",0,"G-7",0,"G#7",0,"A-7",0,"A#7",0,"B-7",0
+             45E6 : 3700 442D 3700 
+             45EC : 4423 3700 452D 
+             45F2 : 3700 462D 3700 
+             45F8 : 4623 3700 472D 
+             45FE : 3700 4723 3700 
+             4604 : 412D 3700 4123 
+             460A : 3700 422D 3700    
+(2)  924/    4610 : 432D 3800 4323      		dc.b "C-8",0,"C#8",0,"D-8",0,"D#8",0,"E-8",0,"F-8",0,"F#8",0,"G-8",0,"G#8",0,"A-8",0,"A#8",0,"B-8",0
+             4616 : 3800 442D 3800 
+             461C : 4423 3800 452D 
+             4622 : 3800 462D 3800 
+             4628 : 4623 3800 472D 
+             462E : 3800 4723 3800 
+             4634 : 412D 3800 4123 
+             463A : 3800 422D 3800    
+(2)  925/    4640 : 432D 3900 4323      		dc.b "C-9",0,"C#9",0,"D-9",0,"D#9",0,"E-9",0,"F-9",0,"F#9",0,"G-9",0,"G#9",0,"A-9",0,"A#9",0,"B-9",0
+             4646 : 3900 442D 3900 
+             464C : 4423 3900 452D 
+             4652 : 3900 462D 3900 
+             4658 : 4623 3900 472D 
+             465E : 3900 4723 3900 
+             4664 : 412D 3900 4123 
+             466A : 3900 422D 3900    
+(2)  926/    4670 : 3F2D 4100 3F2D      		dc.b "?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0,"?-A",0
+             4676 : 4100 3F2D 4100 
+             467C : 3F2D 4100 3F2D 
+             4682 : 4100 3F2D 4100 
+             4688 : 3F2D 4100 3F2D 
+             468E : 4100 3F2D 4100 
+             4694 : 3F2D 4100 3F2D 
+             469A : 4100 3F2D 4100    
+(2)  927/    46A0 : 3F2D 4200 3F2D      		dc.b "?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0,"?-B",0
+             46A6 : 4200 3F2D 4200 
+             46AC : 3F2D 4200 3F2D 
+             46B2 : 4200 3F2D 4200 
+             46B8 : 3F2D 4200 3F2D 
+             46BE : 4200 3F2D 4200 
+             46C4 : 3F2D 4200 3F2D 
+             46CA : 4200 3F2D 4200    
+(2)  928/    46D0 : 3F2D 4300 3F2D      		dc.b "?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0,"?-C",0
+             46D6 : 4300 3F2D 4300 
+             46DC : 3F2D 4300 3F2D 
+             46E2 : 4300 3F2D 4300 
+             46E8 : 3F2D 4300 3F2D 
+             46EE : 4300 3F2D 4300 
+             46F4 : 3F2D 4300 3F2D 
+             46FA : 4300 3F2D 4300    
+(2)  929/    4700 : 3F2D 4400 3F2D      		dc.b "?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0,"?-D",0
+             4706 : 4400 3F2D 4400 
+             470C : 3F2D 4400 3F2D 
+             4712 : 4400 3F2D 4400 
+             4718 : 3F2D 4400 3F2D 
+             471E : 4400 3F2D 4400 
+             4724 : 3F2D 4400 3F2D 
+             472A : 4400 3F2D 4400    
+(2)  930/    4730 : 3F2D 4500 3F2D      		dc.b "?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0,"?-E",0
+             4736 : 4500 3F2D 4500 
+             473C : 3F2D 4500 3F2D 
+             4742 : 4500 3F2D 4500 
+             4748 : 3F2D 4500 3F2D 
+             474E : 4500 3F2D 4500 
+             4754 : 3F2D 4500 3F2D 
+             475A : 4500 3F2D 4500    
+(2)  931/    4760 : 3F2D 4600 3F2D      		dc.b "?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0,"?-F",0
+             4766 : 4600 3F2D 4600 
+             476C : 3F2D 4600 3F2D 
+             4772 : 4600 3F2D 4600 
+             4778 : 3F2D 4600 3F2D 
+             477E : 4600 3F2D 4600 
+             4784 : 3F2D 4600 3F2D 
+             478A : 4600 3F2D 4600    
+(2)  932/    4790 : 2D2D 2D00           strL_FmOnly:	dc.b "---",0
+(2)  933/    4794 : 432D 2000 4323      		dc.b "C- ",0,"C# ",0,"D- ",0,"D# ",0,"E- ",0,"F- ",0,"F# ",0,"G- ",0,"G# ",0,"A- ",0,"A# ",0,"B- ",0
+             479A : 2000 442D 2000 
+             47A0 : 4423 2000 452D 
+             47A6 : 2000 462D 2000 
+             47AC : 4623 2000 472D 
+             47B2 : 2000 4723 2000 
+             47B8 : 412D 2000 4123 
+             47BE : 2000 422D 2000    
+(2)  934/    47C4 : 3F2D 2000 3F2D      		dc.b "?- ",0,"?- ",0,"?- ",0
+             47CA : 2000 3F2D 2000    
+(2)  935/    47D0 : 3000 3100 3200      strL_LazyVal:	dc.b "0",0,"1",0,"2",0,"3",0,"4",0,"5",0,"6",0,"7",0,"8",0,"9",0
+             47D6 : 3300 3400 3500 
+             47DC : 3600 3700 3800 
+             47E2 : 3900             
+(2)  936/    47E4 :                     
+(2)  937/    47E4 : 464D 3300           str_Speci:	dc.b "FM3",0
+(2)  938/    47E8 : 4441 4300           str_Sampl:	dc.b "DAC",0
+(2)  939/    47EC :                     
+(2)  940/    47EC :                     str_ShowVars:
+(2)  941/    47EC : 80FF B86F           		dc.l pstr_mem(0,RAM_GemaSeq+1)
+(2)  942/    47F0 : 2020 20             		dc.b "   "
+(2)  943/    47F3 : 80FF B871           		dc.l pstr_mem(0,RAM_GemaBlk+1)
+(2)  944/    47F7 : 2020 20             		dc.b "   "
+(2)  945/    47FA : 80FF B86D           		dc.l pstr_mem(0,RAM_GemaIndx+1)
+(2)  946/    47FE : 00                  		dc.b 0
+(2)  947/    47FF :                     		align 2
+(2)  948/    4800 :                     str_ShowBeats:
+(2)  949/    4800 : 81FF B87C           		dc.l pstr_mem(1,RAM_CurrBeats)
+(2)  950/    4804 : 00                  		dc.b 0
+(2)  951/    4805 :                     		align 2
+(2)  952/    4806 :                     
+(2)  953/    4806 :                     str_Info:
+(2)  954/    4806 : 83FF D7DC           		dc.l pstr_mem(3,RAM_Framecount)
+(2)  955/    480A : 00                  		dc.b 0
+(2)  956/    480B :                     		align 2
+(2)  957/    480C :                     
+(1)   15/    480C :                     mcscrn_e:
+(1)   15/    480C :                     ; Md_Screen00_e:
+(1)   15/    480C : =$480C               MD_SCREEN00_E label *
+(1)   15/    480C :  (MACRO-2)                   erreport "SCREEN CODE: MD_SCREEN00",mcscrn_e-mcscrn_s,MAX_UserCode
+(1)   16/    480C :                     
+     376/    480C :                     
+     377/    480C :                     ; ====================================================================
+     378/    480C :                     ; ----------------------------------------------------------------
+     379/    480C :                     ; DATA BLOCK (banks)
+     380/    480C :                     ; ----------------------------------------------------------------
+     381/    480C :                     
+     382/    480C :                     		include "game/incl_data.asm"
+(1)    1/    480C :                     ; ===========================================================================
+(1)    2/    480C :                     ; ----------------------------------------------------------------
+(1)    3/    480C :                     ; 68K DATA BANKS
+(1)    4/    480C :                     ;
+(1)    5/    480C :                     ; Size limits:
+(1)    6/    480C :                     ;  $40000 for SegaCD's Word-RAM **compatible to all**
+(1)    7/    480C :                     ;  $80000 for Sega-Mapper(SSF2) bank
+(1)    8/    480C :                     ; $100000 for 32X Cartridge
+(1)    9/    480C :                     ; All 4MB for Genesis/Pico
+(1)   10/    480C :                     ;
+(1)   11/    480C :                     ; SCD/CD32:
+(1)   12/    480C :                     ; Add your BANK entries and filenames on iso_files.asm
+(1)   13/    480C :                     ;
+(1)   14/    480C :                     ; MACRO Usage:
+(1)   15/    480C :                     ;	data_dset LABEL_START
+(1)   16/    480C :                     ;	; your data
+(1)   17/    480C :                     ;	data_dend LABEL_END
+(1)   18/    480C :                     ; ----------------------------------------------------------------
+(1)   19/    480C :                     
+(1)   20/    480C :                     ; ============================================================
+(1)   21/    480C :                     ; --------------------------------------------------------
+(1)   22/    480C :                     ; MAIN bank
+(1)   23/    480C :                     ; --------------------------------------------------------
+(1)   24/    480C :                     
+(1)   25/    480C : (MACRO)              	data_dset DATA_BANK0
+(1)   25/    480C :                     ; MCD_DBANK0:
+(1)   25/    480C : =$480C               DATA_BANK0 label *
+(1)   25/    480C : =$480C               GLBL_MDATA_ST := *
+(1)   26/    480C :                     	; ------------------------------------------------
+(1)   27/    480C :                     		include "sound/data.asm"		; GEMA user sound data
+(2)    1/    480C :                     ; ===========================================================================
+(2)    2/    480C :                     ; -------------------------------------------------------------------
+(2)    3/    480C :                     ; Default sound data
+(2)    4/    480C :                     ; -------------------------------------------------------------------
+(2)    5/    480C :                     
+(2)    6/    480C :                     MainGemaSeqList:
+(2)    7/    480C : (MACRO)              	gemaTrk 0,16,gtrk_Test0
+(2)    7/    480C : 1000 4820                   dc.l ((0&$01)<<31)|((16&$7F)<<24)|(GTRK_TEST0&$FFFFFF)
+(2)    8/    4810 : (MACRO)              	gemaTrk 1,3,gtrk_BGM0
+(2)    8/    4810 : 8300 4A3B                   dc.l ((1&$01)<<31)|((3&$7F)<<24)|(GTRK_BGM0&$FFFFFF)
+(2)    9/    4814 : (MACRO)              	gemaTrk 0,3,gtrk_BGM1
+(2)    9/    4814 : 0300 663B                   dc.l ((0&$01)<<31)|((3&$7F)<<24)|(GTRK_BGM1&$FFFFFF)
+(2)   10/    4818 : (MACRO)              	gemaTrk 1,6,gtrk_savage
+(2)   10/    4818 : 8600 8660                   dc.l ((1&$01)<<31)|((6&$7F)<<24)|(GTRK_SAVAGE&$FFFFFF)
+(2)   11/    481C : (MACRO)              	gemaTrk 1,3,gtrk_song0
+(2)   11/    481C : 8300 98A8                   dc.l ((1&$01)<<31)|((3&$7F)<<24)|(GTRK_SONG0&$FFFFFF)
+(2)   12/    4820 :                     
+(2)   13/    4820 :                     ; ----------------------------------------------------
+(2)   14/    4820 :                     gtrk_Test0:
+(2)   15/    4820 : (MACRO)              	gemaHead .blk,.pat,.ins,4
+(2)   15/    4820 : 0004                        dc.w 4
+(2)   15/    4822 : 0000 482E                   dc.l .BLK
+(2)   15/    4826 : 0000 4836                   dc.l .PAT
+(2)   15/    482A : 0000 4A03                   dc.l .INS
+(2)   16/    482E :                     .blk:	binclude "sound/seq/test_blk.bin"
+(2)   17/    4836 :                     .pat:	binclude "sound/seq/test_patt.bin"
+(2)   18/    4A03 :                     .ins:
+(2)   19/    4A03 : (MACRO)              	gInsPsg    0,$00,$00,$00,$00,$01,$00
+(2)   19/    4A03 : 8000 0000                   dc.b $80,0,$00,$00
+(2)   19/    4A07 : 0000 0100                   dc.b $00,$00,$01,$00
+(2)   20/    4A0B : (MACRO)              	gInsPsgN +12,$00,$00,$00,$00,$01,$00,%011	; Tone3
+(2)   20/    4A0B : 930C 0000                   dc.b $90|%011,+12,$00,$00
+(2)   20/    4A0F : 0000 0100                   dc.b $00,$00,$01,$00
+(2)   21/    4A13 : (MACRO)              	gInsFm   -12,FmIns_Trumpet_bus,0
+(2)   21/    4A13 : A0F4 00B3                   dc.b $A0,-12,((FMINS_TRUMPET_BUS>>16)&$FF),((FMINS_TRUMPET_BUS>>8)&$FF)
+(2)   21/    4A17 : 8800 0000                   dc.b FMINS_TRUMPET_BUS&$FF,$00,$00,$00
+(2)   22/    4A1B : (MACRO)              	gInsFm3    0,FmIns_Sp_OpenHat,0
+(2)   22/    4A1B : B000 00B6                   dc.b $B0,0,((FMINS_SP_OPENHAT>>16)&$FF),((FMINS_SP_OPENHAT>>8)&$FF)
+(2)   22/    4A1F : 1000 0000                   dc.b FMINS_SP_OPENHAT&$FF,$00,$00,$00
+(2)   23/    4A23 : (MACRO)              	gInsDac    0,DacIns_TEST,0
+(2)   23/    4A23 : C000 00C0                   dc.b $C0|0,0,((DACINS_TEST>>16)&$FF),((DACINS_TEST>>8)&$FF)
+(2)   23/    4A27 : 0000 0000                   dc.b DACINS_TEST&$FF,0,0,0
+(2)   24/    4A2B : (MACRO)              	gInsPcm    0,PcmIns_TEST,0
+(2)   24/    4A2B : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   24/    4A2F : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   25/    4A33 : (MACRO)              	gInsPwm    0,PwmIns_TEST,%10
+(2)   25/    4A33 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   25/    4A37 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   26/    4A3B :                     
+(2)   27/    4A3B :                     ; ----------------------------------------------------
+(2)   28/    4A3B :                     gtrk_BGM0:
+(2)   29/    4A3B : (MACRO)              	gemaHead .blk,.pat,.ins,12
+(2)   29/    4A3B : 000C                        dc.w 12
+(2)   29/    4A3D : 0000 4A49                   dc.l .BLK
+(2)   29/    4A41 : 0000 4A54                   dc.l .PAT
+(2)   29/    4A45 : 0000 6603                   dc.l .INS
+(2)   30/    4A49 :                     .blk:	binclude "sound/seq/bgm0_blk.bin"
+(2)   31/    4A54 :                     .pat:	binclude "sound/seq/bgm0_patt.bin"
+(2)   32/    6603 :                     .ins:
+(2)   33/    6603 : (MACRO)              	gInsFm -24,FmIns_Trumpet_bus
+(2)   33/    6603 : A0E8 00B3                   dc.b $A0,-24,((FMINS_TRUMPET_BUS>>16)&$FF),((FMINS_TRUMPET_BUS>>8)&$FF)
+(2)   33/    6607 : 8800 0000                   dc.b FMINS_TRUMPET_BUS&$FF,$00,$00,$00
+(2)   34/    660B : (MACRO)              	gInsFm -12,FmIns_Organ_86;FmIns_Piano_Aqua
+(2)   34/    660B : A0F4 00B2                   dc.b $A0,-12,((FMINS_ORGAN_86>>16)&$FF),((FMINS_ORGAN_86>>8)&$FF)
+(2)   34/    660F : 2800 0000                   dc.b FMINS_ORGAN_86&$FF,$00,$00,$00
+(2)   35/    6613 : (MACRO)              	gInsFm -12,FmIns_Bass_Groove_1
+(2)   35/    6613 : A0F4 00AF                   dc.b $A0,-12,((FMINS_BASS_GROOVE_1>>16)&$FF),((FMINS_BASS_GROOVE_1>>8)&$FF)
+(2)   35/    6617 : E800 0000                   dc.b FMINS_BASS_GROOVE_1&$FF,$00,$00,$00
+(2)   36/    661B : (MACRO)              	gInsPsg 0,$40,$30,$30,$02,$01,$00
+(2)   36/    661B : 8000 4030                   dc.b $80,0,$40,$30
+(2)   36/    661F : 3002 0100                   dc.b $30,$02,$01,$00
+(2)   37/    6623 : (MACRO)              	gInsPsg -12,$00,$00,$00,$00,$01,$00
+(2)   37/    6623 : 80F4 0000                   dc.b $80,-12,$00,$00
+(2)   37/    6627 : 0000 0100                   dc.b $00,$00,$01,$00
+(2)   38/    662B : (MACRO)              	gInsFm -12,FmIns_Organ_121;FmIns_Vibraphone_1
+(2)   38/    662B : A0F4 00B2                   dc.b $A0,-12,((FMINS_ORGAN_121>>16)&$FF),((FMINS_ORGAN_121>>8)&$FF)
+(2)   38/    662F : 6800 0000                   dc.b FMINS_ORGAN_121&$FF,$00,$00,$00
+(2)   39/    6633 : (MACRO)              	gInsFm -12,FmIns_Brass_eur
+(2)   39/    6633 : A0F4 00B7                   dc.b $A0,-12,((FMINS_BRASS_EUR>>16)&$FF),((FMINS_BRASS_EUR>>8)&$FF)
+(2)   39/    6637 : E800 0000                   dc.b FMINS_BRASS_EUR&$FF,$00,$00,$00
+(2)   40/    663B :                     ; ----------------------------------------------------
+(2)   41/    663B :                     gtrk_BGM1:
+(2)   42/    663B : (MACRO)              	gemaHead .blk,.pat,.ins,12
+(2)   42/    663B : 000C                        dc.w 12
+(2)   42/    663D : 0000 6649                   dc.l .BLK
+(2)   42/    6641 : 0000 6654                   dc.l .PAT
+(2)   42/    6645 : 0000 85C0                   dc.l .INS
+(2)   43/    6649 :                     .blk:	binclude "sound/seq/bgm1_blk.bin"
+(2)   44/    6654 :                     .pat:	binclude "sound/seq/bgm1_patt.bin"
+(2)   45/    85C0 :                     .ins:
+(2)   46/    85C0 : (MACRO)              	gInsFm -12,FmIns_Trumpet_1
+(2)   46/    85C0 : A0F4 00B6                   dc.b $A0,-12,((FMINS_TRUMPET_1>>16)&$FF),((FMINS_TRUMPET_1>>8)&$FF)
+(2)   46/    85C4 : E800 0000                   dc.b FMINS_TRUMPET_1&$FF,$00,$00,$00
+(2)   47/    85C8 : (MACRO)              	gInsPsg 0,$30,$10,$10,$03,$05,$00
+(2)   47/    85C8 : 8000 3010                   dc.b $80,0,$30,$10
+(2)   47/    85CC : 1003 0500                   dc.b $10,$03,$05,$00
+(2)   48/    85D0 : (MACRO)              	gInsFm 0,FmIns_Bass_club
+(2)   48/    85D0 : A000 00B7                   dc.b $A0,0,((FMINS_BASS_CLUB>>16)&$FF),((FMINS_BASS_CLUB>>8)&$FF)
+(2)   48/    85D4 : 6800 0000                   dc.b FMINS_BASS_CLUB&$FF,$00,$00,$00
+(2)   49/    85D8 : (MACRO)              	gInsFm -12,FmIns_Vibraphone_2
+(2)   49/    85D8 : A0F4 00B2                   dc.b $A0,-12,((FMINS_VIBRAPHONE_2>>16)&$FF),((FMINS_VIBRAPHONE_2>>8)&$FF)
+(2)   49/    85DC : E800 0000                   dc.b FMINS_VIBRAPHONE_2&$FF,$00,$00,$00
+(2)   50/    85E0 : (MACRO)              	gInsDac +24,DacIns_Kick,0
+(2)   50/    85E0 : C018 012F                   dc.b $C0|0,+24,((DACINS_KICK>>16)&$FF),((DACINS_KICK>>8)&$FF)
+(2)   50/    85E4 : 3E00 0000                   dc.b DACINS_KICK&$FF,0,0,0
+(2)   51/    85E8 : (MACRO)              	gInsNull
+(2)   51/    85E8 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   51/    85EC : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   52/    85F0 : (MACRO)              	gInsFm3 0,FmIns_Sp_ClosedHat
+(2)   52/    85F0 : B000 00B6                   dc.b $B0,0,((FMINS_SP_CLOSEDHAT>>16)&$FF),((FMINS_SP_CLOSEDHAT>>8)&$FF)
+(2)   52/    85F4 : 3800 0000                   dc.b FMINS_SP_CLOSEDHAT&$FF,$00,$00,$00
+(2)   53/    85F8 : (MACRO)              	gInsDac +24,DacIns_Snare,0
+(2)   53/    85F8 : C018 0133                   dc.b $C0|0,+24,((DACINS_SNARE>>16)&$FF),((DACINS_SNARE>>8)&$FF)
+(2)   53/    85FC : E800 0000                   dc.b DACINS_SNARE&$FF,0,0,0
+(2)   54/    8600 : (MACRO)              	gInsFm3 0,FmIns_Sp_OpenHat
+(2)   54/    8600 : B000 00B6                   dc.b $B0,0,((FMINS_SP_OPENHAT>>16)&$FF),((FMINS_SP_OPENHAT>>8)&$FF)
+(2)   54/    8604 : 1000 0000                   dc.b FMINS_SP_OPENHAT&$FF,$00,$00,$00
+(2)   55/    8608 : (MACRO)              	gInsFm -24,FmIns_Vibraphone_1
+(2)   55/    8608 : A0E8 00B2                   dc.b $A0,-24,((FMINS_VIBRAPHONE_1>>16)&$FF),((FMINS_VIBRAPHONE_1>>8)&$FF)
+(2)   55/    860C : C800 0000                   dc.b FMINS_VIBRAPHONE_1&$FF,$00,$00,$00
+(2)   56/    8610 : (MACRO)              	gInsFm -12,FmIns_Trumpet_bus
+(2)   56/    8610 : A0F4 00B3                   dc.b $A0,-12,((FMINS_TRUMPET_BUS>>16)&$FF),((FMINS_TRUMPET_BUS>>8)&$FF)
+(2)   56/    8614 : 8800 0000                   dc.b FMINS_TRUMPET_BUS&$FF,$00,$00,$00
+(2)   57/    8618 : (MACRO)              	gInsFm 0,FmIns_Xylophone
+(2)   57/    8618 : A000 00B3                   dc.b $A0,0,((FMINS_XYLOPHONE>>16)&$FF),((FMINS_XYLOPHONE>>8)&$FF)
+(2)   57/    861C : 0800 0000                   dc.b FMINS_XYLOPHONE&$FF,$00,$00,$00
+(2)   58/    8620 : (MACRO)              	gInsNull
+(2)   58/    8620 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   58/    8624 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   59/    8628 : (MACRO)              	gInsNull
+(2)   59/    8628 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   59/    862C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   60/    8630 : (MACRO)              	gInsNull
+(2)   60/    8630 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   60/    8634 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   61/    8638 : (MACRO)              	gInsNull
+(2)   61/    8638 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   61/    863C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   62/    8640 : (MACRO)              	gInsNull
+(2)   62/    8640 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   62/    8644 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   63/    8648 : (MACRO)              	gInsNull
+(2)   63/    8648 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   63/    864C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   64/    8650 : (MACRO)              	gInsNull
+(2)   64/    8650 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   64/    8654 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   65/    8658 : (MACRO)              	gInsNull
+(2)   65/    8658 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   65/    865C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   66/    8660 :                     
+(2)   67/    8660 :                     ; ----------------------------------------------------
+(2)   68/    8660 :                     gtrk_savage:
+(2)   69/    8660 : (MACRO)              	gemaHead .blk,.pat,.ins,4
+(2)   69/    8660 : 0004                        dc.w 4
+(2)   69/    8662 : 0000 866E                   dc.l .BLK
+(2)   69/    8666 : 0000 868A                   dc.l .PAT
+(2)   69/    866A : 0000 9838                   dc.l .INS
+(2)   70/    866E :                     .blk:	binclude "sound/seq/savage_blk.bin"
+(2)   71/    868A :                     .pat:	binclude "sound/seq/savage_patt.bin"
+(2)   72/    9838 :                     .ins:
+(2)   89/    9838 : (MACRO)              	gInsPcm -12,PcmIns_savage_01,0
+(2)   89/    9838 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   89/    983C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   90/    9840 : (MACRO)              	gInsPcm -12,PcmIns_savage_02,0
+(2)   90/    9840 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   90/    9844 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   91/    9848 : (MACRO)              	gInsPcm -12,PcmIns_savage_03,0
+(2)   91/    9848 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   91/    984C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   92/    9850 : (MACRO)              	gInsPcm -12,PcmIns_savage_04,0
+(2)   92/    9850 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   92/    9854 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   93/    9858 : (MACRO)              	gInsPcm -12,PcmIns_savage_05,0
+(2)   93/    9858 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   93/    985C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   94/    9860 : (MACRO)              	gInsPcm -12,PcmIns_savage_06,0
+(2)   94/    9860 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   94/    9864 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   95/    9868 : (MACRO)              	gInsPcm -12,PcmIns_savage_07,0
+(2)   95/    9868 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   95/    986C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   96/    9870 : (MACRO)              	gInsPcm -12,PcmIns_savage_08,0
+(2)   96/    9870 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   96/    9874 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   97/    9878 : (MACRO)              	gInsPcm -12,PcmIns_savage_09,0
+(2)   97/    9878 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   97/    987C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   98/    9880 : (MACRO)              	gInsPcm -12,PcmIns_savage_10,0
+(2)   98/    9880 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   98/    9884 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   99/    9888 : (MACRO)              	gInsPcm -12,PcmIns_savage_11,0
+(2)   99/    9888 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)   99/    988C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  100/    9890 : (MACRO)              	gInsPcm -12,PcmIns_savage_12,0
+(2)  100/    9890 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  100/    9894 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  101/    9898 : (MACRO)              	gInsPcm -12,PcmIns_savage_13,0
+(2)  101/    9898 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  101/    989C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  102/    98A0 : (MACRO)              	gInsPcm -12,PcmIns_savage_14,0
+(2)  102/    98A0 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  102/    98A4 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  104/    98A8 :                     
+(2)  105/    98A8 :                     ; ----------------------------------------------------
+(2)  106/    98A8 :                     gtrk_song0:
+(2)  107/    98A8 : (MACRO)              	gemaHead .blk,.pat,.ins,8
+(2)  107/    98A8 : 0008                        dc.w 8
+(2)  107/    98AA : 0000 98B6                   dc.l .BLK
+(2)  107/    98AE : 0000 98C7                   dc.l .PAT
+(2)  107/    98B2 : 0000 AE00                   dc.l .INS
+(2)  108/    98B6 :                     .blk:	binclude "sound/seq/song0_blk.bin"
+(2)  109/    98C7 :                     .pat:	binclude "sound/seq/song0_patt.bin"
+(2)  110/    AE00 :                     .ins:
+(2)  122/    AE00 : (MACRO)              	gInsPcm -12,PcmIns_song0_01,0
+(2)  122/    AE00 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  122/    AE04 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  123/    AE08 : (MACRO)              	gInsPcm -12,PcmIns_song0_02,0
+(2)  123/    AE08 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  123/    AE0C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  124/    AE10 : (MACRO)              	gInsFm    0,FmIns_Hats_1
+(2)  124/    AE10 : A000 00B3                   dc.b $A0,0,((FMINS_HATS_1>>16)&$FF),((FMINS_HATS_1>>8)&$FF)
+(2)  124/    AE14 : A800 0000                   dc.b FMINS_HATS_1&$FF,$00,$00,$00
+(2)  125/    AE18 : (MACRO)              	gInsFm3    0,FmIns_Sp_OpenHat
+(2)  125/    AE18 : B000 00B6                   dc.b $B0,0,((FMINS_SP_OPENHAT>>16)&$FF),((FMINS_SP_OPENHAT>>8)&$FF)
+(2)  125/    AE1C : 1000 0000                   dc.b FMINS_SP_OPENHAT&$FF,$00,$00,$00
+(2)  126/    AE20 : (MACRO)              	gInsPcm -12,PcmIns_song0_05,1
+(2)  126/    AE20 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  126/    AE24 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  127/    AE28 : (MACRO)              	gInsPcm -12,PcmIns_song0_06,0
+(2)  127/    AE28 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  127/    AE2C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  128/    AE30 : (MACRO)              	gInsPcm -12,PcmIns_song0_07,0
+(2)  128/    AE30 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  128/    AE34 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  129/    AE38 : (MACRO)              	gInsPcm -12,PcmIns_song0_08,0
+(2)  129/    AE38 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  129/    AE3C : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  130/    AE40 : (MACRO)              	gInsPcm -12,PcmIns_song0_09,0
+(2)  130/    AE40 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  130/    AE44 : 0000 0000                   dc.b $00,$00,$00,$00
+(2)  132/    AE48 :                     
+(2)  133/    AE48 :                     ; ===========================================================================
+(2)  134/    AE48 :                     ; -------------------------------------------------------------------
+(2)  135/    AE48 :                     ; GEMA FM instruments
+(2)  136/    AE48 :                     ; -------------------------------------------------------------------
+(2)  137/    AE48 :                     
+(2)  138/    AE48 :                     ; -----------------------------------------------------------
+(2)  139/    AE48 :                     ; Normal FM Instruments
+(2)  140/    AE48 :                     ; -----------------------------------------------------------
+(2)  141/    AE48 :                     
+(2)  142/    AE48 :                     FmIns_Bass_big_81:
+(2)  143/    AE48 :                     		binclude "sound/ins/fm/bin/bass_big_82.bin"
+(2)  144/    AE68 :                     FmIns_Bass_big_110:
+(2)  145/    AE68 :                     		binclude "sound/ins/fm/bin/bass_big_110.bin"
+(2)  146/    AE88 :                     FmIns_Bass_big_114:
+(2)  147/    AE88 :                     		binclude "sound/ins/fm/bin/bass_big_114.bin"
+(2)  148/    AEA8 :                     FmIns_Bass_big_122:
+(2)  149/    AEA8 :                     		binclude "sound/ins/fm/bin/bass_big_122.bin"
+(2)  150/    AEC8 :                     FmIns_Bass_cave_47:
+(2)  151/    AEC8 :                     		binclude "sound/ins/fm/bin/bass_cave_47.bin"
+(2)  152/    AEE8 :                     FmIns_Bass_club_108:
+(2)  153/    AEE8 :                     		binclude "sound/ins/fm/bin/bass_club_108.bin"
+(2)  154/    AF08 :                     FmIns_Bass_foot_75:
+(2)  155/    AF08 :                     		binclude "sound/ins/fm/bin/bass_foot_75.bin"
+(2)  156/    AF28 :                     FmIns_Bass_gem_26:
+(2)  157/    AF28 :                     		binclude "sound/ins/fm/bin/bass_gem_26.bin"
+(2)  158/    AF48 :                     FmIns_Bass_groove_119:
+(2)  159/    AF48 :                     		binclude "sound/ins/fm/bin/bass_groove_119.bin"
+(2)  160/    AF68 :                     FmIns_Bass_heavy_107:
+(2)  161/    AF68 :                     		binclude "sound/ins/fm/bin/bass_heavy_107.bin"
+(2)  162/    AF88 :                     FmIns_Bass_heavy_118:
+(2)  163/    AF88 :                     		binclude "sound/ins/fm/bin/bass_heavy_118.bin"
+(2)  164/    AFA8 :                     FmIns_Bass_loud_117:
+(2)  165/    AFA8 :                     		binclude "sound/ins/fm/bin/bass_loud_117.bin"
+(2)  166/    AFC8 :                     FmIns_bass_low_46:
+(2)  167/    AFC8 :                     		binclude "sound/ins/fm/bin/bass_low_46.bin"
+(2)  168/    AFE8 :                     FmIns_Bass_Groove_1:
+(2)  169/    AFE8 :                     		binclude "sound/ins/fm/bin/bass_groove_1.bin"
+(2)  170/    B008 :                     FmIns_bass_low_81:
+(2)  171/    B008 :                     		binclude "sound/ins/fm/bin/bass_low_81.bin"
+(2)  172/    B028 :                     FmIns_bass_low_103:
+(2)  173/    B028 :                     		binclude "sound/ins/fm/bin/bass_low_103.bin"
+(2)  174/    B048 :                     FmIns_bass_low_106:
+(2)  175/    B048 :                     		binclude "sound/ins/fm/bin/bass_low_106.bin"
+(2)  176/    B068 :                     FmIns_bass_low_126:
+(2)  177/    B068 :                     		binclude "sound/ins/fm/bin/bass_low_126.bin"
+(2)  178/    B088 :                     FmIns_bass_mid_19:
+(2)  179/    B088 :                     		binclude "sound/ins/fm/bin/bass_mid_19.bin"
+(2)  180/    B0A8 :                     FmIns_bass_mid_80:
+(2)  181/    B0A8 :                     		binclude "sound/ins/fm/bin/bass_mid_80.bin"
+(2)  182/    B0C8 :                     FmIns_bass_mid_111:
+(2)  183/    B0C8 :                     		binclude "sound/ins/fm/bin/bass_mid_111.bin"
+(2)  184/    B0E8 :                     FmIns_bass_power_123:
+(2)  185/    B0E8 :                     		binclude "sound/ins/fm/bin/bass_power_123.bin"
+(2)  186/    B108 :                     FmIns_bass_silent_53:
+(2)  187/    B108 :                     		binclude "sound/ins/fm/bin/bass_silent_53.bin"
+(2)  188/    B128 :                     FmIns_bass_slap_10:
+(2)  189/    B128 :                     		binclude "sound/ins/fm/bin/bass_slap_10.bin"
+(2)  190/    B148 :                     FmIns_bass_slap_105:
+(2)  191/    B148 :                     		binclude "sound/ins/fm/bin/bass_slap_105.bin"
+(2)  192/    B168 :                     FmIns_bass_synth_60:
+(2)  193/    B168 :                     		binclude "sound/ins/fm/bin/bass_synth_60.bin"
+(2)  194/    B188 :                     FmIns_bass_synth_61:
+(2)  195/    B188 :                     		binclude "sound/ins/fm/bin/bass_synth_61.bin"
+(2)  196/    B1A8 :                     FmIns_bass_synth_72:
+(2)  197/    B1A8 :                     		binclude "sound/ins/fm/bin/bass_synth_72.bin"
+(2)  198/    B1C8 :                     FmIns_bass_synth_73:
+(2)  199/    B1C8 :                     		binclude "sound/ins/fm/bin/bass_synth_73.bin"
+(2)  200/    B1E8 :                     FmIns_bass_vlow_74:
+(2)  201/    B1E8 :                     		binclude "sound/ins/fm/bin/bass_vlow_74.bin"
+(2)  202/    B208 :                     FmIns_Organ_70:
+(2)  203/    B208 :                     		binclude "sound/ins/fm/bin/organ_70.bin"
+(2)  204/    B228 :                     FmIns_Organ_86:
+(2)  205/    B228 :                     		binclude "sound/ins/fm/bin/organ_86.bin"
+(2)  206/    B248 :                     FmIns_Organ_115:
+(2)  207/    B248 :                     		binclude "sound/ins/fm/bin/organ_115.bin"
+(2)  208/    B268 :                     FmIns_Organ_121:
+(2)  209/    B268 :                     		binclude "sound/ins/fm/bin/organ_121.bin"
+(2)  210/    B288 :                     
+(2)  211/    B288 :                     FmIns_Flaute_1:
+(2)  212/    B288 :                     		binclude "sound/ins/fm/bin/flaute_1.bin"
+(2)  213/    B2A8 :                     FmIns_Flaute_2:
+(2)  214/    B2A8 :                     		binclude "sound/ins/fm/bin/flaute_2.bin"
+(2)  215/    B2C8 :                     FmIns_Vibraphone_1:
+(2)  216/    B2C8 :                     		binclude "sound/ins/fm/bin/vibraphone_1.bin"
+(2)  217/    B2E8 :                     FmIns_Vibraphone_2:
+(2)  218/    B2E8 :                     		binclude "sound/ins/fm/bin/vibraphone_2.bin"
+(2)  219/    B308 :                     FmIns_Xylophone:
+(2)  220/    B308 :                     		binclude "sound/ins/fm/bin/xylophone2_43.bin"
+(2)  221/    B328 :                     FmIns_Bass_low81:
+(2)  222/    B328 :                     		binclude "sound/ins/fm/bin/bass_low_46.bin"
+(2)  223/    B348 :                     FmIns_Trumpet_low:
+(2)  224/    B348 :                     		binclude "sound/ins/fm/bin/trumpet_low.bin"
+(2)  225/    B368 :                     FmIns_Trumpet_genie:
+(2)  226/    B368 :                     		binclude "sound/ins/fm/bin/trumpet_genie.bin"
+(2)  227/    B388 :                     FmIns_Trumpet_bus:
+(2)  228/    B388 :                     		binclude "sound/ins/fm/bin/trumpet_bus.bin"
+(2)  229/    B3A8 :                     FmIns_Hats_1:
+(2)  230/    B3A8 :                     		binclude "sound/ins/fm/bin/hats_96.bin"
+(2)  231/    B3C8 :                     FmIns_Bell_mid36:
+(2)  232/    B3C8 :                     		binclude "sound/ins/fm/bin/bell_mid_36.bin"
+(2)  233/    B3E8 :                     FmIns_Drum_Kick:
+(2)  234/    B3E8 :                     		binclude "sound/ins/fm/bin/kick_low.bin"
+(2)  235/    B408 :                     FmIns_Tick:
+(2)  236/    B408 :                     		binclude "sound/ins/fm/bin/tick_44.bin"
+(2)  237/    B428 :                     
+(2)  238/    B428 :                     ; -----------------------------------------------------------
+(2)  239/    B428 :                     ; Special FM3 Instruments
+(2)  240/    B428 :                     ; -----------------------------------------------------------
+(2)  241/    B428 :                     
+(2)  242/    B428 :                     FmSpIns_clack_1:
+(2)  243/    B428 :                     		binclude "sound/ins/fm/bin/fm3_clack_1.bin"
+(2)  244/    B450 :                     FmSpIns_cowbell_h:
+(2)  245/    B450 :                     		binclude "sound/ins/fm/bin/fm3_cowbell_h.bin"
+(2)  246/    B478 :                     FmSpIns_cowbell_l:
+(2)  247/    B478 :                     		binclude "sound/ins/fm/bin/fm3_cowbell_l.bin"
+(2)  248/    B4A0 :                     FmSpIns_hats_hq:
+(2)  249/    B4A0 :                     		binclude "sound/ins/fm/bin/fm3_hats_hq.bin"
+(2)  250/    B4C8 :                     FmSpIns_sfx_alien:
+(2)  251/    B4C8 :                     		binclude "sound/ins/fm/bin/fm3_sfx_alien.bin"
+(2)  252/    B4F0 :                     FmSpIns_sfx_knckbuzz:
+(2)  253/    B4F0 :                     		binclude "sound/ins/fm/bin/fm3_sfx_knckbuzz.bin"
+(2)  254/    B518 :                     FmSpIns_sfx_knock_h:
+(2)  255/    B518 :                     		binclude "sound/ins/fm/bin/fm3_sfx_knock_h.bin"
+(2)  256/    B540 :                     FmSpIns_sfx_knock_l:
+(2)  257/    B540 :                     		binclude "sound/ins/fm/bin/fm3_sfx_knock_l.bin"
+(2)  258/    B568 :                     FmSpIns_sfx_laser:
+(2)  259/    B568 :                     		binclude "sound/ins/fm/bin/fm3_sfx_laser.bin"
+(2)  260/    B590 :                     
+(2)  261/    B590 :                     ; -----------------------------------------------------------
+(2)  262/    B590 :                     ; FM sound effects
+(2)  263/    B590 :                     ; -----------------------------------------------------------
+(2)  264/    B590 :                     
+(2)  265/    B590 :                     FmIns_sfx_punch:
+(2)  266/    B590 :                     		binclude "sound/ins/fm/bin/sfx_punch.bin"
+(2)  267/    B5B0 :                     FmIns_sfx_slash:
+(2)  268/    B5B0 :                     		binclude "sound/ins/fm/bin/sfx_slash.bin"
+(2)  269/    B5D0 :                     FmIns_sfx_alien1:
+(2)  270/    B5D0 :                     		binclude "sound/ins/fm/bin/sfx_alien_83.bin"
+(2)  271/    B5F0 :                     FmIns_sfx_alien2:
+(2)  272/    B5F0 :                     		binclude "sound/ins/fm/bin/sfx_alien_84.bin"
+(2)  273/    B610 :                     
+(2)  274/    B610 :                     ; ====================================================================
+(2)  275/    B610 :                     ; OLD gsx patches:
+(2)  276/    B610 :                     
+(2)  277/    B610 :                     FmIns_Sp_OpenHat:
+(2)  278/    B610 :                     		binclude "sound/ins/fm/gsx/fm3_openhat.gsx",$2478,$28
+(2)  279/    B638 :                     FmIns_Sp_ClosedHat:
+(2)  280/    B638 :                     		binclude "sound/ins/fm/gsx/fm3_closedhat.gsx",$2478,$28
+(2)  281/    B660 :                     FmIns_Sp_Cowbell:
+(2)  282/    B660 :                     		binclude "sound/ins/fm/gsx/fm3_cowbell.gsx",$2478,$28
+(2)  283/    B688 :                     FmIns_Drums_Kick1:
+(2)  284/    B688 :                     		binclude "sound/ins/fm/gsx/drum_kick_gem.gsx",$2478,$20
+(2)  285/    B6A8 :                     FmIns_Piano_Aqua:
+(2)  286/    B6A8 :                     		binclude "sound/ins/fm/gsx/piano_aqua.gsx",$2478,$20
+(2)  287/    B6C8 :                     FmIns_HBeat_tom:
+(2)  288/    B6C8 :                     		binclude "sound/ins/fm/gsx/nadia_tom.gsx",$2478,$20
+(2)  289/    B6E8 :                     FmIns_Trumpet_1:
+(2)  290/    B6E8 :                     		binclude "sound/ins/fm/gsx/trumpet_1.gsx",$2478,$20
+(2)  291/    B708 :                     FmIns_Bass_duck:
+(2)  292/    B708 :                     		binclude "sound/ins/fm/gsx/bass_duck.gsx",$2478,$20
+(2)  293/    B728 :                     FmIns_ClosedHat:
+(2)  294/    B728 :                     		binclude "sound/ins/fm/gsx/hats_closed.gsx",$2478,$20
+(2)  295/    B748 :                     FmIns_Trumpet_carnival:
+(2)  296/    B748 :                     		binclude "sound/ins/fm/gsx/OLD_trumpet_carnivl.gsx",$2478,$20
+(2)  297/    B768 :                     FmIns_Bass_club:
+(2)  298/    B768 :                     		binclude "sound/ins/fm/gsx/OLD_bass_club.gsx",$2478,$20
+(2)  299/    B788 :                     FmIns_Bass_groove_2:
+(2)  300/    B788 :                     		binclude "sound/ins/fm/gsx/bass_groove_2.gsx",$2478,$20
+(2)  301/    B7A8 :                     FmIns_PSynth_plus:
+(2)  302/    B7A8 :                     		binclude "sound/ins/fm/gsx/psynth_plus.gsx",$2478,$20
+(2)  303/    B7C8 :                     FmIns_Brass_7:
+(2)  304/    B7C8 :                     		binclude "sound/ins/fm/gsx/brass_7.gsx",$2478,$20
+(2)  305/    B7E8 :                     FmIns_Brass_eur:
+(2)  306/    B7E8 :                     		binclude "sound/ins/fm/gsx/brass_eur.gsx",$2478,$20
+(2)  307/    B808 :                     
+(2)  308/    B808 :                     ; ===========================================================================
+(2)  309/    B808 :                     ; -------------------------------------------------------------------
+(2)  310/    B808 :                     ; GEMA/Nikona DAC samples
+(2)  311/    B808 :                     ;
+(2)  312/    B808 :                     ; 16000hz base
+(2)  313/    B808 :                     ; -------------------------------------------------------------------
+(2)  314/    B808 :                     
+(2)  315/    B808 :                     		align $800
 (2)  316/    C000 :                     		;gSmplData Label,"file_path",loop_start
 (2)  317/    C000 :                     ; -----------------------------------------------------------
 (2)  318/    C000 : (MACRO)              		gSmplData DacIns_TEST,"sound/ins/smpl/test.wav",0
@@ -12103,7 +12105,7 @@
 (2)   28/   17972 :                     
 (1)   29/   17972 :                     	; ------------------------------------------------
 (1)   30/   17972 : (MACRO)              	data_dend DATA_BANK0_e
-(1)   30/   17972 : =$13168              GLBL_MDATA_RP := *-GLBL_MDATA_ST        ; save size for _dend
+(1)   30/   17972 : =$13166              GLBL_MDATA_RP := *-GLBL_MDATA_ST        ; save size for _dend
 (1)   30/   17972 :                     
 (1)   30/   17972 :                     
 (1)   31/   17972 :                     
@@ -12350,7 +12352,7 @@
      425/   4B260 : 00                  		dc.b 0
      426/   4B261 :                     		align $8000
      427/   50000 :                     
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 2 - 10/18/2024 06:33:50 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 2 - 10/19/2024 10:22:37 AM
 
 
   Symbol Table (* = unused):
@@ -12427,8 +12429,8 @@
  DAC_ON :                      11AC C |  DAC_PLAY :                    11D6 C |
  DAC_REFILL :                  120A C |  DAC_REFILL.DACFILL_END :      12C9 C |
  DAC_REFILL.DACFILL_LOOP :     1282 C |  DAC_REFILL.DACFILL_RET :      12CC C |
- DAC_REFILL.DAC_OVER :         1258 C |  DATA_BANK0 :                  480A C |
-*DATE :                "10/18/2024" - |  DDACCNTR :                    177A C |
+ DAC_REFILL.DAC_OVER :         1258 C |  DATA_BANK0 :                  480C C |
+*DATE :                "10/19/2024" - |  DDACCNTR :                    177A C |
  DDACFIFOMID :                   37 C |  DDACPNTR :                    1777 C |
 *DEF_HSIZE_128 :                100 - | *DEF_HSIZE_32 :                  40 - |
  DEF_HSIZE_64 :                  80 - | *DEF_MAXSTAMPCOUT :              60 - |
@@ -12513,45 +12515,45 @@
  FMCACH_2 :                    1550 C |  FMCACH_3 :                    1578 C |
  FMCACH_4 :                    15A0 C |  FMCACH_5 :                    15C8 C |
  FMCACH_6 :                    15F0 C |  FMCACH_LIST :                 1769 C |
- FMFREQ_LIST :                 12DA C | *FMINS_BASS_BIG_110 :          AE66 C |
-*FMINS_BASS_BIG_114 :          AE86 C | *FMINS_BASS_BIG_122 :          AEA6 C |
-*FMINS_BASS_BIG_81 :           AE46 C | *FMINS_BASS_CAVE_47 :          AEC6 C |
- FMINS_BASS_CLUB :             B766 C | *FMINS_BASS_CLUB_108 :         AEE6 C |
-*FMINS_BASS_DUCK :             B706 C | *FMINS_BASS_FOOT_75 :          AF06 C |
-*FMINS_BASS_GEM_26 :           AF26 C |  FMINS_BASS_GROOVE_1 :         AFE6 C |
-*FMINS_BASS_GROOVE_119 :       AF46 C | *FMINS_BASS_GROOVE_2 :         B786 C |
-*FMINS_BASS_HEAVY_107 :        AF66 C | *FMINS_BASS_HEAVY_118 :        AF86 C |
-*FMINS_BASS_LOUD_117 :         AFA6 C | *FMINS_BASS_LOW81 :            B326 C |
-*FMINS_BASS_LOW_103 :          B026 C | *FMINS_BASS_LOW_106 :          B046 C |
-*FMINS_BASS_LOW_126 :          B066 C | *FMINS_BASS_LOW_46 :           AFC6 C |
-*FMINS_BASS_LOW_81 :           B006 C | *FMINS_BASS_MID_111 :          B0C6 C |
-*FMINS_BASS_MID_19 :           B086 C | *FMINS_BASS_MID_80 :           B0A6 C |
-*FMINS_BASS_POWER_123 :        B0E6 C | *FMINS_BASS_SILENT_53 :        B106 C |
-*FMINS_BASS_SLAP_10 :          B126 C | *FMINS_BASS_SLAP_105 :         B146 C |
-*FMINS_BASS_SYNTH_60 :         B166 C | *FMINS_BASS_SYNTH_61 :         B186 C |
-*FMINS_BASS_SYNTH_72 :         B1A6 C | *FMINS_BASS_SYNTH_73 :         B1C6 C |
-*FMINS_BASS_VLOW_74 :          B1E6 C | *FMINS_BELL_MID36 :            B3C6 C |
-*FMINS_BRASS_7 :               B7C6 C |  FMINS_BRASS_EUR :             B7E6 C |
-*FMINS_CLOSEDHAT :             B726 C | *FMINS_DRUMS_KICK1 :           B686 C |
-*FMINS_DRUM_KICK :             B3E6 C | *FMINS_FLAUTE_1 :              B286 C |
-*FMINS_FLAUTE_2 :              B2A6 C |  FMINS_HATS_1 :                B3A6 C |
-*FMINS_HBEAT_TOM :             B6C6 C | *FMINS_ORGAN_115 :             B246 C |
- FMINS_ORGAN_121 :             B266 C | *FMINS_ORGAN_70 :              B206 C |
- FMINS_ORGAN_86 :              B226 C | *FMINS_PIANO_AQUA :            B6A6 C |
-*FMINS_PSYNTH_PLUS :           B7A6 C | *FMINS_SFX_ALIEN1 :            B5CE C |
-*FMINS_SFX_ALIEN2 :            B5EE C | *FMINS_SFX_PUNCH :             B58E C |
-*FMINS_SFX_SLASH :             B5AE C |  FMINS_SP_CLOSEDHAT :          B636 C |
-*FMINS_SP_COWBELL :            B65E C |  FMINS_SP_OPENHAT :            B60E C |
-*FMINS_TICK :                  B406 C |  FMINS_TRUMPET_1 :             B6E6 C |
- FMINS_TRUMPET_BUS :           B386 C | *FMINS_TRUMPET_CARNIVAL :      B746 C |
-*FMINS_TRUMPET_GENIE :         B366 C | *FMINS_TRUMPET_LOW :           B346 C |
- FMINS_VIBRAPHONE_1 :          B2C6 C |  FMINS_VIBRAPHONE_2 :          B2E6 C |
- FMINS_XYLOPHONE :             B306 C |  FMLIST_RSAVE :                1618 C |
- FMSPECIAL :                     30 C | *FMSPINS_CLACK_1 :             B426 C |
-*FMSPINS_COWBELL_H :           B44E C | *FMSPINS_COWBELL_L :           B476 C |
-*FMSPINS_HATS_HQ :             B49E C | *FMSPINS_SFX_ALIEN :           B4C6 C |
-*FMSPINS_SFX_KNCKBUZZ :        B4EE C | *FMSPINS_SFX_KNOCK_H :         B516 C |
-*FMSPINS_SFX_KNOCK_L :         B53E C | *FMSPINS_SFX_LASER :           B566 C |
+ FMFREQ_LIST :                 12DA C | *FMINS_BASS_BIG_110 :          AE68 C |
+*FMINS_BASS_BIG_114 :          AE88 C | *FMINS_BASS_BIG_122 :          AEA8 C |
+*FMINS_BASS_BIG_81 :           AE48 C | *FMINS_BASS_CAVE_47 :          AEC8 C |
+ FMINS_BASS_CLUB :             B768 C | *FMINS_BASS_CLUB_108 :         AEE8 C |
+*FMINS_BASS_DUCK :             B708 C | *FMINS_BASS_FOOT_75 :          AF08 C |
+*FMINS_BASS_GEM_26 :           AF28 C |  FMINS_BASS_GROOVE_1 :         AFE8 C |
+*FMINS_BASS_GROOVE_119 :       AF48 C | *FMINS_BASS_GROOVE_2 :         B788 C |
+*FMINS_BASS_HEAVY_107 :        AF68 C | *FMINS_BASS_HEAVY_118 :        AF88 C |
+*FMINS_BASS_LOUD_117 :         AFA8 C | *FMINS_BASS_LOW81 :            B328 C |
+*FMINS_BASS_LOW_103 :          B028 C | *FMINS_BASS_LOW_106 :          B048 C |
+*FMINS_BASS_LOW_126 :          B068 C | *FMINS_BASS_LOW_46 :           AFC8 C |
+*FMINS_BASS_LOW_81 :           B008 C | *FMINS_BASS_MID_111 :          B0C8 C |
+*FMINS_BASS_MID_19 :           B088 C | *FMINS_BASS_MID_80 :           B0A8 C |
+*FMINS_BASS_POWER_123 :        B0E8 C | *FMINS_BASS_SILENT_53 :        B108 C |
+*FMINS_BASS_SLAP_10 :          B128 C | *FMINS_BASS_SLAP_105 :         B148 C |
+*FMINS_BASS_SYNTH_60 :         B168 C | *FMINS_BASS_SYNTH_61 :         B188 C |
+*FMINS_BASS_SYNTH_72 :         B1A8 C | *FMINS_BASS_SYNTH_73 :         B1C8 C |
+*FMINS_BASS_VLOW_74 :          B1E8 C | *FMINS_BELL_MID36 :            B3C8 C |
+*FMINS_BRASS_7 :               B7C8 C |  FMINS_BRASS_EUR :             B7E8 C |
+*FMINS_CLOSEDHAT :             B728 C | *FMINS_DRUMS_KICK1 :           B688 C |
+*FMINS_DRUM_KICK :             B3E8 C | *FMINS_FLAUTE_1 :              B288 C |
+*FMINS_FLAUTE_2 :              B2A8 C |  FMINS_HATS_1 :                B3A8 C |
+*FMINS_HBEAT_TOM :             B6C8 C | *FMINS_ORGAN_115 :             B248 C |
+ FMINS_ORGAN_121 :             B268 C | *FMINS_ORGAN_70 :              B208 C |
+ FMINS_ORGAN_86 :              B228 C | *FMINS_PIANO_AQUA :            B6A8 C |
+*FMINS_PSYNTH_PLUS :           B7A8 C | *FMINS_SFX_ALIEN1 :            B5D0 C |
+*FMINS_SFX_ALIEN2 :            B5F0 C | *FMINS_SFX_PUNCH :             B590 C |
+*FMINS_SFX_SLASH :             B5B0 C |  FMINS_SP_CLOSEDHAT :          B638 C |
+*FMINS_SP_COWBELL :            B660 C |  FMINS_SP_OPENHAT :            B610 C |
+*FMINS_TICK :                  B408 C |  FMINS_TRUMPET_1 :             B6E8 C |
+ FMINS_TRUMPET_BUS :           B388 C | *FMINS_TRUMPET_CARNIVAL :      B748 C |
+*FMINS_TRUMPET_GENIE :         B368 C | *FMINS_TRUMPET_LOW :           B348 C |
+ FMINS_VIBRAPHONE_1 :          B2C8 C |  FMINS_VIBRAPHONE_2 :          B2E8 C |
+ FMINS_XYLOPHONE :             B308 C |  FMLIST_RSAVE :                1618 C |
+ FMSPECIAL :                     30 C | *FMSPINS_CLACK_1 :             B428 C |
+*FMSPINS_COWBELL_H :           B450 C | *FMSPINS_COWBELL_L :           B478 C |
+*FMSPINS_HATS_HQ :             B4A0 C | *FMSPINS_SFX_ALIEN :           B4C8 C |
+*FMSPINS_SFX_KNCKBUZZ :        B4F0 C | *FMSPINS_SFX_KNOCK_H :         B518 C |
+*FMSPINS_SFX_KNOCK_L :         B540 C | *FMSPINS_SFX_LASER :           B568 C |
  FM_AUTOREG :                  1192 C |  FM_SEND_1 :                   1196 C |
  FM_SEND_2 :                   11A1 C | *FRAMECTL :                       B - |
 *FS :                             1 - | *FULLPMMU :                       1 - |
@@ -12571,17 +12573,17 @@
  GEMA_LASTBANK :               12D0 C |  GEMA_LASTBANK.WRITE :         12D5 C |
  GET_TICK :                     F51 C |  GET_TICK.CTNOTICK :            F6E C |
  GLBL_LASTORG :    FFFFFFFFFFFFB800 - |  GLBL_LASTPC :                 3E68 - |
-*GLBL_MDATA_RP :              13168 - |  GLBL_MDATA_ST :               480A - |
- GTRK_BGM0 :                   4A39 C |  GTRK_BGM0.BLK :               4A47 C |
- GTRK_BGM0.INS :               6601 C |  GTRK_BGM0.PAT :               4A52 C |
- GTRK_BGM1 :                   6639 C |  GTRK_BGM1.BLK :               6647 C |
- GTRK_BGM1.INS :               85BE C |  GTRK_BGM1.PAT :               6652 C |
- GTRK_SAVAGE :                 865E C |  GTRK_SAVAGE.BLK :             866C C |
- GTRK_SAVAGE.INS :             9836 C |  GTRK_SAVAGE.PAT :             8688 C |
- GTRK_SONG0 :                  98A6 C |  GTRK_SONG0.BLK :              98B4 C |
- GTRK_SONG0.INS :              ADFE C |  GTRK_SONG0.PAT :              98C5 C |
- GTRK_TEST0 :                  481E C |  GTRK_TEST0.BLK :              482C C |
- GTRK_TEST0.INS :              4A01 C |  GTRK_TEST0.PAT :              4834 C |
+*GLBL_MDATA_RP :              13166 - |  GLBL_MDATA_ST :               480C - |
+ GTRK_BGM0 :                   4A3B C |  GTRK_BGM0.BLK :               4A49 C |
+ GTRK_BGM0.INS :               6603 C |  GTRK_BGM0.PAT :               4A54 C |
+ GTRK_BGM1 :                   663B C |  GTRK_BGM1.BLK :               6649 C |
+ GTRK_BGM1.INS :               85C0 C |  GTRK_BGM1.PAT :               6654 C |
+ GTRK_SAVAGE :                 8660 C |  GTRK_SAVAGE.BLK :             866E C |
+ GTRK_SAVAGE.INS :             9838 C |  GTRK_SAVAGE.PAT :             868A C |
+ GTRK_SONG0 :                  98A8 C |  GTRK_SONG0.BLK :              98B6 C |
+ GTRK_SONG0.INS :              AE00 C |  GTRK_SONG0.PAT :              98C7 C |
+ GTRK_TEST0 :                  4820 C |  GTRK_TEST0.BLK :              482E C |
+ GTRK_TEST0.INS :              4A03 C |  GTRK_TEST0.PAT :              4836 C |
 *HAS64 :                          1 - | *HASDSP :                         0 - |
 *HASFPU :                         0 - | *HASPMMU :                        0 - |
 *HBLK :                          40 - |  HEADEROUT :                   177D C |
@@ -12620,7 +12622,7 @@
  JOYY :                         200 - |  JOYZ :                         100 - |
 *LCHWIDTH :                      34 - |  LEV :                            4 - |
 *LISTON :                         3 - | *MACEXP :                         7 - |
- MAINGEMASEQLIST :             480A C | *MAP_SISI :                   1788A C |
+ MAINGEMASEQLIST :             480C C | *MAP_SISI :                   1788A C |
  MARS :                           0 - | *MARSBLOCK :                   1F8A C |
  MARSCD :                         0 - |  MARSUPD :                     176F C |
 *MARS_RAMCODE :                3E68 C | *MARS_RAMCODE_E :              3E68 C |
@@ -12655,7 +12657,7 @@
  MD_ERRZDIV :                   200 C |  MD_LINE1010 :                  200 C |
  MD_LINE1111 :                  200 C |  MD_READMODES :                1EB0 C |
  MD_READMODES.PICK_MODE :      1ECC C |  MD_SCREEN00 :                 3E68 C |
-*MD_SCREEN00_E :               480A C | *MD_SYSCODE_E :                1EDC C |
+*MD_SCREEN00_E :               480C C | *MD_SYSCODE_E :                1EDC C |
  MD_TRACE :                     200 C |  MODE :                          18 - |
 *MOMCPU :                     68000 - | *MOMCPUNAME :               "68000" - |
 *MONOWIDTH :                     38 - |  MOUSE_X :                        8 - |
@@ -12783,7 +12785,7 @@
  SYSTEM_BCD_ADDL :             1B4C C | *SYSTEM_BCD_ADDW :             1B46 C |
 *SYSTEM_BCD_SUBB :             1B16 C |  SYSTEM_BCD_SUBL :             1B24 C |
 *SYSTEM_BCD_SUBW :             1B1E C |  SYSTEM_DEFAULT :              193E C |
- SYSTEM_DEFAULT.CLR_LOOP :     194C C | *SYSTEM_DICEROLL :             19C8 C |
+ SYSTEM_DEFAULT.CLR_LOOP :     194C C |  SYSTEM_DICEROLL :             19C8 C |
 *SYSTEM_DICEROLL_SEED :        19A8 C |  SYSTEM_DMAENTER_RAM :         16B8 C |
  SYSTEM_DMAENTER_ROM :         167E C |  SYSTEM_DMAEXIT_RAM :          16BC C |
  SYSTEM_DMAEXIT_ROM :          1682 C |  SYSTEM_INIT :                 15D6 C |
@@ -12847,7 +12849,7 @@
  TBLPWM :                      1C58 C |  TBLZ_CLEAR :                   ED5 C |
  TH :                      20000000 - |  TICKCNT :                     1CF8 C |
  TICKFLAG :                    1CF7 C |  TICKSPSET :                   1CF6 C |
-*TIME :               "06:33:50 AM" - | *TIMERCTL :                      30 - |
+*TIME :               "10:22:36 AM" - | *TIMERCTL :                      30 - |
  TRACK_OUT :                    5AF C |  TRACK_OUT.INDX_DEL :           5BD C |
  TRACK_OUT.NOTHIN :             5EB C |  TRKBLKS_0 :                   1694 C |
  TRKBLKS_1 :                   169C C |  TRKBLKS_2 :                   16A4 C |
@@ -12868,7 +12870,7 @@
  TRK_SEQID :                      1 - |  TRK_SETBLK :                     2 - |
  TRK_STATUS :                     0 - |  TRK_TICKSET :                    3 - |
  TRK_TICKTMR :                   12 - |  TRK_VOLFDTARGET :               18 - |
- TRK_VOLMASTER :                  E - | *TRUE :                           1 - |
+ TRK_VOLMASTER :                  E - |  TRUE :                           1 - |
 *TVMODE :                         0 - |  UPD_TRACK :                    221 C |
  UPD_TRACK.CHNL_FREE :          32C C |  UPD_TRACK.CONT_CHNL :          337 C |
  UPD_TRACK.DECROW :             2DB C |  UPD_TRACK.DECROW_E :           2DE C |
@@ -13035,9 +13037,9 @@
 *_TOCR :                          7 - | *_VDPREG :                 20004100 - |
 
    1324 symbols
-    425 unused symbols
+    423 unused symbols
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 3 - 10/18/2024 06:33:50 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 3 - 10/19/2024 10:22:37 AM
 
 
   Defined Macros:
@@ -13061,7 +13063,7 @@ VDP_SHOWME                            |
 
      29 macros
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 4 - 10/18/2024 06:33:50 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 4 - 10/19/2024 10:22:37 AM
 
 
   Defined Structures/Unions:
@@ -13112,7 +13114,7 @@ PALFD
   5      (I8) TIMER
   6      (I16) NUM
 3 structures
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 5 - 10/18/2024 06:33:50 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 5 - 10/19/2024 10:22:37 AM
 
 
   Defined Functions:
@@ -13122,7 +13124,7 @@ FULL_LOC                              | PSTR_MEM
 COLOR_INDX                            | CELL_VRAM                            
 SPLITW                                |
 
- AS V1.42 Beta [Bld 212] - Source File main.asm - Page 6 - 10/18/2024 06:33:50 AM
+ AS V1.42 Beta [Bld 212] - Source File main.asm - Page 6 - 10/19/2024 10:22:37 AM
 
 
   Code Pages:
@@ -13132,10 +13134,10 @@ STANDARD (0 changed characters)
 
 1 code page
 
-0.19 seconds assembly time
+0.23 seconds assembly time
 
-  14266 lines source file
-  15135 lines incl. macro expansions
+  14270 lines source file
+  15139 lines incl. macro expansions
       5 passes
       0 errors
       0 warnings

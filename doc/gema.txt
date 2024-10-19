@@ -2,9 +2,14 @@
 GEMA Sound Driver version 1.0.x
 ==================================================================================
 
-Can play up to 3 sequences at the same time, any type BGM and SFX.
+==================================================================
+FEATURES
+==================================================================
 
-Priorities low to high: high prio sequence overwrites channels of the lowest.
+- Can play up to 3 sequences at the same time, any type BGM and SFX.
+  | Priorities low to high: high prio sequence overwrites channels of the lowest.
+- Channels are automaticly sorted during play, no need to keep the same chip on the same IT module channel, can detect swaps.
+- Can play from any block, useful for playing sound effects by using the same sequence data.
 
 ==================================================================
 TECHNICAL NOTES
@@ -22,16 +27,16 @@ X - Panning		| Setting varies depending of the chip
 *1 Effect behaves differently in this driver.
 
 ==================================================================
-LIMITATIONS:
+NOTES/LIMITATIONS
 ==================================================================
 
 - Note C-0 can't be used
 - Notes have limited range depending of the chip:
--- PSG, PCM, PWM can only play octaves -4 to -6
--- FM can handle up to 7 octaves
-
-- Sequence can handle up to 63 channels, but only 26 are available to use (In case the sequence format get used on something else)
-- A sequence can use all 26 chip channels, but the Z80 can only hold up to 31 sequence channels for all 3 slots
+-- PSG, PCM, PWM can only play notes x-3 to x-6
+-- FM can only handle octaves 0-7
+- A sequence can handle up to 63 channels, but only 26 are available to use (In case the sequence format get used on something else)
+ | All 26 channels can be used but the Z80 can only hold up to 31 sequence channels for all 3 slots
+- Panning is always reset to defaults when (re)starting the sequence, set your panning manually with effect X inside the module
 
 ==================================================================
 CURRENT ISSUES ON THIS VERSION
@@ -65,7 +70,7 @@ smpl_pwm.asm			Sega 32X PWM Samples at SDRAM compatible with CD32X **very low st
 smpl_pwm_ROM.asm		Sega 32X PWM Samples on Cartridge, more storage but CANNOT be used with CD32X
 
 *1 If you can't use the Z80 code as is you can build a separate binary with make_driver.sh/make_driver.bat
-*2 Using FM patches made requires skipping the first $2478 bytes and only include the data used by the driver:
+*2 Using .gsx FM patches made requires skipping the first $2478 bytes and only include the data used by the driver:
 $20 bytes for normal and $28 for special:
 
 	binclude "sound/ins/fm/gsx/normal.gsx",$2478,$20

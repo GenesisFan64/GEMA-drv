@@ -8,8 +8,8 @@
 ; Settings
 ; ------------------------------------------------------
 
-VIEW_GEMAINFO		equ 1		; ** Using this causes loss of DAC quality **
-VIEW_FAIRY		equ 1		; Show status Dodo/Mifi/Fifi
+VIEW_GEMAINFO		equ True		; ** Using this causes loss of DAC quality **
+VIEW_FAIRY		equ True		; Show status Dodo/Mifi/Fifi
 
 ; ====================================================================
 ; ------------------------------------------------------
@@ -500,6 +500,7 @@ sizeof_thisbuff		ds.l 0
 	endif
 
 .gema_view:
+	if VIEW_FAIRY
 		move.w	#$0100,(z80_bus).l
 		lea	(RAM_GemaStatus),a1
 		moveq	#0,d0
@@ -514,6 +515,7 @@ sizeof_thisbuff		ds.l 0
 		move.w	d0,(a1)+
 		move.w	d1,(a1)+
 		move.w	d2,(a1)+
+	endif
 
 	if VIEW_GEMAINFO
 		bsr	sndLockZ80
@@ -729,9 +731,11 @@ obj_Fairy:
 
 		move.b	obj_subid(a6),d7
 		mulu.w	#42,d7
-		lsl.w	#4,d7
-		neg.w	d7
-		move.w	d7,4(a1)
+		lsl.w	#5,d7
+		move.l	d7,d0
+		bsr	System_DiceRoll
+; 		neg.w	d7
+		move.w	d0,(a1)+
 
 ; ----------------------------------------------
 .main:
@@ -748,7 +752,7 @@ obj_Fairy:
 ; 		lsl.w	#3,d3
 		move.w	(a5),d2
 		move.w	2(a5),d3
-		move.w	#1,d4			; Multiply
+		move.w	#2,d4			; Multiply
 		btst	#7,1(a4)
 		beq.s	.not_enbls
 		move.w	#4,d4
