@@ -27,5 +27,5 @@ RAM_ZCdFlagD	equ $FFFFFF00
 
 		cpu Z80
 		org 0
-		include "../sound/driver/gema_zdrv.asm"
+		include "../sound/drv/gema_zdrv.asm"
 

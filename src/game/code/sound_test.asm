@@ -482,11 +482,11 @@ sizeof_thisbuff		ds.l 0
 .gema_viewinit:
 	if VIEW_FAIRY
 		move.l	#obj_Fairy,d0		; <-- If you don't like the fairies comment out or
-		moveq	#0,d2			; delete all of this
+		moveq	#0,d1			; delete all of this
 		bsr	Object_Make		;
-		addq.w	#1,d2			;
+		addq.w	#1,d1			;
 		bsr	Object_Make		;
-		addq.w	#1,d2			;
+		addq.w	#1,d1			;
 		bsr	Object_Make		; <-- until here
 	endif
 

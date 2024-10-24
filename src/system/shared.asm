@@ -60,8 +60,8 @@ rot		ds.w 1
 ; --------------------------------------------------------
 
 MAX_MARSSPR	equ 32		; !! Maximum 2D-mode Sprites
-MAX_MARSMSPR	equ 32		; !! Maximum 3D-mode Sprites
-MAX_MARSOBJ	equ 24		; !! Maximum 3D-mode Objects (models)
+MAX_MARSMSPR	equ 24		; !! Maximum 3D-mode Sprites
+MAX_MARSOBJ	equ 48		; !! Maximum 3D-mode Objects (models)
 
 ; --------------------------------------------------------
 ; Structs

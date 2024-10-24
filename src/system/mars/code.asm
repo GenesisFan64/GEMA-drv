@@ -2509,7 +2509,7 @@ RAM_Mars_VramData	ds.b MAX_MarsVram			; ** SHARED
 RAM_Mars_SprDrwCanvas	ds.b 320*92
 sizeof_marsram_0	ds.l 0
 			endmemory
-			erreport "2D section",sizeof_marsram_0-SH2_RAM,$8800
+			erreport "2D section",sizeof_marsram_0-SH2_RAM,$8C00
 
 ; ----------------------------------------------------------------
 ; RAM section for 3D
@@ -2529,7 +2529,7 @@ RAM_Mars_PlgnNum_1	ds.l 1
 RAM_Mars_Buff3D_End	ds.l 0				; <-- ****
 sizeof_marsram_1	ds.l 0
 			endmemory
-			erreport "3D section",sizeof_marsram_1-SH2_RAM,$8800
+			erreport "3D section",sizeof_marsram_1-SH2_RAM,$8C00
 
 ; ====================================================================
 ; ----------------------------------------------------------------
