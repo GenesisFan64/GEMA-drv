@@ -11,7 +11,7 @@
 ; --------------------------------------------------------
 
 ; !! = HARDCODED
-MAX_TRFRPZ	equ 10		; !! Max readRom packets(bytes) **AFFECTS WAVE QUALITY**
+MAX_TRFRPZ	equ 9		; !! Max readRom packets(bytes) **AFFECTS WAVE QUALITY** 9 stable
 MAX_TRKCHN	equ 32		; !! Max internal shared tracker channel slots *** LIMTED to 32 ***
 MAX_RCACH	equ 20h		; !! Max storage for ROM pattern data *** 1-BIT SIZES ONLY, MUST BE ALIGNED ***
 MAX_BUFFNTRY	equ 4*2		; !! nikona_BuffList buffer entry size
@@ -1074,7 +1074,6 @@ upd_track:
 		ld	(iy+(trk_RomPattRead+2)),a
 		ld	e,(iy+trk_Cach)
 		ld	d,(iy+(trk_Cach+1))
-
 		ld	(iy+trk_Read),e
 		ld	(iy+(trk_Read+1)),d
 		ld	c,MAX_RCACH
@@ -1085,12 +1084,12 @@ upd_track:
 ; ----------------------------------------
 ; **JUMP ONLY**
 .track_end:
-		call	track_out
 		rst	8
 		xor	a
-		ld	(iy+trk_rowPause),a
-		ld	(iy+trk_TickTmr),a
+; 		ld	(iy+trk_rowPause),a
+; 		ld	(iy+trk_TickTmr),a
 		ld	(iy+trk_Status),-1	; Disable track slot
+		ld	(iy+trk_SeqId),-1
 		ret
 
 ; ----------------------------------------
@@ -1251,6 +1250,7 @@ track_out:
 ; --------------------------------------------------------
 
 set_chips:
+		rst	8
 		call	get_tick
 	; ** MANUAL BUFF READ **
 		ld	iy,trkBuff_0
@@ -1263,16 +1263,14 @@ set_chips:
 		call	get_tick
 proc_chips:
 		rst	20h
-		rst	8
 		ld	iy,tblPSGN		; PSG Noise
 		call	dtbl_singl
-		rst	8
 		ld	iy,tblPSG		; PSG Squares
 		call	dtbl_multi
 		call	get_tick
+		rst	8
 		ld	iy,tblFM		; FM/FM3/DAC
 		call	dtbl_multi
-		rst	8
 		ld	iy,tblPCM		; SEGA CD PCM
 		call	dtbl_multi
 		rst	8
@@ -1353,11 +1351,12 @@ tblbuff_read:
 		ld	a,(ix+chnl_Ins)		; Check intrument type FIRST
 		or	a
 		ret	z			; If 0 == stop
-		rst	8
+		rst	20h			; Refill wave here
 		dec	a			; inst-1
 		and	01111111b
 		ld	hl,instListOut		; hl - Temporal storage for instrument
 		push	hl
+		rst	8
 		rlca
 		rlca
 		rlca
@@ -1561,7 +1560,6 @@ tblbuff_read:
 		or	a			; Failsafe zero priority overwrite
 		jr	z,.new_link_o
 		cp	c
-; 		jr	z,.new_link_o
 		jr	c,.new_link_o		; PRIORITY
 		rst	8
 		call	.nextsrch_tbl
@@ -1617,7 +1615,6 @@ tblbuff_read:
 		or	a			; Failsafe zero priority overwrite
 		jr	z,.l_hiprio
 		cp	c
-; 		jr	z,.l_hiprio
 		jr	c,.l_hiprio		; PRIORITY
 		rst	8
 .set_asfull:
@@ -1671,7 +1668,10 @@ dtbl_multi:
 		rst	8
 		ld	de,MAX_TBLSIZE
 		add	iy,de
+		nop
+		nop
 		rst	8
+		nop
 		jr	dtbl_multi
 dtbl_singl:
 		ld	e,(iy)		; Read link

@@ -8,7 +8,7 @@
 ; Settings
 ; ------------------------------------------------------
 
-VIEW_GEMAINFO		equ True		; ** Using this causes loss of DAC quality **
+VIEW_GEMAINFO		equ False		; ** Using this causes loss of DAC quality **
 VIEW_FAIRY		equ True		; Show status Dodo/Mifi/Fifi
 
 ; ====================================================================
