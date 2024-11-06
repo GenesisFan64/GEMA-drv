@@ -2,9 +2,7 @@
 ; ------------------------------------------------------------
 ; GEMA MACROS
 ;
-; AS format
-;
-; Labels required:
+; Variables used:
 ; MCD, MARS, MARSCD
 ; ------------------------------------------------------------
 
@@ -21,10 +19,10 @@ gSmplData macro labl,file,loop
 		align 4
 	endif
 labl	label *
-	dc.b ((labl_e-labl_s)&$FF),(((labl_e-labl_s)>>8)&$FF),(((labl_e-labl_s)>>16)&$FF)
-	dc.b ((loop)&$FF),(((loop)>>8)&$FF),(((loop)>>16)&$FF)
+	dc.b ((labl_e-labl_s)&$FF),(((labl_e-labl_s)>>8)&$FF),(((labl_e-labl_s)>>16)&$FF)	; dc.b 1,2,3 Length
+	dc.b ((loop)&$FF),(((loop)>>8)&$FF),(((loop)>>16)&$FF)					; dc.b 4,5,6 Start loop
 labl_s:
-	binclude file,$2C
+	binclude file,$2C	; dc.b (data)
 labl_e:
 	if MARS|MARSCD		; <-- label align for 32X
 		align 4
@@ -44,10 +42,10 @@ gSmplRaw macro labl,file,loop
 		align 4
 	endif
 labl	label *
-	dc.b ((labl_e-labl_s)&$FF),(((labl_e-labl_s)>>8)&$FF),(((labl_e-labl_s)>>16)&$FF)
-	dc.b ((loop)&$FF),(((loop)>>8)&$FF),(((loop)>>16)&$FF)
+	dc.b ((labl_e-labl_s)&$FF),(((labl_e-labl_s)>>8)&$FF),(((labl_e-labl_s)>>16)&$FF)	; dc.b 1,2,3 Length
+	dc.b ((loop)&$FF),(((loop)>>8)&$FF),(((loop)>>16)&$FF)					; dc.b 4,5,6 Start loop
 labl_s:
-	binclude file
+	binclude file		; dc.b (data)
 labl_e:
 	if MARS|MARSCD		; <-- label align for 32X
 		align 4
@@ -58,8 +56,9 @@ labl_e:
 ; gemaTrk - Sequence entry in the current master
 ;           list
 ;
-; enblt | Disable/Enable global beats on this Sequence
-;         0 - Don't Use beats, 1 - Use beats
+; enblt | Disable/Enable global beats on this Sequence:
+;         0 - Don't use beats
+;         1 - Use beats
 ; ticks | Ticks (Default tempo: 150-NTSC 120-PAL)
 ;   loc | Direct 24-bit location of the sequence data
 ; ----------------------------------------------------
@@ -77,6 +76,9 @@ gemaTrk macro enblt,ticks,loc
 ; num_chnls | Number of channels used in the track
 ;             If 0: Read ALL channels
 ;                   (NOT recommended, UNSTABLE)
+;
+; Note:
+; Pointers are in 68k map area
 ; ----------------------------------------------------
 
 gemaHead macro blk,pat,ins,num
@@ -90,7 +92,8 @@ gemaHead macro blk,pat,ins,num
 ; Instrument macros, instrument_num-1
 ; (ex. Instrument 1 is 0 here)
 ;
-; NOTE: UNUSED instruments MUST use gInsNull or
+; Note:
+; UNUSED instruments MUST use gInsNull or
 ; the Z80 gets unexpected results and probably crash.
 ; ------------------------------------------------------------
 
@@ -133,11 +136,11 @@ gInsPsg	macro pitch,alv,atk,slv,dky,rrt,vib
 ; rrt   | Release rate (down)
 ; vib   | Set to 0, reserved for vibrato
 ; mode  | Noise mode: %tmm
-;         | t - Bass(0)|Noise(1)
-;         | m - Clock(0)|Clock/2(1)|Clock/4(2)|Tone3(3)
+;         t - Bass(0)|Noise(1)
+;         m - Clock(00)|Clock/2(01)|Clock/4(10)|Tone3(11)
 ;
 ; Note:
-; Enabling tone3 will turn OFF PSG channel 3.
+; Using Tone3 will turn OFF channel 3.
 ; ----------------------------------------------------
 
 gInsPsgN macro pitch,alv,atk,slv,dky,rrt,vib,mode
@@ -160,7 +163,7 @@ gInsFm macro pitch,fmins
 ; ----------------------------------------------------
 ; gInsFm - YM2612 FM special instrument/patch
 ;
-; pitch | UNUSED, set to 0
+; pitch | UNUSED, value ignored (set to 0)
 ; fmins | 24-bit pointer to FM patch data
 ; ----------------------------------------------------
 
@@ -187,8 +190,8 @@ gInsDac	macro pitch,start,flags
 ; gInsPcm - RF5C164 PCM Sample (SEGA CD)
 ;
 ; pitch | Pitch/Octave
-; start | 24-bit direct pointer
-;         *Sub-CPU's memory area only*
+; start | 24-bit direct pointer to
+;         Sub-CPU's memory area.
 ; flags | Flags: %0000000l
 ;         | l - Enable loop: No(0)/Yes(1)
 ; ----------------------------------------------------
@@ -207,7 +210,7 @@ gInsPcm	macro pitch,start,flags
 ; gInsPwm - PWM Sample (SEGA 32X)
 ;
 ; pitch | Pitch/Octave
-; start | 32-bit pointer from
+; start | 32-bit pointer to
 ;         SH2's map view: CS1(ROM) or CS3(SDRAM)
 ; flags | Flags: %000000sl
 ;         | l - Enable loop: No(0)/Yes(1)

@@ -11,14 +11,13 @@
 ; --------------------------------------------------------
 
 ; !! = HARDCODED
-MAX_TRFRPZ	equ 9		; !! Max readRom packets(bytes) **AFFECTS WAVE QUALITY** 9 stable
-MAX_TRKCHN	equ 32		; !! Max internal shared tracker channel slots *** LIMTED to 32 ***
-MAX_RCACH	equ 20h		; !! Max storage for ROM pattern data *** 1-BIT SIZES ONLY, MUST BE ALIGNED ***
-MAX_BUFFNTRY	equ 4*2		; !! nikona_BuffList buffer entry size
-MAX_SLOTS	equ 3		; !! Number of buffers
+MAX_TRFRPZ	equ 9		; !! Max readRom packets(bytes) **AFFECTS WAVE QUALITY**
+MAX_TRKCHN	equ 32		; !! Max internal shared tracker channel slots *** MSB alinged ***
+MAX_RCACH	equ 20h		; !! Max storage for ROM pattern data *** 1-BIT SIZES ONLY, MUST BE LSB ALIGNED ***
+MAX_BUFFNTRY	equ 4*2		; !! nikona_BuffList buffer entry size **HARDCODED
+MAX_SLOTS	equ 3		; !! Number of track buffers
 MAX_ZCMND	equ 20h		; !! Size of command array ** 1-bit SIZES ONLY ** (68k uses this label too)
-
-MAX_TBLSIZE	equ 12h		; Maximum size for chip tables
+MAX_TBLSIZE	equ 12h		; Maximum size for chip table arrays
 MAX_TRKINDX	equ 26		; Max channel indexes per buffer: 4PSG+6FM+8PCM+8PWM
 
 ; --------------------------------------------------------
@@ -155,7 +154,7 @@ PTMR		equ 56
 ; de - pitch increment
 ; hl - wave buffer position 00.00h
 		org 8
-dac_me:		exx			; * flip registers <-- Changes between EXX(play) and RET(stop)
+dac_me:		exx			; * flip registers | Changes between EXX(play) and RET(stop)
 		ex	af,af'		; Swap af
 		ld	b,l		; Save old hl buff
 		ld	l,h		;
@@ -168,7 +167,7 @@ dac_me:		exx			; * flip registers <-- Changes between EXX(play) and RET(stop)
 		ld	l,b		;
 		add	hl,de		; Pitch increment hl
 		ex	af,af'		; Return af
-		exx			; * return registers
+		exx			; * return regs
 		ret
 
 ; --------------------------------------------------------
@@ -188,12 +187,12 @@ gemaMstrListPos:
 ; --------------------------------------------------------
 
 		org 20h
-dac_fill:	push	af		; Save af <-- Changes between PUSH AF(play) and RET(stop)
+dac_fill:	push	af		; Save af | Changes between PUSH AF(play) and RET(stop)
 		ld	a,(dDacFifoMid)	; a - Get half-way value
-		exx			; * swap regs
+		exx			; * flip registers
 		xor	h		; Grab LSB.00
-		exx			; * swap regs
-		and	80h		; Check if half-bit changed
+		exx			; * restore regs
+		and	80h		; Check if LSB 7th bit changed
 		call	nz,dac_refill	; If yes, call refill and update LSB
 		pop	af		; Restore af
 		ret
@@ -225,7 +224,6 @@ dDacFifoMid	db 0			; WAVE play halfway refill flag (00h/80h)
 
 z80_init:
 		call	gema_init		; Init values
-		ei
 
 ; --------------------------------------------------------
 ; MAIN LOOP
@@ -262,7 +260,7 @@ drv_loop:
 		call	set_chips		; Send changes to sound chips
 		call	get_tick
 		rst	8
-		call	upd_track		; Update track data
+		call	upd_seq			; Process sequences
 		call	get_tick
 .neither:
 		rst	8
@@ -589,11 +587,10 @@ drv_loop:
 ; Read mini-impulse-tracker data
 ; --------------------------------------------------------
 
-upd_track:
+upd_seq:
 		rst	20h
 		call	get_tick		; Check for tick flag
-	; ** MANUAL BUFF READ **
-		ld	iy,trkBuff_0
+		ld	iy,trkBuff_0		; ** MANUAL BUFFERS
 		call	.read_track
 		ld	iy,trkBuff_1
 		call	.read_track
@@ -612,8 +609,8 @@ upd_track:
 		bit	7,b			; bit7: Track active?
 		ret	z			; Return if not.
 		ld	a,b
-		cp	-1			; Flag is -1?
-		ret	z			; Return if mid-flag
+		cp	-1			; Value is -1?
+		ret	z
 		rst	8
 	; ----------------------------------------
 	; Track volume changes
@@ -736,7 +733,7 @@ upd_track:
 		ld	c,a			; Copy patt byte control to c
 		call	.inc_cpatt		; * Increment patt pos
 		push	hl			; Save hl patt pos
-		push	iy
+		push	iy			; copy iy to hl
 		pop	hl
 		ld	ix,trkChnls		; ix - Channels buffer
 		ld	de,trk_ChnIndx		; <-- this clears d
@@ -748,26 +745,31 @@ upd_track:
 		add	hl,de			; Increment more by this pos
 		ld	a,(hl)			; Check if this index is occupied.
 		or	a
-		jr	z,.srch_new		; If == 0, new index
-		and	00011111b		; If already used, read that channel
+		jr	z,.srch_new		; If == 0, search new one
+		and	00011111b		; If already taken, read that channel
 		add	a,a
 		add	a,a
 		add	a,a
 		ld	e,a
 		add	ix,de
+		ld	a,(ix)			; Check status (chnl_Flags)
+		or	a
+		jp	p,.srch_reroll
 		jr	.cont_chnl
 
 ; Make NEW channel
 ; ix - channel list start
+.srch_reroll:
+		ld	(ix),0
 .srch_new:
 		rst	8
-		ld	b,MAX_TRKCHN-1	; Max channels to check - 1
-		ld	d,0		; Reset out index
+		ld	b,MAX_TRKCHN-1		; Max channels to check - 1
+		ld	d,0			; Reset out index
 .next_chnl:
-		ld	a,(ix)		; Read chnl_Flags
-		or	a		; If plus, track channel is free
+		ld	a,(ix)			; Read chnl_Flags
+		or	a			; If plus, track channel is free
 		jp	p,.chnl_free
-		inc	ix		; Search next channel, increment by 8
+		inc	ix			; Search next channel, increment by 8
 		inc	ix
 		inc	ix
 		inc	ix
@@ -776,19 +778,23 @@ upd_track:
 		inc	ix
 		inc	ix
 		inc	ix
-		inc	d		; Increment out index
+		inc	d			; Increment out index
 		djnz	.next_chnl
 .chnl_free:
 		rst	8
 		ld	a,d			; Read index we got
 		and	00011111b		; Filter bits
-		or	10000000b		; + set as used
+		or	10000000b		; and set as used
 		ld	(hl),a			; Write index slot
 		set	7,(ix+chnl_Flags)	; Enable channel on the list
 .cont_chnl:
-
 		pop	hl			; Recover patt pos
+
 	; ix - current channel
+	; b - evinEVIN
+	;     E-effect/V-volume/I-instrument/N-note
+	;     evin: byte is already stored on track-channel buffer
+	;     EVIN: next byte(s) contain a new value. for eff:2 bytes
 		rst	8
 		ld	b,(ix+chnl_Type)	; b - current TYPE byte
 		bit	6,c			; This byte has new TYPE setting?
@@ -798,11 +804,6 @@ upd_track:
 		ld	b,a			; Set to b
 		call	.inc_cpatt		; Next patt pos
 .old_type:
-	; b - evinEVIN
-	;     E-effect/V-volume/I-instrument/N-note
-	;     evin: byte is already stored on track-channel buffer
-	;     EVIN: next byte(s) contain a new value. for eff:2 bytes
-
 		rst	8
 		bit	0,b			; New NOTE?
 		jr	z,.no_note
@@ -816,6 +817,7 @@ upd_track:
 		ld	(ix+chnl_Ins),a
 		call	.inc_cpatt
 .no_ins:
+		rst	8
 		bit	2,b			; New VOL?
 		jr	z,.no_vol
 		ld	a,(hl)			; Set VOL and increment patt
@@ -977,7 +979,6 @@ upd_track:
 		ld	l,(iy+trk_RomBlks)
 		ld	h,(iy+(trk_RomBlks+1))
 		ld	a,(iy+(trk_RomBlks+2))
-		rst	20h
 		add	hl,bc
 		adc	a,0
 		ld	bc,8			; 8 blocks stored
@@ -1085,9 +1086,6 @@ upd_track:
 ; **JUMP ONLY**
 .track_end:
 		rst	8
-		xor	a
-; 		ld	(iy+trk_rowPause),a
-; 		ld	(iy+trk_TickTmr),a
 		ld	(iy+trk_Status),-1	; Disable track slot
 		ld	(iy+trk_SeqId),-1
 		ret
@@ -1134,7 +1132,7 @@ upd_track:
 		ld	de,trkInfoCach
 		push	de
 		ld	bc,4
-		call	readRom		; *** ROM ACCESS ***
+		call	readRom			; *** ROM ACCESS ***
 		pop	hl
 		ld	a,(hl)
 		inc	hl
@@ -1211,7 +1209,12 @@ track_out:
 		rst	8
 		ld	de,trk_ChnIndx
 		add	hl,de
-		ld	b,MAX_TRKINDX
+		ld	a,(iy+trk_MaxChnl)
+		or	a
+		jr	nz,.valid
+		ld	a,MAX_TRKINDX		; If zero, Read ALL channels
+.valid:
+		ld	b,a
 .indx_del:
 		ld	a,(hl)
 		or	a
@@ -1230,8 +1233,8 @@ track_out:
 		ld	(ix+chnl_Flags),1
 		ld	(ix+chnl_Vol),64
 		ld	(ix+chnl_EffId),a
-		rst	8
 		ld	(ix+chnl_EffArg),a
+		rst	8
 		ld	(ix+chnl_Ins),a
 		ld	(ix+chnl_Type),a
 		pop	ix
@@ -1242,6 +1245,7 @@ track_out:
 		djnz	.indx_del
 		ld	a,1
 		ld	(marsUpd),a
+		ld	(mcdUpd),a
 		ret
 
 ; ============================================================
@@ -1252,8 +1256,7 @@ track_out:
 set_chips:
 		rst	8
 		call	get_tick
-	; ** MANUAL BUFF READ **
-		ld	iy,trkBuff_0
+		ld	iy,trkBuff_0		; ** MANUAL BUFFERS
 		call	tblbuff_read
 		ld	iy,trkBuff_1
 		call	tblbuff_read
@@ -1293,7 +1296,6 @@ tblbuff_read:
 		jp	nz,.track_cont
 		call	track_out
 		ld	(iy+trk_Status),0
-; 		rst	20h			; Refill wave
 .track_cont:
 		push	iy
 		pop	hl
@@ -1351,7 +1353,6 @@ tblbuff_read:
 		ld	a,(ix+chnl_Ins)		; Check intrument type FIRST
 		or	a
 		ret	z			; If 0 == stop
-		rst	20h			; Refill wave here
 		dec	a			; inst-1
 		and	01111111b
 		ld	hl,instListOut		; hl - Temporal storage for instrument
@@ -1549,18 +1550,19 @@ tblbuff_read:
 .pass_2:
 		pop	hl
 .next_prio:
-		ld	a,(hl)		; Read LSB
-		cp	-1		; If -1, return -1
+		ld	a,(hl)			; Read LSB
+		cp	-1			; If -1, return -1
 		ret	z
 		inc	hl
 		inc	hl
-		ld	a,(hl)		; Read priority
+		ld	a,(hl)			; Read priority
 		dec	hl
 		dec	hl
 		or	a			; Failsafe zero priority overwrite
 		jr	z,.new_link_o
 		cp	c
 		jr	c,.new_link_o		; PRIORITY
+; 		jr	z,.new_link_o
 		rst	8
 		call	.nextsrch_tbl
 		jr	.next_prio
@@ -1571,7 +1573,7 @@ tblbuff_read:
 		pop	de
 		ret
 .new_link_z:
-		inc	sp		; skip backup
+		inc	sp			; skip backup
 		inc	sp
 		jr	.new_link
 
@@ -1612,10 +1614,11 @@ tblbuff_read:
 		jr	z,.l_hiprio
 		rst	8
 		ld	a,(hl)
-		or	a			; Failsafe zero priority overwrite
+		or	a
 		jr	z,.l_hiprio
 		cp	c
 		jr	c,.l_hiprio		; PRIORITY
+; 		jr	z,.l_hiprio
 		rst	8
 .set_asfull:
 		ld	a,-1			; Return -1
@@ -1674,16 +1677,16 @@ dtbl_multi:
 		nop
 		jr	dtbl_multi
 dtbl_singl:
-		ld	e,(iy)		; Read link
+		ld	e,(iy)			; Read link
 		ld	d,(iy+1)
-		ld	a,d		; If no-zero, active
+		ld	a,d			; If no-zero, active
 		or	e
 		jr	nz,.linked
-		ld	a,(iy+2)	; Silence request?
+		ld	a,(iy+ztbl_Priority)	; Silence request?
 		or	a
-		ret	p		; Return if not.
+		ret	p			; Return if not.
 		rst	8
-		ld	(iy+2),0	; Reset request on memory
+		ld	(iy+ztbl_Priority),0	; Reset request on memory
 
 ; ----------------------------------------
 ; chip-silence request
@@ -3160,7 +3163,6 @@ dtbl_singl:
 		ret	z
 		cp	-2
 		ret	z
-; 		rst	20h
 		rst	8
 		ld	a,(hl)
 		and	11110000b
@@ -3230,20 +3232,30 @@ dtbl_singl:
 ; ----------------------------------------
 ; Reset all table
 ;
-; hl - Current channel table
-; d - Silence chip
+; Input:
+; iy - Current buffer
+; hl - Channel table
+; d  - Silence chip
 ;
 ; Uses:
-; b
+; b,de,hl
 ; ----------------------------------------
 
 tblz_clear:
-		rst	8
-		ld	(hl),0			; Delete link
+		ld	b,MAX_TBLSIZE-4
+		xor	a
+		ld	(hl),a			; 0 - Delete link
 		inc	hl
-		ld	(hl),0
+		ld	(hl),a
 		inc	hl
-		ld	(hl),d			; Set "silence" chip ID.
+		ld	(hl),d			; 2 - Write silence request
+		inc	hl
+		inc	hl			; 3 - skip ID
+.clr_all:
+		ld	(hl),a
+		inc	hl
+		djnz	.clr_all
+; 		ld	(ix+chnl_Chip),0
 		ret
 
 ; ============================================================
@@ -3466,7 +3478,7 @@ zmars_send:
 ; --------------------------------------------------------
 
 gema_init:
-		call	gema_lastbank		; Set last bank slot, solves bus problem with 32X
+		call	gema_lastbank		; Set last bank slot, solves problem with 32X
 		call	dac_off
 		xor	a
 		ld	(marsUpd),a
@@ -3580,36 +3592,36 @@ get_tick:
 
 readRom:
 		push	ix
-		ld	ix,commZRomBlk	; ix - rom read/block flags
-		cp	0FFh		; <-- WORKAROUND FOR $FF0000 area
+		ld	ix,commZRomBlk		; ix - rom read/block flags
+		cp	0FFh			; Reading from 68k's RAM?
 		jr	z,.from_ram
 		rst	8
-		ld	(x68ksrclsb),hl	; save hl copy
-		res	7,h
-		ld	b,0
-		dec	bc
-		add	hl,bc
-		bit	7,h
-		jr	nz,.double
-		ld	hl,(x68ksrclsb)
-		inc	c
-		ld	b,a
+		ld	(x68ksrclsb),hl		; Backup midlow address
+		res	7,h			; Reset MSB bit 7
+		ld	b,0			; Clear b
+		dec	bc			; len-1
+		add	hl,bc			; Add len to the mid and low to this temp address
+		bit	7,h			; Did it cross the bank?
+		jr	nz,.double		; Then it's a double transfer
+		ld	hl,(x68ksrclsb)		; Restore hl
+		inc	c			; len+1
+		ld	b,a			; b - $xx0000
 		call	.transfer
 		pop	ix
 		ret
 .double:
 		rst	8
-		ld	b,a
-		push	bc
+		ld	b,a			; b - $xx0000
+		push	bc			; Backup len and midlow address
 		push	hl
-		ld	a,c
+		ld	a,c			; len - LSB
 		sub	a,l
-		ld	c,a
-		ld	hl,(x68ksrclsb)
+		ld	c,a			; Save new size
+		ld	hl,(x68ksrclsb)		; Restore TOP
 		call	.transfer
-		pop	hl
+		pop	hl			; Restore len and midlow address
 		pop	bc
-		ld	c,l
+		ld	c,l			; Get second len
 		inc	c
 		ld	a,(x68ksrcmid)
 		and	80h
@@ -3617,7 +3629,7 @@ readRom:
 		ld	h,a
 		ld	l,0
 		jr	nc,.x68knocarry
-		inc	b
+		inc	b			; Next $xx0000
 .x68knocarry:
 		call	.transfer
 		pop	ix
@@ -3627,23 +3639,21 @@ readRom:
 ; WORKAROUND FOR READING FROM $FF0000 RAM
 ;
 ; On the 68K side YOU MUST CALL
-; gemaUpdate manually if you have the oportunity
-;
-; Normally from a Vblank wait loop.
+; gemaSendRam manually and every time, normally
+; from a Vblank wait-loop.
 ; ------------------------------------------------
 
 .from_ram:
-		ld	(cdRamDst),de
+		ld	(cdRamDst),de			; Show variables
 		ld	(cdRamSrc),hl
 		ld	(cdRamSrcB),a
-		call	gema_lastbank			; ** Set bank to $FF8000 area
+		call	gema_lastbank			; Set bank to $FF8000 area
 		rst	8
 		ld	a,c
-		ld	(cdRamLen),a
+		ld	(cdRamLen),a			; Show length
 		ld	hl,RAM_ZCdFlagD&07FFFh+8000h	; ** 68K LABEL **
 		ld	(hl),1				; WRITE flag
 .wait:
-	; Get stuck here until 68K finishes
 		ld	a,(cdRamLen)			; Wait until 68K clears
 		or	a
 		jr	nz,.wait
@@ -3660,30 +3670,30 @@ readRom:
 
 .transfer:
 		rst	8
-		push	de
-		ld	de,6000h
+		push	hl
 		ld	a,h
+		ld	hl,6000h
 		rlca
-		ld	(de),a
+		ld	(hl),a
 		ld	a,b
 		rst	8
-		ld	(de),a
+		ld	(hl),a
 		rrca
-		ld	(de),a
+		ld	(hl),a
 		rrca
-		ld	(de),a
+		ld	(hl),a
 		rrca
-		ld	(de),a
+		ld	(hl),a
 		rrca
 		rst	8
-		ld	(de),a
+		ld	(hl),a
 		rrca
-		ld	(de),a
+		ld	(hl),a
 		rrca
-		ld	(de),a
+		ld	(hl),a
 		rrca
-		ld	(de),a
-		pop	de
+		ld	(hl),a
+		pop	hl
 		set	7,h
 		rst	8
 	; Transfer ROM data in packets
