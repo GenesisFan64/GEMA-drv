@@ -76,7 +76,7 @@ If you can implement PCM and PWM manually: (Requires knowdage of both Sega CD an
 
 ## CURRENT ISSUES
 
-* SCD: PCM streaming may miss some streaming blocks if playing the same sample repeatedly
-* 32X: PWM sample volume is lower that the other chips
+* YM2612: Changing from FM3 Special to Normal might cause a click
+* w/32X: PWM sample volume is lower that the other chips
 
 Documentation for the driver is located at /doc<br>
