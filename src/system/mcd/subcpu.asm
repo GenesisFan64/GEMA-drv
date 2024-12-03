@@ -1555,6 +1555,7 @@ CdSub_PCM_Process:
 		bsr	CdSub_PCM_Stream
 		bsr	CdSub_PCM_Stream
 		move.b	(RAM_CdSub_PcmEnbl).w,(SCPU_pcm+ONREG).l
+		bsr	CdSub_PCM_Wait
 		subq.b	#1,(RAM_CdSub_PcmReqUpd).w
 		bra	CdSub_PCM_Process
 .no_req:
@@ -1601,6 +1602,19 @@ CdSub_PCM_Process:
 		andi.w	#%00001111,d0
 		move.b	d0,(SCPU_reg+mcd_comm_s).w
 .not_now:
+		rts
+
+; --------------------------------------------------------
+; CdSub_PCM_Wait
+;
+; Call this after writes to the PCM's in CONTROL mode
+; --------------------------------------------------------
+
+CdSub_PCM_Wait:
+		movem.l d0-a6,-(sp)
+		movem.l (sp)+,d0-a6
+		movem.l d0-d4,-(sp)
+		movem.l (sp)+,d0-d4
 		rts
 
 ; --------------------------------------------------------
@@ -1732,11 +1746,15 @@ CdSub_PCM_ReadTable:
 		move.b	d6,d0			; Set PCM to control mode
 		or.b	#$C0,d0
 		move.b	d0,CTREG(a4)
+		bsr	CdSub_PCM_Wait
 		move.b	#$80,ST(a4)
+		bsr	CdSub_PCM_Wait
 		move.w	#$8000,d0
 		move.b	d0,LSL(a4)
+		bsr	CdSub_PCM_Wait
 		lsr.w	#8,d0
 		move.b	d0,LSH(a4)
+		bsr	CdSub_PCM_Wait
 		move.w	#$1000/SET_PCMBLK,cdpcm_cblk(a6)
 		move.w	#0,cdpcm_cout(a6)
 		move.l	#0,cdpcm_clen(a6)
@@ -1764,14 +1782,19 @@ CdSub_PCM_ReadTable:
 		move.b	d6,d0			; Set PCM to control mode
 		or.b	#$C0,d0
 		move.b	d0,CTREG(a4)
+		bsr	CdSub_PCM_Wait
 		move.w	cdpcm_pitch(a6),d0	; Write frequency
 		move.b	d0,FDL(a4)
+		bsr	CdSub_PCM_Wait
 		lsr.w	#8,d0
 		move.b	d0,FDH(a4)
+		bsr	CdSub_PCM_Wait
 		move.b	cdpcm_pan(a6),d0	; Panning
 		move.b	d0,PAN(a4)
+		bsr	CdSub_PCM_Wait
 		move.b	cdpcm_env(a6),d0	; Envelope
 		move.b	d0,ENV(a4)
+		bsr	CdSub_PCM_Wait
 		rts
 
 ; ============================================================
@@ -1846,6 +1869,7 @@ CdSub_PCM_Stream:
 		move.b	d6,d0			; Set PCM memory mode + current channel
 		or.b	#$80,d0
 		move.b	d0,CTREG(a5)
+		bsr	CdSub_PCM_Wait
 		lea	$2000(a5),a1		; a1 - WAVE RAM output
 		add.w	d4,d4			; Pos * 2
 		adda	d4,a1			; add to a1

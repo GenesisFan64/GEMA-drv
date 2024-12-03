@@ -1,5 +1,5 @@
 # GEMA Sound Driver (GEMA-drv)
-A sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X<br>
+A sound driver for the Genesis with support for Sega CD, Sega 32X and CD32X<br>
 
 ## FEATURES
 
@@ -45,12 +45,12 @@ A sound driver for the Genesis with support for Sega CD, Sega 32X and Sega CD32X
 
 ### Building the sound tester
 
-* Music data is located at `sound/seq`, FM instruments and samples on `sound/ins`
+* Music data is located at `sound/seq` and instruments/samples on `sound/ins`
 * The sequence list, instruments and DAC samples are located on `sound/data.asm`, PCM and PWM samples are stored separately.
-* Sub-beats are loaded externally: open `src/game/code/sound_test.asm` and go to the label `exgema_beats`, the sub-beats are sorted the same order as the sequence list. (I don't have the exact formula to convert to IT tempo, but the value 214 corresponds to tempo 125)
+* Sub-beats are loaded externally, on this tester open `src/game/code/sound_test.asm` and go to the label `exgema_beats`, the sub-beats are sorted the same order as the sequence list. (I don't have the exact formula to convert to IT tempo, but the value 214 corresponds to IT's tempo 125)
 * OPTIONAL: on the same file but at the very top, there's 2 boolean settings: `VIEW_GEMAINFO` and `VIEW_FAIRY`, VIEW_GEMAINFO toggles the note playback status but causes a small loss of DAC quality and VIEW_FAIRY toggles the status fairies (in case you don't like those)
 * Run `make_tester.sh` on Linux or `make_tester.bat` on Windows
-* Output ROMS will be located at /bin: the `rom_(system)` rom are for real hardware and `rom_emu_(system)` are for emulators, SegaCD/CD32X: the letters j, u, e represent the region.
+* Output ROMS will be located at `/bin`, the `rom_(system)` rom are for real hardware and `rom_emu_(system)` for emulators, SegaCD/CD32X: the letters j, u, e represent the region.
 
 The tester uses code a copy of NikonaMD which you can check here: https://github.com/GenesisFan64/NikonaMD
 
@@ -60,23 +60,23 @@ The tester uses code a copy of NikonaMD which you can check here: https://github
 **Currently the standard driver zdrv_md.bin / zdrv_emu_md.bin is the only one that can be used outside of this code, support for the PCM and PWM chips require special playback code on SCD's Sub-CPU and 32X's Slave SH2**<br>
 The `gema_macros.asm` file uses the variables `MCD`, `MARS` and `MARSCD` for detecting the current target system, if you are not using PCM and PWM you can delete the macros `gInsPcm` and `gInsPwm`, also the variables at `gSmplData`, `gSmplRaw`.
 
-* Include the Z80 binary like this:<br>
+* Include the Z80 binary including these labels:<br>
     Z80_CODE:
     		binclude "zdrv_md.bin"
     Z80_CODE_END:
 
 * Include the files `sound/driver/gema.asm`, `sound/driver/gema_macros.asm` in your code.<br>
-If your assembler doesn't support dotted labels (ASM68k...) change the dots to @
+If your assembler doesn't support dotted labels (ASM68k...) change the dots to @, uses
 
-* You can check the list of sound calls (play, stop, fade) at gema.asm<br>
+* You can check the list of sound calls (Play, Stop, Fade) on gema.asm<br>
 
-If you can implement PCM and PWM manually: (Requires knowdage of both Sega CD and 32X)<br>
+If you can implement PCM and PWM manually, requires knowdage of both Sega CD and 32X:<br>
 * PCM code is located at `src/system/mcd/marscd.asm` at CdSub_PCM_Process
 * PWM at: `src/system/mars/sound.asm` `src/system/mars/main.asm` (at s_irq_cmd) and `src/system/mars/cache/cache_slv.asm` (playback code loaded to SH2's Slave CACHE)
 
 ## CURRENT ISSUES
 
-* YM2612: Changing from FM3 Special to Normal might cause a click
+* YM2612: Changing FM Channel 3 Special to Normal might cause a click
 * w/32X: PWM sample volume is lower that the other chips
 
 Documentation for the driver is located at /doc<br>

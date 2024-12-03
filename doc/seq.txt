@@ -37,7 +37,7 @@ num_channels:
 Number of channels used in the original module
 
 =========================================
-EJEMPLO
+EXAMPLE
 =========================================
 
 gtrk_Test0:

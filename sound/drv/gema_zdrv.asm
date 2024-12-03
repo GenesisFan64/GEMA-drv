@@ -255,6 +255,7 @@ drv_loop:
 		or	a
 		jr	z,.neither
 		ld	(currTickBits),a	; Save BEAT/TICK bits
+		rst	20h
 		rst	8
 		call	get_tick
 		call	set_chips		; Process sound chips
@@ -263,6 +264,7 @@ drv_loop:
 		call	upd_seq			; Read sequences
 		call	get_tick
 .neither:
+		rst	20h
 		rst	8
 	if MCD|MARS|MARSCD
 		call	zmars_send		; External communication with SCD and 32X
@@ -1267,7 +1269,6 @@ set_chips:
 		call	dtbl_singl
 		ld	iy,tblPSG		; PSG Squares
 		call	dtbl_multi
-		rst	20h
 		ld	iy,tblFM		; FM/FM3/DAC
 		call	dtbl_multi
 		ld	iy,tblPCM		; SEGA CD PCM
@@ -1308,7 +1309,6 @@ tblbuff_read:
 		ld	a,(hl)			; Read index
 		or	a
 		jr	nz,.has_indx		; If non-zero: valid
-		rst	20h
 		jr	.no_indx
 .has_indx:
 		and	00011111b
@@ -2039,6 +2039,8 @@ dtbl_singl:
 ; FM3 special
 ; --------------------------------
 
+; TODO: Do to PAL freq increment
+
 .mk_fm_sp:
 		ld	c,010b			; ** FM3 special ID
 		ld	a,b			; New NOTE and/or INS?
@@ -2160,7 +2162,6 @@ dtbl_singl:
 		call	.mkfm_wregs		; 70h+
 		call	.mkfm_wregs		; 80h+
 		call	.mkfm_wregs		; 90h+
-		rst	20h
 		ld	a,b			; 0B0h algorithm
 		inc	hl
 		ld	e,a
