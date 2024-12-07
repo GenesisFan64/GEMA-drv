@@ -52,7 +52,7 @@ A sound driver for the Genesis with support for Sega CD, Sega 32X and CD32X<br>
 * Run `make_tester.sh` on Linux or `make_tester.bat` on Windows
 * Output ROMS will be located at `/bin`, the `rom_(system)` rom are for real hardware and `rom_emu_(system)` for emulators, SegaCD/CD32X: the letters j, u, e represent the region.
 
-The tester uses code a copy of NikonaMD which you can check here: https://github.com/GenesisFan64/NikonaMD
+The tester uses code a now-outdated copy of NikonaMD, the latest is located here: https://github.com/GenesisFan64/NikonaMD
 
 ### Using this driver in your project
 
