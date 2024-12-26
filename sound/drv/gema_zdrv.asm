@@ -1258,12 +1258,11 @@ set_chips:
 		call	get_tick
 		ld	iy,trkBuff_0		; ** MANUAL BUFFERS
 		call	tblbuff_read
-		rst	20h
 		ld	iy,trkBuff_1
 		call	tblbuff_read
-		rst	8
 		ld	iy,trkBuff_2
 		call	tblbuff_read
+		rst	20h
 		call	get_tick
 		ld	iy,tblPSGN		; PSG Noise
 		call	dtbl_singl
@@ -1271,6 +1270,7 @@ set_chips:
 		call	dtbl_multi
 		ld	iy,tblFM		; FM/FM3/DAC
 		call	dtbl_multi
+		rst	20h
 		ld	iy,tblPCM		; SEGA CD PCM
 		call	dtbl_multi
 		ld	iy,tblPWM		; 32X PWM
@@ -2994,7 +2994,7 @@ dtbl_singl:
 		ld	a,b
 		ld	bc,28h			; <- size
 		call	readRom			; *** ROM ACCESS ***
-		rst	20h
+; 		rst	20h			; TODO bad idea
 .same_patch:
 		pop	bc
 		pop	hl
